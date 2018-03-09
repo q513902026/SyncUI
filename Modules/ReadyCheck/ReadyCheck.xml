@@ -1,0 +1,147 @@
+<Ui>
+
+	<Script file="ReadyCheck.lua" />
+	
+	<Frame name="SyncUI_ReadyCheckLineTemplate" virtual="true">
+		<Size x="" y="20" />
+		<Anchors>
+			<Anchor point="LEFT" />
+			<Anchor point="RIGHT" x="-14" y="0" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Icon" file="Interface\RaidFrame\ReadyCheck-Ready" >
+					<Size x="20" y="20" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+				</Texture>
+				<FontString parentKey="Name" inherits="SyncUI_GameFontOutline_Medium" justifyH="LEFT" justifyV="CENTER" wordwrap="false">
+					<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Icon" relativePoint="RIGHT" x="2" y="0" />
+						<Anchor point="RIGHT" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+	</Frame>
+	
+	<Frame name="SyncUI_ReadyCheckWindow" inherits="SyncUI_BorderGlowFrameTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="175" y="160" />
+		<Anchors>
+			<Anchor point="TOPLEFT" x="230" y="-15" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="-10" />
+					<Anchor point="BOTTOMRIGHT" x="-4" y="30" />
+				</Anchors>
+			</Frame>
+			<ScrollFrame parentKey="ScrollFrame" inherits="SyncUI_ScrollFrameTemplate2" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+				</Anchors>
+				<Scripts>
+					<OnShow function="SyncUI_ReadyCheckWindow_UpdateScrollFrame" />
+					<OnVerticalScroll>
+						SyncUI_ScrollFrame_OnVerticalScroll(self, offset, 19, SyncUI_ReadyCheckWindow_UpdateScrollFrame)
+					</OnVerticalScroll>
+				</Scripts>
+			</ScrollFrame>
+
+			<Frame parentKey="Line1" inherits="SyncUI_ReadyCheckLineTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Line2" inherits="SyncUI_ReadyCheckLineTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Line1" relativePoint="BOTTOMLEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Line3" inherits="SyncUI_ReadyCheckLineTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Line2" relativePoint="BOTTOMLEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Line4" inherits="SyncUI_ReadyCheckLineTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Line3" relativePoint="BOTTOMLEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Line5" inherits="SyncUI_ReadyCheckLineTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Line4" relativePoint="BOTTOMLEFT" />
+				</Anchors>
+			</Frame>
+
+			<Button parentKey="Timer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+				<Size x="60" y="35" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="0" y="5" />
+				</Anchors>
+				<NormalFont style="SyncUI_GameFontShadow_Medium" />
+				<ButtonText justifyH="CENTER">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="8" y="-8"  />
+						<Anchor point="BOTTOMRIGHT" x="-8" y="8"  />
+					</Anchors>
+				</ButtonText>
+				<PushedTextOffset x="0" y="0" />
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_ReadyCheckWindow_OnLoad" />
+			<OnEvent function="SyncUI_ReadyCheckWindow_OnEvent" />
+			<OnUpdate function="SyncUI_ReadyCheckWindow_OnUpdate" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_ReadyCheckQuery" inherits="SyncUI_BorderGlowFrameTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="240" y="90" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Frames>
+			<Button parentKey="Text" inherits="SyncUI_LayerWithNoEdgeTemplate" text="READY_CHECK_MESSAGE">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="-10" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="30" />
+				</Anchors>
+				<NormalFont style="SyncUI_GameFontShadow_Medium" />
+				<ButtonText justifyH="CENTER">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="10" y="-10"  />
+						<Anchor point="BOTTOMRIGHT" x="-10" y="10"  />
+					</Anchors>
+				</ButtonText>
+				<PushedTextOffset x="0" y="0" />
+			</Button>
+			<Button parentKey="Accept" inherits="SyncUI_TextButtonTemplate" text="READY">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="-5" y="0"  />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						ConfirmReadyCheck(1)
+						self:GetParent():Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="Cancel" inherits="SyncUI_TextButtonTemplate" text="NOT_READY">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Accept" relativePoint="RIGHT" x="-5" y="0" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						ConfirmReadyCheck()
+						self:GetParent():Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+	</Frame>
+
+</Ui>

@@ -1,0 +1,50 @@
+<Ui>
+
+	<Script file="ScrollFrame.lua" />
+
+	<Slider name="SyncUI_ScrollBarTemplate" virtual="true" hidden="true">
+		<Size x="8" y="0" />
+		<ThumbTexture parentKey="Thumb" file="Interface\AddOns\SyncUI\Media\Textures\Elements\ScrollThumb">
+			<Size x="16" y="32" />
+		</ThumbTexture>
+		<Scripts>
+			<OnValueChanged>
+				self:GetParent():SetVerticalScroll(value)
+			</OnValueChanged>
+		</Scripts>
+	</Slider>
+
+	<ScrollFrame name="SyncUI_ScrollFrameTemplate" virtual="true">
+		<Frames>
+			<Slider parentKey="ScrollBar" inherits="SyncUI_ScrollBarTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="8" y="8" />
+					<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="8" y="8" />
+				</Anchors>
+			</Slider>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				SyncUI_ScrollFrame_OnLoad(self)
+			</OnLoad>
+			<OnScrollRangeChanged>
+				SyncUI_ScrollFrame_OnScrollRangeChanged(self, xrange, yrange)
+			</OnScrollRangeChanged>
+			<OnVerticalScroll>
+				self.ScrollBar:SetValue(offset)
+			</OnVerticalScroll>
+			<OnMouseWheel>
+				SyncUI_ScrollFrame_OnMouseWheel(self,delta)
+			</OnMouseWheel>
+		</Scripts>
+	</ScrollFrame>
+	
+	<ScrollFrame name="SyncUI_ScrollFrameTemplate2" inherits="SyncUI_ScrollFrameTemplate" virtual="true">
+		<ScrollChild>
+			<Frame parentKey="ChildFrame">
+				<Size x="300" y="334" />
+			</Frame>
+		</ScrollChild>
+	</ScrollFrame>
+
+</Ui>

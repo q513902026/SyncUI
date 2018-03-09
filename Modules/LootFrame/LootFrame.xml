@@ -1,0 +1,145 @@
+<UI>
+	
+	<Script file="LootFrame.lua" />
+	
+	<Button name="SyncUI_LootButtonTemplate" virtual="true">
+		<Size x="32" y="32" />
+		<NormalTexture>
+			<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+		</NormalTexture>
+		<HighlightTexture>
+			<Anchors>
+				<Anchor point="TOPLEFT" />
+				<Anchor point="BOTTOMRIGHT" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text" justifyH="LEFT">
+			<Anchors>
+				<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="5" y="0" />
+				<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMRIGHT" x="5" y="0" />
+				<Anchor point="RIGHT" relativeKey="$parent.$parent.ContentLayer" x="-15" y="0" />
+			</Anchors>
+		</ButtonText>
+		<Layers>
+			<Layer level="BORDER">
+				<Texture parentKey="Border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" JustifyH="RIGHT">
+					<Size x="30" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="" y="0" />
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="38" y="38" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="1">
+				<Texture parentKey="Quality" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\QualityBorder">
+					<Size x="38" y="38" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnClick function="SyncUI_LootButton_OnClick" />
+			<OnEnter function="SyncUI_LootButton_OnEnter" />
+			<OnLeave>
+				GameTooltip:Hide()
+				ResetCursor()
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_LootFrame" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="HIGH" clampedToScreen="true" hidden="true" parent="SyncUI_UIParent">
+		<Size x="210" y="100" />
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="LootFrame"/>
+		</Anchors>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="2" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+				</Anchors>
+			</Frame>
+			<ScrollFrame parentKey="ScrollFrame" inherits="SyncUI_ScrollFrameTemplate2">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+				</Anchors>
+				<Scripts>
+					<OnVerticalScroll>
+						SyncUI_ScrollFrame_OnVerticalScroll(self, offset, 33, SyncUI_LootFrame_OnScrollUpdate)
+					</OnVerticalScroll>
+					<OnShow function="SyncUI_LootFrame_OnScrollUpdate" />
+				</Scripts>
+			</ScrollFrame>
+			
+			<Button parentKey="Button1" inherits="SyncUI_LootButtonTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="20" y="-20" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button2" inherits="SyncUI_LootButtonTemplate" id="2">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button3" inherits="SyncUI_LootButtonTemplate" id="3">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button4" inherits="SyncUI_LootButtonTemplate" id="4">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button5" inherits="SyncUI_LootButtonTemplate" id="5">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button4" relativePoint="BOTTOM" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button6" inherits="SyncUI_LootButtonTemplate" id="6">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button5" relativePoint="BOTTOM" x="0" y="-5" />
+				</Anchors>
+			</Button>
+
+			<Button parentKey="Close" inherits="SyncUI_CloseButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="5" y="2" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						SyncUI_LootFrame_OnHide(self:GetParent())
+					</OnClick>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_LootFrame_OnLoad" />
+			<OnEvent function="SyncUI_LootFrame_OnEvent" />
+			<OnHide function="SyncUI_LootFrame_OnHide" />
+		</Scripts>
+	</Frame>
+
+</UI>

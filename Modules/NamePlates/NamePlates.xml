@@ -1,0 +1,306 @@
+<Ui>
+	
+	<Script file="NamePlates.lua"/>
+	
+	<StatusBar name="SyncUI_NamePlateCastBarTemplate" inherits="SyncUI_StatusBarTemplate" virtual="true" hidden="true">
+		<Size x="" y="8" />
+		<Animations>
+			<AnimationGroup parentKey="FadeOut" setToFinalAlpha="false">
+				<Alpha smoothing="OUT" startDelay="0.3" duration="1" order="1" fromAlpha="1" toAlpha="0"/>
+				<Scripts>
+					<OnFinished>
+						self:GetParent():Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Frames>
+			<Frame parentKey="IconFrame">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" x="-5" y="0" />
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture parentKey="Icon" file="Interface\Icons\INV_MISC_QUESTIONMARK">
+							<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Timer" inherits="SyncUI_GameFontNormal_Small" justifyH="CENTER" hidden="true">
+							<Size x="50" y="10" />
+							<Anchors>
+								<Anchor point="BOTTOM" relativeKey="$parent.Icon" x="" y="-15" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="border">
+				<Size x="" y="24" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-11" y="6" />
+					<Anchor point="BOTTOMRIGHT" x="11" y="-10" />
+				</Anchors>
+				<Layers>
+					<Layer level="BORDER">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+							</Anchors>
+							<TexCoords left="0" right="0.375" top="0" bottom="0.375" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" />
+							</Anchors>
+							<TexCoords left="0.625" right="1" top="0" bottom="0.375" />
+						</Texture>
+						<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+								<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+							</Anchors>
+							<TexCoords left="0.375" right="0.625" top="0" bottom="0.375" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Spell" inherits="SyncUI_GameFontNormal_Small">
+							<Size x="" y="10" />
+							<Anchors>
+								<Anchor point="LEFT" x="5" y="" />
+								<Anchor point="RIGHT" x="-5" y="" />
+							</Anchors>
+						</FontString>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Spark" file="Interface\AddOns\SyncUI\Media\Textures\Elements\Statusbar-Spark" alphaMode="ADD">
+							<Size x="10" y="" />
+							<Color r="1" g="1" b="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_CastingBar_OnLoad" />
+			<OnEvent function="SyncUI_CastingBar_OnEvent" />
+			<OnUpdate function="SyncUI_CastingBar_OnUpdate" />
+		</Scripts>
+	</StatusBar>	
+
+	<Frame name="SyncUI_PlateFrame" parent="SyncUI_UIParent">
+		<Scripts>
+			<OnLoad function="SyncUI_PlateFrame_OnLoad" />
+			<OnEvent function="SyncUI_PlateFrame_OnEvent" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_NameplateAuraTemplate" hidden="true" virtual="true">
+		<Size x="20" y="14" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon">
+					<TexCoords left="0.05" right="0.95" top="0.1" bottom="0.6" />
+					<Color r="1" g="1" b="0" a="0.5" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Charge" inherits="SyncUI_GameFontNormal_Small" justifyH="RIGHT">
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" />
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Time" inherits="SyncUI_GameFontNormal_Small" justifyH="CENTER" justifyV="CENTER">
+					<Anchors>
+						<Anchor point="BOTTOM" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown parentKey="Cooldown" inherits="CooldownFrameTemplate" setAllPoints="true" useParentLevel="true" />
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Cooldown:SetReverse(true)
+				self.Cooldown:SetHideCountdownNumbers(true) 
+			</OnLoad>
+			<OnUpdate function="SyncUI_AuraButton_OnUpdate" />
+			<!--OnEnter function="SyncUI_AuraButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" /-->
+		</Scripts>		
+	</Frame>
+	
+	<Frame name="SyncUI_NamePlateUnitTemplate" parentKey="UnitFrame" setAllPoints="true" useParentLevel="true" virtual="true">
+		<!--<Size x="" y="50" />
+		<Anchors>
+			<Anchor point="BOTTOMLEFT" />
+			<Anchor point="BOTTOMRIGHT" />
+		</Anchors>
+		-->
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Name" inherits="SyncUI_GameFontShadow_Small" wordwrap="false" justifyH="CENTER" text="Name">
+					<Anchors>
+						<Anchor point="BOTTOM" relativeKey="$parent.healthBar" relativePoint="TOP" x="0" y="-16" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="" y="8" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="11" y="-20" />
+					<Anchor point="TOPRIGHT" x="-11" y="-20" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="border">
+						<Size x="" y="24" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-11" y="6" />
+							<Anchor point="BOTTOMRIGHT" x="11" y="-10" />
+						</Anchors>
+						<Layers>
+							<Layer level="BORDER">
+								<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Size x="48" y="24" />
+									<Anchors>
+										<Anchor point="TOPLEFT"/>
+									</Anchors>
+									<TexCoords left="0" right="0.375" top="0" bottom="0.375" />
+								</Texture>
+								<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Size x="48" y="24" />
+									<Anchors>
+										<Anchor point="TOPRIGHT" />
+									</Anchors>
+									<TexCoords left="0.625" right="1" top="0" bottom="0.375" />
+								</Texture>
+								<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Anchors>
+										<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+										<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+									</Anchors>
+									<TexCoords left="0.375" right="0.625" top="0" bottom="0.375" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+			</StatusBar>
+			<StatusBar parentKey="PowerBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true" hidden="true">
+				<Size x="" y="8" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar" relativePoint="BOTTOMLEFT" x="" y="-6" />
+					<Anchor point="TOPRIGHT" relativeKey="$parent.HealthBar" relativePoint="BOTTOMRIGHT" x="" y="-6" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="border">
+						<Size x="" y="24" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-11" y="6" />
+							<Anchor point="BOTTOMRIGHT" x="11" y="-10" />
+						</Anchors>
+						<Layers>
+							<Layer level="BORDER">
+								<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Size x="48" y="24" />
+									<Anchors>
+										<Anchor point="TOPLEFT"/>
+									</Anchors>
+									<TexCoords left="0" right="0.375" top="0" bottom="0.375" />
+								</Texture>
+								<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Size x="48" y="24" />
+									<Anchors>
+										<Anchor point="TOPRIGHT" />
+									</Anchors>
+									<TexCoords left="0.625" right="1" top="0" bottom="0.375" />
+								</Texture>
+								<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+									<Anchors>
+										<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+										<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+									</Anchors>
+									<TexCoords left="0.375" right="0.625" top="0" bottom="0.375" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+			</StatusBar>
+			<StatusBar parentKey="CastBar" inherits="SyncUI_NamePlateCastBarTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar" relativePoint="BOTTOMLEFT" x="" y="-6" />
+					<Anchor point="TOPRIGHT" relativeKey="$parent.HealthBar" relativePoint="BOTTOMRIGHT" x="" y="-6" />
+				</Anchors>
+			</StatusBar>
+
+			<Frame parentKey="Selection" setAllPoints="true" hidden="true">
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="" y="-14" />
+							</Anchors>
+							<TexCoords left="0" right="0.375" top="0.5" bottom="0.875"  />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="" y="-14" />
+							</Anchors>
+							<TexCoords left="0.375" right="0" top="0.5" bottom="0.875"  />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Threat" setAllPoints="true" hidden="true">
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="" y="-14" />
+							</Anchors>
+							<TexCoords left="0" right="0.375" top="0.5" bottom="0.875"  />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="" y="-14" />
+							</Anchors>
+							<TexCoords left="0.375" right="0" top="0.5" bottom="0.875"  />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="RaidMark" hidden="true">
+				<Size x="15" y="15" />
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.HealthBar" relativePoint="LEFT" x="-5" y="0" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Icon" file="Interface\TargetingFrame\UI-RaidTargetingIcons" />
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_NamePlateUnitFrame_OnLoad" />
+			<OnUpdate function="SyncUI_NamePlateUnitFrame_OnUpdate" />
+			<OnEvent function="SyncUI_NamePlateUnitFrame_OnEvent" />
+		</Scripts>
+	</Frame>
+
+</Ui>

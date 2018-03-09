@@ -1,0 +1,23 @@
+<UI>
+	<!-- Core -->
+	<Include file="ActionBars\ActionBars.xml" />
+	<Include file="UnitFrames\UnitFrames.xml" />
+	
+	<!-- Advanced -->
+	<Include file="Alerts\Alerts.xml" />
+	<Include file="AwayMode\AwayMode.xml" />
+	<Include file="Bags\Bags.xml" />
+	<Include file="Changelog\Changelog.xml" />
+	<Include file="Chat\Chat.xml" />
+	<Include file="ChatBubble\ChatBubble.xml" />
+	<Include file="GroupControl\GroupControl.xml" />
+	<Include file="LootFrame\LootFrame.xml" />
+	<Include file="Minimap\Minimap.xml" />
+	<Include file="NamePlates\NamePlates.xml" />
+	<Include file="ObjTracker\ObjTracker.xml" />
+	<Include file="ReadyCheck\ReadyCheck.xml" />
+	<Include file="TalentUI\TalentUI.xml" />
+	<!--Include file="TalkingHead\TalkingHead.xml" /-->
+	<Include file="Tooltip\Tooltip.xml" />
+	
+</UI>

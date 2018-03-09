@@ -1,0 +1,92 @@
+<Ui>
+	
+	<Script file="TalkingHead.lua" />
+
+	<Button name="SyncUI_TalkingHead" inherits="SyncUI_BorderGlowFrameTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Animations>
+			<AnimationGroup parentKey="FadeIn" setToFinalAlpha="true">
+				<Alpha smoothing="OUT" duration="1" order="2" fromAlpha="0" toAlpha="1"/>
+				<Scripts>
+					<OnPlay>
+						self:GetParent().FadeOut:Stop()
+					</OnPlay>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="FadeOut" setToFinalAlpha="true">
+                <Alpha smoothing="OUT" duration="1" order="1" fromAlpha="1" toAlpha="0"/>
+				<Scripts>
+					<OnPlay>
+						self:GetParent().FadeIn:Stop()
+					</OnPlay>
+					<OnStop>
+						self:GetParent():Hide()
+					</OnStop>
+					<OnFinished>
+						self:GetParent():Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Size x="300" y="80" />
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Name" inherits="SyncUI_GameFontShadow_Large" justifyH="LEFT">
+					<Size x="260" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="15" y="2" />
+					</Anchors>
+					<Color r="0.4" g="1" b="0" />
+				</FontString>
+				<FontString parentKey="Text" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT" justifyV="TOP">
+					<Size x="232" y="55" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="65" y="-19" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="PortraitBorder" inherits="SyncUI_LayerBackdropTemplate">
+				<Size x="70" y="70" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="-5" y="-2" />
+				</Anchors>
+			</Frame>
+			<PlayerModel parentKey="Model" >
+				<Size x="54" y="54" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.PortraitBorder" x="8" y="-8" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND" textureSubLevel="1">
+						<Texture parentKey="PortraitBg" atlas="TalkingHeads-PortraitBg" useAtlasSize="false">
+							<Size x="54" y="54" />
+							<Anchors>
+								<Anchor point="TOPLEFT"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnModelLoaded function="TalkingHeadFrame_OnModelLoaded"/>
+					<OnAnimFinished function="TalkingHeadFrame_OnAnimFinished"/>
+				</Scripts>
+			</PlayerModel>
+			<Button parentKey="Close" inherits="SyncUI_CloseButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="5" y="2" />
+				</Anchors>
+				<Scripts>
+					<OnClick function="SyncUI_TalkingHead_Close" />
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_TalkingHead_OnLoad" />
+			<OnEvent function="SyncUI_TalkingHead_OnEvent" />
+			<OnClick function="SyncUI_TalkingHead_OnClick" />
+			<OnUpdate function="SyncUI_TalkingHead_OnUpdate" />
+		</Scripts>
+	</Button>
+
+</Ui>

@@ -1,0 +1,90 @@
+<Ui>
+
+	<Font name="SyncUI_GameFontNormal_Tiny" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight val="7"/>
+		<Shadow>
+			<Offset x="0" y="0" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontNormal_Small" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight val="8"/>
+		<Shadow>
+			<Offset x="0" y="0" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontNormal_Medium" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight  val="10"/>
+		<Shadow>
+			<Offset x="0" y="0" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontNormal_Large" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight  val="12"/>
+		<Shadow>
+			<Offset x="0" y="0" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontNormal_Huge" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight  val="14"/>
+		<Shadow>
+			<Offset x="0" y="0" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+
+	<Font name="SyncUI_GameFontOutline_Small" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight val="8"/>
+	</Font>
+	<Font name="SyncUI_GameFontOutline_Medium" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="10"/>
+	</Font>
+	<Font name="SyncUI_GameFontOutline_Large" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="12"/>
+	</Font>
+	<Font name="SyncUI_GameFontOutline_Huge" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="14"/>
+	</Font>
+
+	<Font name="SyncUI_GameFontShadow_Small" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight val="8"/>
+		<Shadow>
+			<Offset x="1" y="-1" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontShadow_Medium" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="10"/>
+		<Shadow>
+			<Offset x="1" y="-1" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontShadow_Large" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="12"/>
+		<Shadow>
+			<Offset x="1" y="-1" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+	<Font name="SyncUI_GameFontShadow_Huge" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="14"/>
+		<Shadow>
+			<Offset x="1" y="-1" />
+			<Color r="0" g="0" b="0"/>
+		</Shadow>
+	</Font>
+
+	<Font name="SyncUI_GameFontSpecial" font="Interface\AddOns\SyncUI\Media\Fonts\Vibro.ttf" outline="NORMAL" virtual="true">
+		<FontHeight  val="11" />
+	</Font>
+
+	<Font name="SyncUI_PixelFont_Small" font="Interface\AddOns\SyncUI\Media\Fonts\Pixel.ttf" outline="NONE" virtual="true">
+		<FontHeight  val="10" />
+		<Color r="0.7" g="0.7" b="0.7" />
+	</Font>
+	
+</Ui>

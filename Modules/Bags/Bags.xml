@@ -1,0 +1,1126 @@
+<Ui>
+	
+	<Script file="Bags.lua"/>
+	
+	<!-- Templates -->
+	<Button name="SyncUI_BagItemSlotTemplate" inherits="ContainerFrameItemButtonTemplate" virtual="true">
+		<Size x="38" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="icon">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>			
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture parentKey="quest" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
+					<TexCoords left="0.7578125" right="0.90625" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+				<Texture parentKey="quality" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\QualityBorder" />
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="1">
+				<Texture parentKey="searchOverlay" hidden="true">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<Color r="0" g="0" b="0" a="0.85" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<HighlightTexture>
+			<Size x="32" y="32" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Frames>
+			<Frame parentKey="DropDown">
+				<Scripts>
+					<OnLoad>
+						SyncUI_DropDownMenu_Initialize(self, SyncUI_ItemSlot_InitDropDown)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="delete" setAllPoints="true" hidden="false">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture>
+							<Size x="32" y="32" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<Color r="0" g="0" b="0" a="0.75" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Trash">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_ItemSlot_OnLoad" />
+			<OnEnter function="SyncUI_ItemSlot_OnEnter" />
+			<OnUpdate function="SyncUI_ItemSlot_OnUpdate" />
+		</Scripts>
+	</Button>
+	
+	<Button name="SyncUI_ReagentItemSlotTemplate" inherits="ReagentBankItemButtonGenericTemplate" virtual="true">
+		<Size x="38" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="icon">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>			
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture parentKey="quest" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
+					<TexCoords left="0.7578125" right="0.90625" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+				<Texture parentKey="quality" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\QualityBorder" />
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="1">
+				<Texture parentKey="searchOverlay" hidden="true">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<Color r="0" g="0" b="0" a="0.85" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<HighlightTexture>
+			<Size x="32" y="32" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+	</Button>
+	
+	<Button name="SyncUI_DropItemSlotTemplate" virtual="true">
+		<Size x="38" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="background" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.1640625" right="0.3125" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" JustifyH="RIGHT">
+					<Size x="200" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="-2" y="4" />
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<HighlightTexture>
+			<Size x="32" y="32" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>	
+		<Scripts>
+			<OnClick function="SyncUI_DropItemSlot_OnClick" />
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_LEFT")
+				GameTooltip:AddLine(SYNCUI_STRING_BAGS_DROP_SLOT, 1,1,1)
+				GameTooltip:Show()
+			</OnEnter>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	
+	<Frame name="SyncUI_ItemBagTemplate" virtual="true">
+		<Frames>
+			<Button name="$parent_Slot1" inherits="SyncUI_BagItemSlotTemplate" id="1" />
+			<Button name="$parent_Slot2" inherits="SyncUI_BagItemSlotTemplate" id="2" />
+			<Button name="$parent_Slot3" inherits="SyncUI_BagItemSlotTemplate" id="3" />
+			<Button name="$parent_Slot4" inherits="SyncUI_BagItemSlotTemplate" id="4" />
+			<Button name="$parent_Slot5" inherits="SyncUI_BagItemSlotTemplate" id="5" />
+			<Button name="$parent_Slot6" inherits="SyncUI_BagItemSlotTemplate" id="6" />
+			<Button name="$parent_Slot7" inherits="SyncUI_BagItemSlotTemplate" id="7" />
+			<Button name="$parent_Slot8" inherits="SyncUI_BagItemSlotTemplate" id="8" />
+			<Button name="$parent_Slot9" inherits="SyncUI_BagItemSlotTemplate" id="9" />
+			<Button name="$parent_Slot10" inherits="SyncUI_BagItemSlotTemplate" id="10" />
+			<Button name="$parent_Slot11" inherits="SyncUI_BagItemSlotTemplate" id="11" />
+			<Button name="$parent_Slot12" inherits="SyncUI_BagItemSlotTemplate" id="12" />
+			<Button name="$parent_Slot13" inherits="SyncUI_BagItemSlotTemplate" id="13" />
+			<Button name="$parent_Slot14" inherits="SyncUI_BagItemSlotTemplate" id="14" />
+			<Button name="$parent_Slot15" inherits="SyncUI_BagItemSlotTemplate" id="15" />
+			<Button name="$parent_Slot16" inherits="SyncUI_BagItemSlotTemplate" id="16" />
+			<Button name="$parent_Slot17" inherits="SyncUI_BagItemSlotTemplate" id="17" />
+			<Button name="$parent_Slot18" inherits="SyncUI_BagItemSlotTemplate" id="18" />
+			<Button name="$parent_Slot19" inherits="SyncUI_BagItemSlotTemplate" id="19" />
+			<Button name="$parent_Slot20" inherits="SyncUI_BagItemSlotTemplate" id="20" />
+			<Button name="$parent_Slot21" inherits="SyncUI_BagItemSlotTemplate" id="21" />
+			<Button name="$parent_Slot22" inherits="SyncUI_BagItemSlotTemplate" id="22" />
+			<Button name="$parent_Slot23" inherits="SyncUI_BagItemSlotTemplate" id="23" />
+			<Button name="$parent_Slot24" inherits="SyncUI_BagItemSlotTemplate" id="24" />
+			<Button name="$parent_Slot25" inherits="SyncUI_BagItemSlotTemplate" id="25" />
+			<Button name="$parent_Slot26" inherits="SyncUI_BagItemSlotTemplate" id="26" />
+			<Button name="$parent_Slot27" inherits="SyncUI_BagItemSlotTemplate" id="27" />
+			<Button name="$parent_Slot28" inherits="SyncUI_BagItemSlotTemplate" id="28" />
+			<Button name="$parent_Slot29" inherits="SyncUI_BagItemSlotTemplate" id="29" />
+			<Button name="$parent_Slot30" inherits="SyncUI_BagItemSlotTemplate" id="30" />
+			<Button name="$parent_Slot31" inherits="SyncUI_BagItemSlotTemplate" id="31" />
+			<Button name="$parent_Slot32" inherits="SyncUI_BagItemSlotTemplate" id="32" />
+			<Button name="$parent_Slot33" inherits="SyncUI_BagItemSlotTemplate" id="33" />
+			<Button name="$parent_Slot34" inherits="SyncUI_BagItemSlotTemplate" id="34" />
+			<Button name="$parent_Slot35" inherits="SyncUI_BagItemSlotTemplate" id="35" />
+			<Button name="$parent_Slot36" inherits="SyncUI_BagItemSlotTemplate" id="36" />
+		</Frames>
+	</Frame>
+
+	<Frame name="SyncUI_ItemContainerTemplate" virtual="true">
+		<Size x="" y="76" />
+		<Anchors>
+			<Anchor point="LEFT" />
+			<Anchor point="RIGHT" />
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString parentKey="Header" inherits="SyncUI_GameFontShadow_Large" justifyH="LEFT" justifyV="CENTER">
+					<Size x="200" y="38" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="18" y="" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton parentKey="Collapse">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="" y="-10" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Minus" />
+				<CheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Plus" />
+				<Scripts>
+					<OnClick function="SyncUI_ItemContainer_Collapse" />
+				</Scripts>
+			</CheckButton>
+			<Frame parentKey="Divider" inherits="SyncUI_DividerTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="TOPRIGHT" x="-2" y="-18" />
+					<Anchor point="TOPRIGHT" relativeTo="$parent" x="-5" y="-18" />	
+				</Anchors>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.buttons = {}
+				if self:GetID() ~= 1 then
+					self:Hide()
+				end
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+	<ScrollFrame name="SyncUI_ItemContainerScrollFrameTemplate" inherits="SyncUI_ScrollFrameTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self.ScrollBar.scrollStep = 38
+				SyncUI_ScrollFrame_OnLoad(self)
+			</OnLoad>
+		</Scripts>
+	</ScrollFrame>
+
+	
+	<Button name="SyncUI_BankBagTemplate" inherits="BankItemButtonBagTemplate" virtual="true">
+		<Size x="38" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentIconTexture" parentKey="icon">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" JustifyH="RIGHT">
+					<Size x="200" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="-2" y="4" />
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalTexture />
+		<PushedTexture />
+		<CheckedTexture />
+		<HighlightTexture>
+			<Size x="32" y="32" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Frames>
+			<Frame parentKey="Initializer">
+				<Scripts>
+					<OnLoad>
+						local frame = self:GetParent()
+						if not frame.UpdateTooltip then
+							frame.UpdateTooltip = frame.OnEnter
+						end
+						frame.IconBorder:Hide()
+					</OnLoad>
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+
+				local hasItem = GetInventoryItemTexture("player",self:GetInventorySlot())
+				if hasItem then
+					GameTooltip:SetInventoryItem("player",self:GetInventorySlot())
+				elseif self.tooltipText then
+					GameTooltip:SetText(self.tooltipText)
+				else
+					GameTooltip:SetText(BANK_BAG)
+				end
+				
+				GameTooltip:Show()
+			</OnEnter>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_RestackButtonTemplate" virtual="true">
+		<Size x="24" y="24" />
+		<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Restack" alpha="0.5" />
+		<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Restack" />
+		<Scripts>
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-5)
+				GameTooltip:AddLine(SYNCUI_STRING_BAGS_RESTACK,1,1,1)
+				GameTooltip:Show()
+			</OnEnter>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	
+	<!-- Bag, Bank & Reagent Bank -->
+	<Frame name="SyncUI_BagFrame" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="MEDIUM" toplevel="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="200" y="380" />
+		<Anchors>
+			<Anchor point="BOTTOMRIGHT" relativeTo="$parent" x="-45" y="150" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="2" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="28" />
+				</Anchors>
+			</Frame>
+			<ScrollFrame parentKey="ScrollFrame" inherits="SyncUI_ItemContainerScrollFrameTemplate" >
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+				</Anchors>
+				<ScrollChild>
+					<Frame parentKey="ScrollChild">
+						<Size x="266" y="0"/>
+						<Anchors>
+							<Anchor point="TOPLEFT"/>
+						</Anchors>
+						<Frames>
+							<Frame name="SyncUI_BagFrame_Bag1" inherits="SyncUI_ItemBagTemplate" id="0" />
+							<Frame name="SyncUI_BagFrame_Bag2" inherits="SyncUI_ItemBagTemplate" id="1" />
+							<Frame name="SyncUI_BagFrame_Bag3" inherits="SyncUI_ItemBagTemplate" id="2" />
+							<Frame name="SyncUI_BagFrame_Bag4" inherits="SyncUI_ItemBagTemplate" id="3" />
+							<Frame name="SyncUI_BagFrame_Bag5" inherits="SyncUI_ItemBagTemplate" id="4" />
+							
+							<Frame name="SyncUI_BagFrame_Container1" inherits="SyncUI_ItemContainerTemplate" id="1">
+								<Anchors>
+									<Anchor point="TOPLEFT" />
+								</Anchors>
+								<Frames>
+									<Button parentKey="DropSlot" inherits="SyncUI_DropItemSlotTemplate">
+										<Anchors>
+											<Anchor point="TOPLEFT" x="0" y="40" />
+										</Anchors>
+									</Button>
+								</Frames>
+							</Frame>
+							<Frame name="SyncUI_BagFrame_Container2" inherits="SyncUI_ItemContainerTemplate" id="2">
+								<Scripts>
+									<OnHide>
+										C_NewItems.ClearAll()
+									</OnHide>
+								</Scripts>
+							</Frame>
+							<Frame name="SyncUI_BagFrame_Container3" inherits="SyncUI_ItemContainerTemplate" id="3" />
+							<Frame name="SyncUI_BagFrame_Container4" inherits="SyncUI_ItemContainerTemplate" id="4" />
+							<Frame name="SyncUI_BagFrame_Container5" inherits="SyncUI_ItemContainerTemplate" id="5" />
+							<Frame name="SyncUI_BagFrame_Container6" inherits="SyncUI_ItemContainerTemplate" id="6" />
+						</Frames>
+					</Frame>
+				</ScrollChild>
+			</ScrollFrame>
+
+			<!-- Bag Slot Frame -->
+			<Frame parentKey="BagFrame" inherits="SyncUI_LayerBackdropTemplate" hidden="true">
+				<Size x="172" y="58" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="-14" y="0" />
+				</Anchors>
+				<Scripts>
+					<OnLoad function="SyncUI_BagFrame_BagContainer_OnLoad" />
+				</Scripts>
+			</Frame>
+
+			<!-- Menu -->
+			<Button parentKey="Settings">
+				<Size x="24" y="24" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="7" y="0" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Folder" alpha="0.5" />
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Folder" />
+				<Scripts>
+					<OnClick>
+						local frame = SyncUI_BagCategoryMenu
+						
+						if frame:IsShown() then
+							frame:Hide()
+						else
+							frame:Show()
+						end
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+						GameTooltip:AddLine(SYNCUI_STRING_BAGS_MANAGE_CONTAINERS,1,1,1)
+						GameTooltip:AddLine(" ")
+						GameTooltip:AddLine(SYNCUI_STRING_BAGS_MANAGE_CONTAINERS_HINT, 0.5,0.5,0.5, true)
+						GameTooltip:Show()
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide" />
+				</Scripts>
+			</Button>
+			<Button parentKey="BagToggle">
+				<Size x="24" y="24" />
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Settings" relativePoint="RIGHT" x="10" y="0" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Bag" alpha="0.5" />
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Bag" />
+				<Scripts>
+					<OnClick>
+						local frame = self:GetParent().BagFrame
+						
+						if frame:IsShown() then
+							frame:Hide()
+						else
+							frame:Show()
+						end
+					</OnClick>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+						GameTooltip:AddLine(BAGSLOTTEXT,1,1,1)
+						GameTooltip:Show()
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide" />
+				</Scripts>
+			</Button>
+			<Button parentKey="Restack" inherits="SyncUI_RestackButtonTemplate">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.BagToggle" relativePoint="RIGHT" x="10" y="-1" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						C_NewItems.ClearAll()
+						SortBags()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="Trash">
+				<Size x="20" y="20" />
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Restack" relativePoint="RIGHT" x="5" y="0" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Trash" alpha="0.5" />
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Trash" />
+				<Scripts>
+					<OnClick function="SyncUI_BagFrame_DeleteItems" />
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+						GameTooltip:AddLine(SYNCUI_STRING_BAGS_DELETION, 1,1,1)
+						GameTooltip:AddLine(" ")
+						GameTooltip:AddLine(SYNCUI_STRING_BAGS_DELETION_HINT, 0.5,0.5,0.5, true)
+						GameTooltip:Show()
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide" />
+				</Scripts>
+			</Button>
+			<EditBox parentKey="SearchBox" inherits="SyncUI_SearchBoxTemplate" >
+				<Size x="140" y="19" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" x="-18" y="6" />
+				</Anchors>
+				<Scripts>
+					<OnHide function="BagSearch_OnHide" />
+					<OnTextChanged function="BagSearch_OnTextChanged" />
+					<OnChar function="BagSearch_OnChar"/>
+				</Scripts>
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_BagFrame_OnLoad" />
+			<OnEvent function="SyncUI_BagFrame_OnEvent" />
+			<OnShow function="SyncUI_BagFrame_OnShow" />
+			<OnHide function="SyncUI_BagFrame_OnHide" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_BankFrame" frameStrata="MEDIUM" toplevel="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="400" y="400" />
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeTo="$parent" x="43" y="-35" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="Normal" name="SyncUI_BankFrame_Bank" inherits="SyncUI_BorderGlowFrameTemplate" >
+				<Size x="400" y="430" />
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="28" />
+						</Anchors>
+					</Frame>
+					<ScrollFrame parentKey="ScrollFrame" inherits="SyncUI_ItemContainerScrollFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+							<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+						</Anchors>
+						<ScrollChild>
+							<Frame parentKey="ScrollChild">
+								<Size x="380" y="0"/>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+								<Frames>
+									<Frame name="SyncUI_BankFrame_Bag1" inherits="SyncUI_ItemBagTemplate" id="BANK_CONTAINER">
+										<Scripts>
+											<OnLoad function="SyncUI_BankBag1_OnLoad" />
+										</Scripts>
+									</Frame>
+									<Frame name="SyncUI_BankFrame_Bag2" inherits="SyncUI_ItemBagTemplate" id="5" />
+									<Frame name="SyncUI_BankFrame_Bag3" inherits="SyncUI_ItemBagTemplate" id="6" />
+									<Frame name="SyncUI_BankFrame_Bag4" inherits="SyncUI_ItemBagTemplate" id="7" />
+									<Frame name="SyncUI_BankFrame_Bag5" inherits="SyncUI_ItemBagTemplate" id="8" />
+									<Frame name="SyncUI_BankFrame_Bag6" inherits="SyncUI_ItemBagTemplate" id="9" />
+									<Frame name="SyncUI_BankFrame_Bag7" inherits="SyncUI_ItemBagTemplate" id="10" />
+									<Frame name="SyncUI_BankFrame_Bag8" inherits="SyncUI_ItemBagTemplate" id="11" />
+
+									<Frame name="SyncUI_BankFrame_Container1" inherits="SyncUI_ItemContainerTemplate" id="1">
+										<Anchors>
+											<Anchor point="TOPLEFT" />
+										</Anchors>
+										<Frames>
+											<Button parentKey="DropSlot" inherits="SyncUI_DropItemSlotTemplate">
+												<Anchors>
+													<Anchor point="TOPLEFT" x="0" y="40" />
+												</Anchors>
+											</Button>
+										</Frames>
+									</Frame>
+									<Frame name="SyncUI_BankFrame_Container2" inherits="SyncUI_ItemContainerTemplate" id="2" />
+									<Frame name="SyncUI_BankFrame_Container3" inherits="SyncUI_ItemContainerTemplate" id="3" />
+									<Frame name="SyncUI_BankFrame_Container4" inherits="SyncUI_ItemContainerTemplate" id="4" />
+									<Frame name="SyncUI_BankFrame_Container5" inherits="SyncUI_ItemContainerTemplate" id="5" />
+									<Frame name="SyncUI_BankFrame_Container6" inherits="SyncUI_ItemContainerTemplate" id="6" />
+								</Frames>
+							</Frame>
+						</ScrollChild>
+					</ScrollFrame>
+					
+					<Button parentKey="Switch" inherits="SyncUI_TextButtonTemplate" text="REAGENT_BANK">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="0" y="5" />
+						</Anchors>
+						<Scripts>
+							<OnClick function="SyncUI_BankFrame_Switch" />
+						</Scripts>
+					</Button>
+					<Button parentKey="Deposite" text="DEPOSIT">
+						<Size x="24" y="24" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Switch" relativePoint="RIGHT" x="10" y="0" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Deposite" alpha="0.5" />
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Deposite" />
+						<Scripts>
+							<OnClick>
+								DepositReagentBank()
+							</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+								GameTooltip:AddLine(REAGENTBANK_DEPOSIT,1,1,1)
+								GameTooltip:Show()
+							</OnEnter>
+							<OnLeave function="GameTooltip_Hide" />
+						</Scripts>
+					</Button>
+					<Button parentKey="BagToggle">
+						<Size x="24" y="24" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Deposite" relativePoint="RIGHT" x="10" y="0" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Bag" alpha="0.5" />
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Bag" />
+						<Scripts>
+							<OnClick>
+								local frame = SyncUI_BankFrame.BagFrame
+								
+								if frame:IsShown() then
+									frame:Hide()
+									frame.wasShown = false
+								else
+									frame:Show()
+									frame.wasShown = true
+								end
+							</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+								GameTooltip:AddLine(BAGSLOTTEXT,1,1,1)
+								GameTooltip:Show()
+							</OnEnter>
+							<OnLeave function="GameTooltip_Hide" />
+						</Scripts>
+					</Button>	
+					<Button parentKey="Restack" inherits="SyncUI_RestackButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.BagToggle" relativePoint="TOPRIGHT" x="10" y="-1" />
+						</Anchors>
+						<Scripts>
+							<OnClick function="SortBankBags" />
+						</Scripts>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnShow>
+						local frame = self:GetParent().BagFrame
+						if frame.wasShown then
+							frame:Show()
+						end
+						if not IsReagentBankUnlocked() then
+							self.Deposite:Disable()
+						end
+					</OnShow>
+					<OnHide>
+						self:GetParent().BagFrame:Hide()
+					</OnHide>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="Reagent" name="SyncUI_BankFrame_ReagentBank" inherits="SyncUI_BorderGlowFrameTemplate"  hidden="true">
+				<Size x="400" y="445" />
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="28" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="UnlockFrame" hidden="true">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" />
+							<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" inherits="SyncUI_GameFontShadow_Huge" JustifyH="CENTER" text="REAGENT_BANK">
+									<Size x="140" y="20" />
+									<Anchors>
+										<Anchor point="TOP" x="0" y="-20" />
+									</Anchors>
+								</FontString>
+								<FontString parentKey="Description" inherits="SyncUI_GameFontShadow_Medium" JustifyH="CENTER" wordwrap="true">
+									<Size x="350" y="50" />
+									<Anchors>
+										<Anchor point="TOP" relativeKey="$parent.Header" relativePoint="BOTTOM" x="" y="-10" />
+									</Anchors>
+								</FontString>
+								<FontString parentKey="Cost" inherits="SyncUI_GameFontShadow_Medium" JustifyH="CENTER" wordwrap="true">
+									<Size x="350" y="40" />
+									<Anchors>
+										<Anchor point="TOP" relativeKey="$parent.Description" relativePoint="BOTTOM" x="" y="" />
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="PurchaseButton" inherits="SyncUI_OptionsButtonTemplate" text="BANKSLOTPURCHASE">
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.Cost" relativePoint="BOTTOM" x="" y="5" />
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										StaticPopup_Show("CONFIRM_BUY_REAGENTBANK_TAB")
+									</OnClick>
+								</Scripts>
+							</Button>
+						</Frames>
+						<Scripts>
+							<OnLoad>
+								local text = REAGENTBANK_PURCHASE_TEXT:gsub("\n","\n\n")
+								local cost = TABARDVENDORCOST.." "..GetCoinTextureString(GetReagentBankCost())
+								
+								self.Description:SetText(text)
+								self.Cost:SetText(cost)
+							</OnLoad>
+							<!--OnShow>
+								self:GetParent().DropSlot:Hide()
+							</OnShow>
+							<OnHide>
+								self:GetParent().DropSlot:Show()
+							</OnHide-->
+						</Scripts>
+					</Frame>
+
+					<Button parentKey="DropSlot" inherits="SyncUI_DropItemSlotTemplate" />
+
+					<Button parentKey="Switch" inherits="SyncUI_TextButtonTemplate" text="BANK">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="0" y="5" />
+						</Anchors>
+						<Scripts>
+							<OnClick function="SyncUI_BankFrame_Switch" />
+						</Scripts>
+					</Button>
+					<Button parentKey="Deposite" text="DEPOSIT">
+						<Size x="24" y="24" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Switch" relativePoint="RIGHT" x="10" y="0" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Deposite" alpha="0.5" />
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Deposite" />
+						<Scripts>
+							<OnClick>
+								DepositReagentBank()
+							</OnClick>
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-6)
+								GameTooltip:AddLine(REAGENTBANK_DEPOSIT,1,1,1)
+								GameTooltip:Show()
+							</OnEnter>
+							<OnLeave function="GameTooltip_Hide" />
+						</Scripts>
+					</Button>
+					<Button parentKey="Restack" inherits="SyncUI_RestackButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Deposite" relativePoint="TOPRIGHT" x="10" y="-1" />
+						</Anchors>
+						<Scripts>
+							<OnClick function="SortReagentBankBags" />
+						</Scripts>
+					</Button>
+					
+					<Button name="$parent_Slot1" inherits="SyncUI_ReagentItemSlotTemplate" id="1" />
+					<Button name="$parent_Slot2" inherits="SyncUI_ReagentItemSlotTemplate" id="2" />
+					<Button name="$parent_Slot3" inherits="SyncUI_ReagentItemSlotTemplate" id="3" />
+					<Button name="$parent_Slot4" inherits="SyncUI_ReagentItemSlotTemplate" id="4" />
+					<Button name="$parent_Slot5" inherits="SyncUI_ReagentItemSlotTemplate" id="5" />
+					<Button name="$parent_Slot6" inherits="SyncUI_ReagentItemSlotTemplate" id="6" />
+					<Button name="$parent_Slot7" inherits="SyncUI_ReagentItemSlotTemplate" id="7" />
+					<Button name="$parent_Slot8" inherits="SyncUI_ReagentItemSlotTemplate" id="8" />
+					<Button name="$parent_Slot9" inherits="SyncUI_ReagentItemSlotTemplate" id="9" />
+					<Button name="$parent_Slot10" inherits="SyncUI_ReagentItemSlotTemplate" id="10" />
+					<Button name="$parent_Slot11" inherits="SyncUI_ReagentItemSlotTemplate" id="11" />
+					<Button name="$parent_Slot12" inherits="SyncUI_ReagentItemSlotTemplate" id="12" />
+					<Button name="$parent_Slot13" inherits="SyncUI_ReagentItemSlotTemplate" id="13" />
+					<Button name="$parent_Slot14" inherits="SyncUI_ReagentItemSlotTemplate" id="14" />
+					<Button name="$parent_Slot15" inherits="SyncUI_ReagentItemSlotTemplate" id="15" />
+					<Button name="$parent_Slot16" inherits="SyncUI_ReagentItemSlotTemplate" id="16" />
+					<Button name="$parent_Slot17" inherits="SyncUI_ReagentItemSlotTemplate" id="17" />
+					<Button name="$parent_Slot18" inherits="SyncUI_ReagentItemSlotTemplate" id="18" />
+					<Button name="$parent_Slot19" inherits="SyncUI_ReagentItemSlotTemplate" id="19" />
+					<Button name="$parent_Slot20" inherits="SyncUI_ReagentItemSlotTemplate" id="20" />
+					<Button name="$parent_Slot21" inherits="SyncUI_ReagentItemSlotTemplate" id="21" />
+					<Button name="$parent_Slot22" inherits="SyncUI_ReagentItemSlotTemplate" id="22" />
+					<Button name="$parent_Slot23" inherits="SyncUI_ReagentItemSlotTemplate" id="23" />
+					<Button name="$parent_Slot24" inherits="SyncUI_ReagentItemSlotTemplate" id="24" />
+					<Button name="$parent_Slot25" inherits="SyncUI_ReagentItemSlotTemplate" id="25" />
+					<Button name="$parent_Slot26" inherits="SyncUI_ReagentItemSlotTemplate" id="26" />
+					<Button name="$parent_Slot27" inherits="SyncUI_ReagentItemSlotTemplate" id="27" />
+					<Button name="$parent_Slot28" inherits="SyncUI_ReagentItemSlotTemplate" id="28" />
+					<Button name="$parent_Slot29" inherits="SyncUI_ReagentItemSlotTemplate" id="29" />
+					<Button name="$parent_Slot30" inherits="SyncUI_ReagentItemSlotTemplate" id="30" />
+					<Button name="$parent_Slot31" inherits="SyncUI_ReagentItemSlotTemplate" id="31" />
+					<Button name="$parent_Slot32" inherits="SyncUI_ReagentItemSlotTemplate" id="32" />
+					<Button name="$parent_Slot33" inherits="SyncUI_ReagentItemSlotTemplate" id="33" />
+					<Button name="$parent_Slot34" inherits="SyncUI_ReagentItemSlotTemplate" id="34" />
+					<Button name="$parent_Slot35" inherits="SyncUI_ReagentItemSlotTemplate" id="35" />
+					<Button name="$parent_Slot36" inherits="SyncUI_ReagentItemSlotTemplate" id="36" />
+					<Button name="$parent_Slot37" inherits="SyncUI_ReagentItemSlotTemplate" id="37" />
+					<Button name="$parent_Slot38" inherits="SyncUI_ReagentItemSlotTemplate" id="38" />
+					<Button name="$parent_Slot39" inherits="SyncUI_ReagentItemSlotTemplate" id="39" />
+					<Button name="$parent_Slot40" inherits="SyncUI_ReagentItemSlotTemplate" id="40" />
+					<Button name="$parent_Slot41" inherits="SyncUI_ReagentItemSlotTemplate" id="41" />
+					<Button name="$parent_Slot42" inherits="SyncUI_ReagentItemSlotTemplate" id="42" />
+					<Button name="$parent_Slot43" inherits="SyncUI_ReagentItemSlotTemplate" id="43" />
+					<Button name="$parent_Slot44" inherits="SyncUI_ReagentItemSlotTemplate" id="44" />
+					<Button name="$parent_Slot45" inherits="SyncUI_ReagentItemSlotTemplate" id="45" />
+					<Button name="$parent_Slot46" inherits="SyncUI_ReagentItemSlotTemplate" id="46" />
+					<Button name="$parent_Slot47" inherits="SyncUI_ReagentItemSlotTemplate" id="47" />
+					<Button name="$parent_Slot48" inherits="SyncUI_ReagentItemSlotTemplate" id="48" />
+					<Button name="$parent_Slot49" inherits="SyncUI_ReagentItemSlotTemplate" id="49" />
+					
+					<Button name="$parent_Slot50" inherits="SyncUI_ReagentItemSlotTemplate" id="50" />
+					<Button name="$parent_Slot51" inherits="SyncUI_ReagentItemSlotTemplate" id="51" />
+					<Button name="$parent_Slot52" inherits="SyncUI_ReagentItemSlotTemplate" id="52" />
+					<Button name="$parent_Slot53" inherits="SyncUI_ReagentItemSlotTemplate" id="53" />
+					<Button name="$parent_Slot54" inherits="SyncUI_ReagentItemSlotTemplate" id="54" />
+					<Button name="$parent_Slot55" inherits="SyncUI_ReagentItemSlotTemplate" id="55" />
+					<Button name="$parent_Slot56" inherits="SyncUI_ReagentItemSlotTemplate" id="56" />
+					<Button name="$parent_Slot57" inherits="SyncUI_ReagentItemSlotTemplate" id="57" />
+					<Button name="$parent_Slot58" inherits="SyncUI_ReagentItemSlotTemplate" id="58" />
+					<Button name="$parent_Slot59" inherits="SyncUI_ReagentItemSlotTemplate" id="59" />
+					<Button name="$parent_Slot60" inherits="SyncUI_ReagentItemSlotTemplate" id="60" />
+					<Button name="$parent_Slot61" inherits="SyncUI_ReagentItemSlotTemplate" id="61" />
+					<Button name="$parent_Slot62" inherits="SyncUI_ReagentItemSlotTemplate" id="62" />
+					<Button name="$parent_Slot63" inherits="SyncUI_ReagentItemSlotTemplate" id="63" />
+					<Button name="$parent_Slot64" inherits="SyncUI_ReagentItemSlotTemplate" id="64" />
+					<Button name="$parent_Slot65" inherits="SyncUI_ReagentItemSlotTemplate" id="65" />
+					<Button name="$parent_Slot66" inherits="SyncUI_ReagentItemSlotTemplate" id="66" />
+					<Button name="$parent_Slot67" inherits="SyncUI_ReagentItemSlotTemplate" id="67" />
+					<Button name="$parent_Slot68" inherits="SyncUI_ReagentItemSlotTemplate" id="68" />
+					<Button name="$parent_Slot69" inherits="SyncUI_ReagentItemSlotTemplate" id="69" />
+					<Button name="$parent_Slot70" inherits="SyncUI_ReagentItemSlotTemplate" id="70" />
+					<Button name="$parent_Slot71" inherits="SyncUI_ReagentItemSlotTemplate" id="71" />
+					<Button name="$parent_Slot72" inherits="SyncUI_ReagentItemSlotTemplate" id="72" />
+					<Button name="$parent_Slot73" inherits="SyncUI_ReagentItemSlotTemplate" id="73" />
+					<Button name="$parent_Slot74" inherits="SyncUI_ReagentItemSlotTemplate" id="74" />
+					<Button name="$parent_Slot75" inherits="SyncUI_ReagentItemSlotTemplate" id="75" />
+					<Button name="$parent_Slot76" inherits="SyncUI_ReagentItemSlotTemplate" id="76" />
+					<Button name="$parent_Slot77" inherits="SyncUI_ReagentItemSlotTemplate" id="77" />
+					<Button name="$parent_Slot78" inherits="SyncUI_ReagentItemSlotTemplate" id="78" />
+					<Button name="$parent_Slot79" inherits="SyncUI_ReagentItemSlotTemplate" id="79" />
+					<Button name="$parent_Slot80" inherits="SyncUI_ReagentItemSlotTemplate" id="80" />
+					<Button name="$parent_Slot81" inherits="SyncUI_ReagentItemSlotTemplate" id="81" />
+					<Button name="$parent_Slot82" inherits="SyncUI_ReagentItemSlotTemplate" id="82" />
+					<Button name="$parent_Slot83" inherits="SyncUI_ReagentItemSlotTemplate" id="83" />
+					<Button name="$parent_Slot84" inherits="SyncUI_ReagentItemSlotTemplate" id="84" />
+					<Button name="$parent_Slot85" inherits="SyncUI_ReagentItemSlotTemplate" id="85" />
+					<Button name="$parent_Slot86" inherits="SyncUI_ReagentItemSlotTemplate" id="86" />
+					<Button name="$parent_Slot87" inherits="SyncUI_ReagentItemSlotTemplate" id="87" />
+					<Button name="$parent_Slot88" inherits="SyncUI_ReagentItemSlotTemplate" id="88" />
+					<Button name="$parent_Slot89" inherits="SyncUI_ReagentItemSlotTemplate" id="89" />
+					<Button name="$parent_Slot90" inherits="SyncUI_ReagentItemSlotTemplate" id="90" />
+					<Button name="$parent_Slot91" inherits="SyncUI_ReagentItemSlotTemplate" id="91" />
+					<Button name="$parent_Slot92" inherits="SyncUI_ReagentItemSlotTemplate" id="92" />
+					<Button name="$parent_Slot93" inherits="SyncUI_ReagentItemSlotTemplate" id="93" />
+					<Button name="$parent_Slot94" inherits="SyncUI_ReagentItemSlotTemplate" id="94" />
+					<Button name="$parent_Slot95" inherits="SyncUI_ReagentItemSlotTemplate" id="95" />
+					<Button name="$parent_Slot96" inherits="SyncUI_ReagentItemSlotTemplate" id="96" />
+					<Button name="$parent_Slot97" inherits="SyncUI_ReagentItemSlotTemplate" id="97" />
+					<Button name="$parent_Slot98" inherits="SyncUI_ReagentItemSlotTemplate" id="98" />
+				</Frames>
+				<Scripts>
+					<OnLoad function="SyncUI_ReagentBank_OnLoad" />
+					<OnEvent function="SyncUI_ReagentBank_OnEvent" />
+					<OnShow>
+						SyncUI_ReagentBank_OnShow(self)
+					</OnShow>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="BagFrame" inherits="SyncUI_LayerBackdropTemplate" hidden="true">
+				<Size x="286" y="58" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Normal" relativePoint="BOTTOMLEFT" x="-14" y="0" />
+				</Anchors>
+				<Frames>
+					<Button parentKey="Bag1" inherits="SyncUI_BankBagTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="10" y="-10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag2" inherits="SyncUI_BankBagTemplate" id="2">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Bag1" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag3" inherits="SyncUI_BankBagTemplate" id="3">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Bag2" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag4" inherits="SyncUI_BankBagTemplate" id="4">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Bag3" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag5" inherits="SyncUI_BankBagTemplate" id="5">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Bag4" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag6" inherits="SyncUI_BankBagTemplate" id="6">
+						<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Bag5" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Bag7" inherits="SyncUI_BankBagTemplate" id="7">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Bag6" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					
+					<Button parentKey="Purchase" inherits="SyncUI_TextButtonTemplate" text="BANKSLOTPURCHASE">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="11" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								StaticPopup_Show("CONFIRM_BUY_BANK_SLOT")
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self:SetBackdropColor(1,1,1,0.75)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_BankFrame_OnLoad" />
+			<OnEvent function="SyncUI_BankFrame_OnEvent" />
+			<OnShow function="SyncUI_BankFrame_OnShow" />
+			<OnHide>
+				BankFrame:Hide()
+				CloseBankFrame()
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+
+	<!-- Category Menu -->
+	<Button name="SyncUI_BagCatLineTemplate" hidden="true" virtual="true">
+		<Size x="222" y="20" />
+		<Frames>
+			<Button parentKey="Delete" alpha="0">
+				<Size x="17" y="17" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="0" y="-1" />
+				</Anchors>
+				<NormalTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="0.5" />
+				<HighlightTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="1" />
+				<Scripts>
+					<OnLoad>
+						self:RegisterForClicks("AnyUp")
+					</OnLoad>
+					<OnClick>
+						SyncUI_BagCategoryLine_Delete(self:GetParent())
+					</OnClick>
+					<OnEnter>
+						SyncUI_BagCategoryLine_OnEnter(self)
+					</OnEnter>
+					<OnLeave>
+						SyncUI_BagCategoryLine_OnLeave(self)
+					</OnLeave>
+				</Scripts>
+			</Button>
+		</Frames>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Name" justifyH="LEFT">
+			<Size x="195" y="10" />
+			<Anchors>
+				<Anchor point="LEFT" x="5" y="0" />
+			</Anchors>
+		</ButtonText>
+		<PushedTextOffset x="5" y="0" />
+		<Scripts>
+			<OnLoad>
+				self:RegisterForDrag("LeftButton")
+			</OnLoad>
+			<OnEnter>
+				SyncUI_BagCategoryLine_OnEnter(self,true)
+			</OnEnter>
+			<OnLeave>
+				SyncUI_BagCategoryLine_OnLeave(self,true)
+			</OnLeave>
+			<!--OnDragStart function="SyncUI_BagCategoryLine_OnDragStart" /-->
+			<OnDragStop function="SyncUI_BagCategoryLine_OnDragStop" />
+			<OnMouseDown function="SyncUI_BagCategoryLine_OnDragStart" />
+			<OnMouseUp function="SyncUI_BagCategoryLine_OnDragStop" />
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_BagCategoryMenu" inherits="SyncUI_BorderGlowFrameTemplate" parent="SyncUI_BagFrame" hidden="true">
+		<Size x="252" y="215" />
+		<Anchors>
+			<Anchor Point="BOTTOMRIGHT" relativeTo="SyncUI_BagFrame" relativePoint="BOTTOMLEFT" x="-20" y="0" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="-10" />
+					<Anchor point="BOTTOMRIGHT" x="-4" y="28" />
+				</Anchors>
+			</Frame>			
+			<ScrollFrame parentKey="ScrollFrame" name="$parent_ScrollFrame" inherits="SyncUI_ScrollFrameTemplate2" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+					<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+				</Anchors>
+				<Scripts>
+					<OnVerticalScroll>
+						SyncUI_ScrollFrame_OnVerticalScroll(self, offset, 20, SyncUI_BagCategoryMenu_UpdateScrollFrame)
+					</OnVerticalScroll>
+					<OnShow function="SyncUI_BagCategoryMenu_UpdateScrollFrame" />
+				</Scripts>
+			</ScrollFrame>
+
+			<Button parentKey="Line1" inherits="SyncUI_BagCatLineTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ScrollFrame" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line2" inherits="SyncUI_BagCatLineTemplate" id="2">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line1" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line3" inherits="SyncUI_BagCatLineTemplate" id="3">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line2" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line4" inherits="SyncUI_BagCatLineTemplate" id="4">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line3" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line5" inherits="SyncUI_BagCatLineTemplate" id="5">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line4" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line6" inherits="SyncUI_BagCatLineTemplate" id="6">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line5" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Line7" inherits="SyncUI_BagCatLineTemplate" id="7">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Line6" relativePoint="BOTTOM" x="0" y="-1" />
+				</Anchors>
+			</Button>
+
+			<EditBox parentKey="EnterName" inherits="SyncUI_EditBoxTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="8" y="-3" />
+				</Anchors>
+				<Scripts>
+					<OnEnterPressed>
+						SyncUI_BagCategoryMenu_AddCategory()
+						self:ClearFocus()
+					</OnEnterPressed>
+				</Scripts>
+			</EditBox>
+			<Button parentKey="Create" inherits="SyncUI_TextButtonTemplate" text="BATTLETAG_CREATE">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" x="-10" y="-2" />
+				</Anchors>
+				<Scripts>
+					<OnClick function="SyncUI_BagCategoryMenu_AddCategory" />
+				</Scripts>
+			</Button>
+
+			<Button parentKey="Close" inherits="SyncUI_CloseButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="5" y="2" />
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnShow function="SyncUI_BagCategoryMenu_OnShow" />
+		</Scripts>
+	</Frame>
+
+</Ui>

@@ -1,0 +1,20 @@
+<UI>
+
+	<Script file="Tooltip.lua" />
+	
+	<Frame name="SyncUI_Tooltip">
+		<Size x="100" y="20" />
+		<Scripts>
+			<OnLoad function="SyncUI_Tooltip_OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<GameTooltip name="SyncUI_ScanTooltip" inherits="GameTooltipTemplate">
+		<Scripts>
+			<OnLoad>
+				self:SetOwner(WorldFrame, "ANCHOR_NONE")
+			</OnLoad>
+		</Scripts>
+	</GameTooltip>
+
+</UI>

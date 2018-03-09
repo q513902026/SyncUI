@@ -1,0 +1,4 @@
+<Bindings>
+	<Binding name="CLICK SyncUI_ObjQuickItem:LeftButton" header="QUESTHUB" category="|cFF66FF00Sync|cFFFFFFFFUI" />
+	<Binding name="CLICK SyncUI_SideBarToggle:LeftButton" category="|cFF66FF00Sync|cFFFFFFFFUI" />
+</Bindings>

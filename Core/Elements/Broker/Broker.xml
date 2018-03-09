@@ -1,0 +1,224 @@
+<Ui>
+	
+	<Script file="Broker.lua" />
+	
+	<Button name="SyncUI_BrokerButtonStyleTemplate" inherits="SyncUI_BackdropTemplate" virtual="true">
+		<HitRectInsets left="6" right="6" top="6" bottom="6" />
+		<Size x="140" y="35" />		
+		<NormalTexture parentKey="Icon" hidden="true">
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+			</Anchors>
+			<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+		</NormalTexture>
+		<HighlightTexture parentKey="Highlight">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="IconEdge" hidden="true">
+					<Size x="1" y="19" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="27" y="-8" />
+					</Anchors>
+					<Color r="0" g="0" b="0" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+		</ButtonText>
+	</Button>
+
+	<Button name="SyncUI_BrokerButtonTemplate" inherits="SyncUI_BrokerButtonStyleTemplate" alpha="0" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self:RegisterForClicks("AnyUp")
+				self.update = 0
+				self.interval = 1
+			</OnLoad>
+			<OnClick function="SyncUI_BrokerButton_OnClick" />
+			<OnUpdate function="SyncUI_BrokerButton_OnUpdate" />
+			<OnEnter function="SyncUI_BrokerButton_OnEnter" />
+			<OnLeave function="SyncUI_BrokerButton_OnLeave" />
+		</Scripts>
+	</Button>
+	
+	<Button name="SyncUI_BrokerMenuButtonTemplate" inherits="SyncUI_BrokerButtonStyleTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self.IconEdge:Show()
+				self.Highlight:SetPoint("TOPLEFT",28,-8)
+				self.Text:SetPoint("TOPLEFT",28,-8)
+			</OnLoad>
+			<OnClick function="SyncUI_BrokerMenuButton_OnClick" />
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_BrokerMenu" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="MEDIUM" toplevel="true" hidden="true" parent="SyncUI_UIParent">
+		<Size x="130" y="320" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Frames>
+			<Button parentKey="Button1" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="-10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button2" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button3" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button4" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button5" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button4" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button6" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button5" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button7" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button6" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button8" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button7" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button9" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button8" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button10" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button9" relativePoint="BOTTOM"  x="0" y="10"/>
+				</Anchors>
+			</Button>
+
+			<Button parentKey="Button11" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button10" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button12" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button11" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button13" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button12" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button14" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button13" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button15" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button14" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button16" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button15" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button17" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button16" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button18" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button17" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button19" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button18" relativePoint="BOTTOM" x="0" y="10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Button20" inherits="SyncUI_BrokerMenuButtonTemplate">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Button19" relativePoint="BOTTOM"  x="0" y="10"/>
+				</Anchors>
+			</Button>
+			
+			<Button parentKey="Clear" inherits="SyncUI_BrokerMenuButtonTemplate" text="BROWSER_CLEAR_CACHE">
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="-5" y="10" />
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.IconEdge:Show()
+						self.Highlight:SetPoint("TOPLEFT",28,-8)
+						self.Text:SetPoint("TOPLEFT",28,-8)
+						self:SetNormalTexture("Interface\\Icons\\inv_pet_broom")
+					</OnLoad>
+					<OnClick>
+						SyncUI_BrokerButton_OnReset(self:GetParent().ref)
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="Close" inherits="SyncUI_CloseButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="5" y="2" />
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterEvent("PLAYER_ENTERING_WORLD")
+			</OnLoad>
+			<OnEvent function="SyncUI_BrokerMenu_OnInit" />
+			<OnHide>
+				local frame = self.ref
+				
+				if frame and not frame.brokerType then
+					frame:SetAlpha(0)
+				end
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+	
+	<Script file="Broker - Currency.lua" />
+	<Script file="Broker - Durability.lua" />
+	<Script file="Broker - FPS.lua" />
+	<Script file="Broker - Friends.lua" />
+	<Script file="Broker - Guild.lua" />
+	<Script file="Broker - Latency.lua" />
+	<Script file="Broker - Memory.lua" />
+	<Script file="Broker - Money.lua" />
+	<Script file="Broker - Artifact.lua" />
+	<Script file="Broker - WorldQuests.lua" />	
+	
+</Ui>

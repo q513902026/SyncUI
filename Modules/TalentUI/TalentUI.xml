@@ -1,0 +1,576 @@
+<Ui>
+	
+	<Script file="TalentUI.lua" />
+
+	<Button name="SyncUI_TalentButtonTemplate" virtual="true">
+		<Size x="38" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon" desaturated="true" >
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture parentKey="Border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<Size x="42" y="42" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Lock" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
+					<TexCoords left="0.609375" right="0.7578125" top="0" bottom="0.59375" />
+				</Texture>
+				<Texture parentKey="Select" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
+					<TexCoords left="0.4609375" right="0.609375" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<HighlightTexture parentKey="Highlight">
+			<Size x="32" y="32" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+	</Button>
+
+	<Button name="SyncUI_TalentActionButtonTemplate" inherits="SecureHandlerDragTemplate, SyncUI_TalentButtonTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				SyncUI_TalentButton_OnLoad(self)
+				SecureHandler_OnLoad(self)
+			</OnLoad>
+			<OnClick function="SyncUI_TalentButton_OnClick" />
+			<OnUpdate function="SyncUI_TalentButton_OnUpdate" />
+			<OnEnter function="SyncUI_TalentButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_PvPTalentActionButtonTemplate" inherits="SecureHandlerDragTemplate, SyncUI_TalentButtonTemplate" motionScriptsWhileDisabled="true" virtual="true">
+		<Scripts>
+			<OnLoad>
+				SyncUI_PvPTalentButton_OnLoad(self)
+				SecureHandler_OnLoad(self)
+			</OnLoad>
+			<OnClick function="SyncUI_PvPTalentButton_OnClick" />
+			<OnUpdate function="SyncUI_PvPTalentButton_OnUpdate" />
+			<OnEnter function="SyncUI_PvPTalentButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_SpecButtonTemplate" inherits="SyncUI_TalentButtonTemplate" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK" textureSubLevel="1">
+				<Texture parentKey="Primary" file="Interface\Minimap\ObjectIcons" hidden="true">
+					<Size x="20" y="20" />
+					<Anchors>
+						<Anchor point="TOP" x="" y="5" />
+					</Anchors>
+					<TexCoords left="0.375" right="0.5" top="0.625" bottom="0.75" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnClick function="SyncUI_SpecButton_OnClick" />
+			<OnEnter function="SyncUI_SpecButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_PetSpecButtonTemplate" inherits="SyncUI_SpecButtonTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self.isPet = true
+			</OnLoad>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_PetAbilityButtonTemplate" inherits="SyncUI_TalentButtonTemplate" virtual="true">
+		<Scripts>
+			<OnEnter>
+				if not self.spellID then return end
+				
+				GameTooltip:SetOwner(SyncUI_TalentUI.Talents, "ANCHOR_RIGHT",10,-19)
+				GameTooltip:SetSpellByID(self.spellID)
+				GameTooltip:Show()
+			</OnEnter>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_TalentTabButtonTemplate" inherits="SecureHandlerClickTemplate, SyncUI_TalentButtonTemplate" virtual="true">
+		<Scripts>
+			<OnLoad>
+				self:RegisterEvent("PLAYER_LOGIN")
+				SecureHandler_OnLoad(self)
+			</OnLoad>
+			<OnEvent function="SyncUI_TalentTabButton_OnLoad" />
+			<OnEnter>
+				GameTooltip:SetOwner(SyncUI_TalentUI.Talents, "ANCHOR_RIGHT",10,-19)
+				GameTooltip:AddLine(self.text,1,1,1)
+				GameTooltip:Show()
+			</OnEnter>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	
+	<Frame name="SyncUI_TalentUI" frameStrata="MEDIUM" toplevel="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="276" y="314" />
+		<Anchors>
+			<Anchor point="TOPLEFT" x="70" y="-200"/>
+		</Anchors>
+		<Frames>
+			<Frame parentKey="Talents" inherits="SyncUI_BorderGlowFrameTemplate" useParentLevel="true">
+				<Size x="136" y="294" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="70" y="-10" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Slot1" inherits="SyncUI_TalentActionButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="16" y="-16" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot2" inherits="SyncUI_TalentActionButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot1" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot3" inherits="SyncUI_TalentActionButtonTemplate" id="3">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot2" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot4" inherits="SyncUI_TalentActionButtonTemplate" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot1" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot5" inherits="SyncUI_TalentActionButtonTemplate" id="5">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot4" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot6" inherits="SyncUI_TalentActionButtonTemplate" id="6">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot5" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot7" inherits="SyncUI_TalentActionButtonTemplate" id="7">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot4" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot8" inherits="SyncUI_TalentActionButtonTemplate" id="8">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot7" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot9" inherits="SyncUI_TalentActionButtonTemplate" id="9">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot8" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot10" inherits="SyncUI_TalentActionButtonTemplate" id="10">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot7" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot11" inherits="SyncUI_TalentActionButtonTemplate" id="11">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot10" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot12" inherits="SyncUI_TalentActionButtonTemplate" id="12">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot11" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot13" inherits="SyncUI_TalentActionButtonTemplate" id="13">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot10" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot14" inherits="SyncUI_TalentActionButtonTemplate" id="14">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot13" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot15" inherits="SyncUI_TalentActionButtonTemplate" id="15">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot14" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot16" inherits="SyncUI_TalentActionButtonTemplate" id="16">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot13" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot17" inherits="SyncUI_TalentActionButtonTemplate" id="17">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot16" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot18" inherits="SyncUI_TalentActionButtonTemplate" id="18">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot17" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot19" inherits="SyncUI_TalentActionButtonTemplate" id="19">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot16" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot20" inherits="SyncUI_TalentActionButtonTemplate" id="20">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot19" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot21" inherits="SyncUI_TalentActionButtonTemplate" id="21">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot20" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self.isTalent = true
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="PvPTalents" inherits="SyncUI_BorderGlowFrameTemplate" useParentLevel="true" hidden="true">
+				<Size x="136" y="256" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="70" y="-10" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Slot1" inherits="SyncUI_PvPTalentActionButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="16" y="-16" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot2" inherits="SyncUI_PvPTalentActionButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot1" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot3" inherits="SyncUI_PvPTalentActionButtonTemplate" id="3">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot2" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot4" inherits="SyncUI_PvPTalentActionButtonTemplate" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot1" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot5" inherits="SyncUI_PvPTalentActionButtonTemplate" id="5">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot4" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot6" inherits="SyncUI_PvPTalentActionButtonTemplate" id="6">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot5" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot7" inherits="SyncUI_PvPTalentActionButtonTemplate" id="7">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot4" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot8" inherits="SyncUI_PvPTalentActionButtonTemplate" id="8">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot7" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot9" inherits="SyncUI_PvPTalentActionButtonTemplate" id="9">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot8" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot10" inherits="SyncUI_PvPTalentActionButtonTemplate" id="10">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot7" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot11" inherits="SyncUI_PvPTalentActionButtonTemplate" id="11">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot10" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot12" inherits="SyncUI_PvPTalentActionButtonTemplate" id="12">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot11" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot13" inherits="SyncUI_PvPTalentActionButtonTemplate" id="13">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot10" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot14" inherits="SyncUI_PvPTalentActionButtonTemplate" id="14">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot13" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot15" inherits="SyncUI_PvPTalentActionButtonTemplate" id="15">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot14" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot16" inherits="SyncUI_PvPTalentActionButtonTemplate" id="16">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Slot13" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot17" inherits="SyncUI_PvPTalentActionButtonTemplate" id="17">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot16" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Slot18" inherits="SyncUI_PvPTalentActionButtonTemplate" id="18">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Slot17" relativePoint="RIGHT" />
+						</Anchors>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self.isTalent = true
+					</OnLoad>
+				</Scripts>
+			</Frame>
+
+			<Frame parentKey="Specs" inherits="SyncUI_BackdropTemplate" useParentLevel="true">
+				<Size x="68" y="144" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativeKey="$parent.Talents" relativePoint="TOPLEFT" x="-5" y="-15" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="5" y="-5" />
+							<Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Spec1" inherits="SyncUI_SpecButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Spec2" inherits="SyncUI_SpecButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Spec1" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Spec3" inherits="SyncUI_SpecButtonTemplate" hidden="true" id="3">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Spec2" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Spec4" inherits="SyncUI_SpecButtonTemplate" hidden="true" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Spec3" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad function="SyncUI_TalentSpecFrame_OnLoad" />
+					<OnShow>
+						for i = 1, 4 do
+							SyncUI_SpecButton_Update(self["Spec"..i])
+						end
+					</OnShow>
+					<OnEvent>
+						for i = 1, 4 do
+							SyncUI_SpecButton_Update(self["Spec"..i])
+						end
+					</OnEvent>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="PetSpecs" inherits="SyncUI_BackdropTemplate, SecureHandlerStateTemplate" hidden="true">
+				<Size x="68" y="144" />
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Specs" relativePoint="BOTTOM" x="0" y="8" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="5" y="-5" />
+							<Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Spec1" inherits="SyncUI_PetSpecButtonTemplate" id="1" >
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Spec2" inherits="SyncUI_PetSpecButtonTemplate" id="2" >
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Spec1" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Spec3" inherits="SyncUI_PetSpecButtonTemplate" id="3" >
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Spec2" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						if select(2, UnitClass("player"))  ~= "HUNTER" then
+							return
+						end
+						
+						self:RegisterEvent("PET_SPECIALIZATION_CHANGED")
+						RegisterStateDriver(self, "visibility", "[@pet,exists] show; hide")
+					</OnLoad>
+					<OnShow>
+						for i = 1, 3 do
+							SyncUI_SpecButton_Update(self["Spec"..i])
+						end
+					</OnShow>
+					<OnEvent>
+						for i = 1, 3 do
+							SyncUI_SpecButton_Update(self["Spec"..i])
+						end
+					</OnEvent>
+				</Scripts>
+			</Frame>
+
+			<Frame parentKey="TabFrame" inherits="SyncUI_BackdropTemplate" useParentLevel="true">
+				<Size x="68" y="106" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Talents" relativePoint="TOPRIGHT" x="5" y="-15" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="5" y="-5" />
+							<Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Tab1" name="SyncUI_TalentTabButton1" inherits="SyncUI_TalentTabButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+						</Anchors>
+
+					</Button>
+					<Button parentKey="Tab2" name="SyncUI_TalentTabButton2" inherits="SyncUI_TalentTabButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Tab1" relativePoint="BOTTOM" />
+						</Anchors>
+					</Button>
+				</Frames>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_TalentUI_OnLoad" />
+			<OnEvent function="SyncUI_TalentUI_OnEvent" />
+			<OnShow>
+				if SyncUI_AbilityFrame then
+					SyncUI_AbilityFrame:RegisterEvent("MODIFIER_STATE_CHANGED")
+				end
+			</OnShow>
+			<OnHide>
+				SyncUI_AbilityFrame:Hide()
+				SyncUI_AbilityFrame:UnregisterAllEvents()
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_AbilityFrame" inherits="SyncUI_BackdropTemplate" frameStrata="HIGH" toplevel="true" parent="SyncUI_TalentUI" hidden="true">
+		<Size x="68" y="68" />
+		<Anchors>
+			<Anchor point="TOP" relativeTo="SyncUI_TalentUI" relativePoint="BOTTOM" x="0" y="0" />
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture file="Interface\AddOns\SyncUI\Media\Textures\Elements\Arrows">
+					<Size x="15" y="25" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="-6" y="-22" />
+					</Anchors>
+					<TexCoords left="0.765625" right="1" top="0" bottom="0.75" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5" y="-5" />
+					<Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+				</Anchors>
+			</Frame>
+			
+			<Button parentKey="Slot1" inherits="SyncUI_PetAbilityButtonTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Slot2" inherits="SyncUI_PetAbilityButtonTemplate" id="2">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Slot1"  relativePoint="RIGHT" /> 
+				</Anchors>
+			</Button>
+			<Button parentKey="Slot3" inherits="SyncUI_PetAbilityButtonTemplate" id="3">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Slot2"  relativePoint="RIGHT" /> 
+				</Anchors>
+			</Button>
+			<Button parentKey="Slot4" inherits="SyncUI_PetAbilityButtonTemplate" id="4">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Slot3"  relativePoint="RIGHT" /> 
+				</Anchors>
+			</Button>
+			<Button parentKey="Slot5" inherits="SyncUI_PetAbilityButtonTemplate" id="5">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Slot4"  relativePoint="RIGHT" /> 
+				</Anchors>
+			</Button>
+			<Button parentKey="Slot6" inherits="SyncUI_PetAbilityButtonTemplate" id="6">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Slot5"  relativePoint="RIGHT" /> 
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnEvent function="SyncUI_AbilityFrame_OnEvent" />
+			<OnShow function="SyncUI_AbilityFrame_UpdateSize" />
+			<OnHide function="GameTooltip_Hide" />
+		</Scripts>
+	</Frame>
+
+</Ui>

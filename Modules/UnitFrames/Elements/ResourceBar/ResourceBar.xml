@@ -1,0 +1,338 @@
+<Ui>
+
+	<Script file="ResourceBar.lua"/>
+	
+	<StatusBar name="SyncUI_ResourceTokenTemplate" inherits="SyncUI_StatusBarTemplate" defaultValue="0"	minValue="0" maxValue="1" virtual="true" />
+
+	<Frame name="SyncUI_RuneTemplate" virtual="true">
+		<Size x="23" y="15"/>
+		<Frames>
+			<StatusBar parentKey="StatusBar" inherits="SyncUI_StatusBarTemplate" setAllPoints="true" useParentLevel="true" />
+			<Frame parentKey="ArtFrame" frameStrata="MEDIUM" setAllPoints="true">
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Shine" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar" alphaMode="ADD" setAllPoints="true" hidden="true">
+							<Size x="31" y="23" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<TexCoords left="0.78125" right="0.90234375" top="0.78125" bottom="0.87109375"/>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Shine = self.ArtFrame.Shine
+				self.wasReady = true
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+	<Button name="SyncUI_TotemTemplate" inherits="SecureActionButtonTemplate" virtual="true">
+		<Size x="42" y="10" />
+		<Layers>
+			<Layer level="BACKGROUND" textureSubLevel="1">
+				<Texture parentKey="Icon" setAllPoints="true">
+					<TexCoords left="0.05" right="0.95" top="0.4" bottom="0.6" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<StatusBar parentKey="StatusBar" inherits="SyncUI_StatusBarTemplate" setAllPoints="true" useParentLevel="true">
+				<BarColor r="0" g="0" b="0" a="0.75" />
+			</StatusBar>
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString parentKey="Timer" inherits="SyncUI_GameFontNormal_Medium">
+							<Anchors>
+								<Anchor point="TOP" relativePoint="BOTTOM" />
+							</Anchors>
+						</FontString>			
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Timer = self.ArtFrame.Timer
+				
+				self:RegisterForClicks("RightButtonUp")
+				self:SetAttribute("type2","destroytotem")
+				self:SetAttribute("totem-slot",self:GetID())
+			</OnLoad>
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-20)
+				GameTooltip:SetArrow("TOP",true)
+				GameTooltip:SetTotem(self:GetID())
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_StatueTemplate" inherits="SecureActionButtonTemplate" virtual="true">
+		<Size x="48" y="32" />
+		<HitRectInsets left="4" right="4" top="4" bottom="-4" />
+		<Backdrop edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
+			<EdgeSize val="16" />
+		</Backdrop>
+		<Layers>
+			<Layer level="BORDER">
+				<Texture parentKey="Icon">
+					<Size x="32" y="16" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.05" right="0.95" top="0.275" bottom="0.725" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Timer" inherits="SyncUI_GameFontNormal_Medium">
+					<Anchors>
+						<Anchor point="TOP" relativeKey="$parent.Icon" relativePoint="BOTTOM" x="" y="-2" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<StatusBar parentKey="StatusBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="32" y="16" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				<BarColor r="0" g="0" b="0" a="0.75" />
+			</StatusBar>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterForClicks("RightButtonUp")
+				self:SetAttribute("type2", "destroytotem")
+				self:SetAttribute("totem-slot", self:GetID())
+			</OnLoad>
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM",0,-5)
+				GameTooltip:SetTotem(self:GetID())
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide()
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_ResourceBar" inherits="SecureHandlerStateTemplate" parent="SyncUI_UIParent">
+		<Size x="192" y="24" />
+		<Frames>
+			<Frame parentKey="GenericBar" setAllPoints="true" hidden="true">
+				<Frames>
+					<StatusBar parentKey="Token1" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="7" y="-7" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token2" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token1" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token3" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token2" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token4" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token3" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token5" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token4" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token6" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token5" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</StatusBar>
+
+					<Frame parentKey="Border" setAllPoints="true">
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture parentKey="Tex" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar" />
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnUpdate function="SyncUI_ResourceTypeBar_OnUpdate" />
+				</Scripts>
+			</Frame>
+			<Frame parentKey="AlternateBar" setAllPoints="true" hidden="true">
+				<Frames>
+					<StatusBar parentKey="StatusBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+						<Size x="177" y="10" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="7" y="-7" />
+						</Anchors>
+					</StatusBar>
+					<Frame parentKey="ArtFrame" setAllPoints="true">
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar">
+									<TexCoords left="0" right="0.75" top="0" bottom="0.1875" />
+								</Texture>
+							</Layer>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Value" inherits="SyncUI_GameFontNormal_Medium">
+									<Anchors>
+										<Anchor point="CENTER" relativeKey="$parent.$parent.StatusBar" />
+									</Anchors>
+								</FontString>			
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+			</Frame>
+			<Frame parentKey="ComboBar" setAllPoints="true" hidden="true">
+				<Frames>
+					<StatusBar parentKey="Token1" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Size x="33" y="10" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="7" y="-7" />
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token2" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Size x="33" y="10" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token1" relativePoint="RIGHT" x="3" y="0"/>
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token3" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Size x="33" y="10" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token2" relativePoint="RIGHT" x="3" y="0"/>
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token4" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Size x="33" y="10" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token3" relativePoint="RIGHT" x="3" y="0"/>
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="Token5" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
+						<Size x="33" y="10" />
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Token4" relativePoint="RIGHT" x="3" y="0"/>
+						</Anchors>
+					</StatusBar>
+					<StatusBar parentKey="ArtFrame" setAllPoints="true">
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar">
+									<TexCoords left="0" right="0.75" top="0.5" bottom="0.6875" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</StatusBar>
+				</Frames>
+				<Scripts>
+					<OnShow>
+						self:RegisterUnitEvent("UNIT_MAXPOWER", "player")
+						self:RegisterUnitEvent("UNIT_DISPLAYPOWER", "player")
+						self:RegisterUnitEvent("UNIT_POWER_FREQUENT", "player")
+						self:RegisterEvent("PLAYER_ENTERING_WORLD")
+					</OnShow>
+					<OnHide>
+						self:UnregisterAllEvents()
+					</OnHide>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="RuneBar" setAllPoints="true" hidden="true">
+				<Scripts>
+					<OnLoad>
+						self.unit = "player"
+						RuneFrame:SetParent(self)
+						RuneFrame:ClearAllPoints()
+						RuneFrame:SetPoint("CENTER",4,0)
+					</OnLoad>
+				</Scripts>
+			</Frame>
+			<Frame parentKey="StaggerBar" setAllPoints="true" hidden="true">
+				<Frames>
+					<StatusBar parentKey="StatusBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+						<Size x="177" y="10" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="7" y="-7" />
+						</Anchors>
+					</StatusBar>
+					<Frame parentKey="ArtFrame" setAllPoints="true">
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar">
+									<TexCoords left="0" right="0.75" top="0" bottom="0.1875" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnUpdate function="SyncUI_StaggerBar_OnUpdate" />
+				</Scripts>
+			</Frame>
+			<Button parentKey="StatueButton" inherits="SyncUI_StatueTemplate" hidden="true" id="1">
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" />
+				</Anchors>
+			</Button>
+			<Frame parentKey="TotemBar" hidden="true">
+				<Size x="192" y="24" />
+				<Anchors>
+					<Anchor point="TOP" />
+				</Anchors>
+				<Frames>
+					<Button parentKey="Totem1" useParentLevel="true" inherits="SyncUI_TotemTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="7" y="-7" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Totem2" useParentLevel="true" inherits="SyncUI_TotemTemplate" id="2">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Totem1" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Totem3" useParentLevel="true" inherits="SyncUI_TotemTemplate" id="3">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Totem2" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Totem4" useParentLevel="true" inherits="SyncUI_TotemTemplate" id="4">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Totem3" relativePoint="RIGHT" x="3" y="0" />
+						</Anchors>
+					</Button>
+					<Frame parentKey="ArtFrame" setAllPoints="true">
+						<Layers>
+							<Layer level="BACKGROUND">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\ResourceBar">
+									<TexCoords left="0" right="0.75" top="0.25" bottom="0.4375" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnUpdate function="SyncUI_TotemBar_OnUpdate" />
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_ResourceBar_OnLoad" />
+			<OnEvent function="SyncUI_ResourceBar_OnEvent" />
+		</Scripts>
+	</Frame>
+
+</Ui>

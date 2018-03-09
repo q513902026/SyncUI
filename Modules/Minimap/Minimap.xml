@@ -1,0 +1,345 @@
+<UI>
+
+	<Script file="Minimap.lua"/>
+	
+	<Frame name="SyncUI_MinimapButtonTemplate" inherits="SyncUI_BackdropTemplate" virtual="true">
+		<Size x="36" y="36" />
+	</Frame>
+	
+	<Frame name="SyncUI_Minimap" inherits="SyncUI_BorderGlowFrameTemplate" parent="SyncUI_UIParent">
+		<Size x="155" y="155" />
+		<Anchors>
+			<Anchor point="TOPRIGHT" x="-5" y="-5" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="Cluster" setAllPoints="true">
+				<Frames>
+					<Button parentKey="Zone">
+						<Size x="145" y="20" />
+						<Anchors>
+							<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="5" />
+						</Anchors>
+						<ButtonText justifyH="CENTER" wordwrap="false">
+							<Size x="145" y="20" />
+						</ButtonText>
+						<NormalFont style="SyncUI_GameFontNormal_Medium" />
+						<PushedTextOffset x="0" y="0" />
+						<Scripts>
+							<OnLoad>
+								self:SetText(GetMinimapZoneText())
+								self:RegisterEvent("ZONE_CHANGED")
+								self:RegisterEvent("ZONE_CHANGED_INDOORS")
+								self:RegisterEvent("ZONE_CHANGED_NEW_AREA")
+							</OnLoad>
+							<OnEnter function="SyncUI_Minimap_Zone_OnEnter" />
+							<OnLeave function="GameTooltip_Hide" />
+							<OnEvent>
+								self:SetText(GetMinimapZoneText())
+							</OnEvent>
+						</Scripts>
+					</Button>
+					<Button parentKey="Calendar">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="TOPRIGHT" x="4" y="2" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Calendar">
+							<Color r="0.75" g="0.75" b="0.75" />
+							<TexCoords left="0" right="0.5" top="0" bottom="1" />
+						</NormalTexture>
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Calendar">
+							<TexCoords left="0" right="0.5" top="0" bottom="1" />
+						</HighlightTexture>
+						<Frames>
+							<Frame parentKey="Notification" setAllPoints="true" hidden="true">
+								<Animations>
+									<AnimationGroup parentKey="Pulse" setToFinalAlpha="true" looping="REPEAT">
+										<Alpha duration="0" order="0" fromAlpha="0" toAlpha="0" />
+										<Alpha smoothing="IN" duration="1" order="1" fromAlpha="0" toAlpha="1" />
+										<Alpha smoothing="OUT" duration="1" order="2" fromAlpha="1" toAlpha="0" />
+									</AnimationGroup>
+								</Animations>
+								<Layers>
+									<Layer level="ARTWORK">
+										<Texture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Calendar">
+											<TexCoords left="0.5" right="1" top="0" bottom="1" />
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnShow>
+										self.Pulse:Play()
+									</OnShow>
+								</Scripts>
+							</Frame>
+							<Frame parentKey="Text" setAllPoints="true">
+								<Layers>
+									<Layer level="ARTWORK">
+										<FontString parentKey="String" inherits="SyncUI_PixelFont_Small" justifyH="CENTER">
+											<Anchors>
+												<Anchor point="BOTTOM" x="0.5" y="2" />
+											</Anchors>
+										</FontString>
+									</Layer>
+								</Layers>
+							</Frame>
+						</Frames>
+						<Scripts>
+							<OnLoad>
+								self:RegisterEvent("PLAYER_ENTERING_WORLD")
+								self:RegisterEvent("CALENDAR_UPDATE_PENDING_INVITES")
+								self:RegisterEvent("CALENDAR_EVENT_ALARM")
+								self:RegisterForClicks("AnyUp")
+								self.pending = 0
+							</OnLoad>
+							<OnEvent>
+								local pending = CalendarGetNumPendingInvites()
+								if pending > self.pending then
+									self.Notification:Show()
+									self.pending = pending
+								elseif pending == 0 then
+									self.Notification:Hide()
+									self.pending = 0
+								end
+							</OnEvent>
+							<OnClick>
+								ToggleCalendar()
+							</OnClick>
+							<OnUpdate>
+								self.Text.String:SetText(select(3, CalendarGetDate()))
+							</OnUpdate>
+						</Scripts>
+					</Button>
+					<Button parentKey="Mail" hidden="true">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Calendar" relativePoint="BOTTOM" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Letter">
+							<Color r="0.75" g="0.75" b="0.75" />
+						</NormalTexture>
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Letter" />
+						<Scripts>
+							<OnLoad>
+								self:RegisterEvent("MAIL_CLOSED")
+								self:RegisterEvent("UPDATE_PENDING_MAIL")
+							</OnLoad>
+							<OnEvent function="SyncUI_Minimap_Mail_OnEvent" />
+							<OnEnter function="SyncUI_Minimap_Mail_OnEnter" />            
+							<OnLeave function="GameTooltip_Hide" />
+						</Scripts>
+					</Button>
+					<Button parentKey="Garrison">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="RIGHT" relativeKey="$parent.Calendar" relativePoint="LEFT" x="-2" y="0" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Monitor">
+							<Color r="0.75" g="0.75" b="0.75" />
+							<TexCoords left="0" right="0.5" top="0" bottom="1" />
+						</NormalTexture>
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Monitor">
+							<TexCoords left="0" right="0.5" top="0" bottom="1" />
+						</HighlightTexture>
+						<Frames>
+							<Frame parentKey="Notification" setAllPoints="true" hidden="true">
+								<Animations>
+									<AnimationGroup parentKey="Flash" setToFinalAlpha="true" looping="REPEAT">
+										<Alpha duration="0" order="0" fromAlpha="0" toAlpha="0" />
+										<Alpha smoothing="IN" duration="1" order="1" fromAlpha="0" toAlpha="1" />
+										<Alpha smoothing="OUT" duration="1" order="2" fromAlpha="1" toAlpha="0" />
+									</AnimationGroup>
+								</Animations>
+								<Layers>
+									<Layer level="ARTWORK">
+										<Texture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Monitor">
+											<TexCoords left="0.5" right="1" top="0" bottom="1" />
+										</Texture>
+									</Layer>
+								</Layers>
+								<Scripts>
+									<OnShow>
+										self.Flash:Play()
+									</OnShow>
+								</Scripts>
+							</Frame>
+						</Frames>
+						<Scripts>
+							<OnLoad function="SyncUI_Minimap_Garrison_OnLoad" />
+							<OnEvent function="SyncUI_Minimap_Garrison_OnEvent" />
+							<OnClick function="GarrisonLandingPage_Toggle" />
+							<OnEnter>
+								GameTooltip:SetOwner(self, "ANCHOR_BOTTOMLEFT")
+								GameTooltip:SetText(GARRISON_LANDING_PAGE_TITLE, 1,1,1)
+								GameTooltip:Show()
+							</OnEnter>
+							<OnLeave function="GameTooltip:Hide" />
+						</Scripts>
+					</Button>
+					<Frame parentKey="Queue">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" x="-3" y="0" />
+						</Anchors>
+						<Scripts>
+							<OnLoad function="SyncUI_Minimap_Queue_OnLoad" />
+						</Scripts>
+					</Frame>
+					<Frame parentKey="Instance">
+						<Size x="40" y="20" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="15" y="5" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Text" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+									<Anchors>
+										<Anchor point="LEFT" />
+									</Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Scripts>
+							<OnLoad>
+								self:RegisterEvent("CHALLENGE_MODE_START")
+								self:RegisterEvent("PLAYER_DIFFICULTY_CHANGED")
+								self:RegisterEvent("INSTANCE_GROUP_SIZE_CHANGED")
+								self:RegisterEvent("UPDATE_INSTANCE_INFO")
+							</OnLoad>
+							<OnEvent function="SyncUI_Minimap_Instance_OnEvent" />
+						</Scripts>
+					</Frame>
+
+					<!-- Arrow Buttons -->
+					<Button parentKey="Tracking">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="SyncUI_Minimap" x="-7" y="7" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Resize">
+							<TexCoords left="1" right="0" top="1" bottom="0" />
+						</NormalTexture>
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Resize" alphaMode="ADD">
+							<TexCoords left="1" right="0" top="1" bottom="0" />
+						</HighlightTexture>
+						<Scripts>
+							<OnLoad>
+								self:RegisterEvent("MINIMAP_UPDATE_TRACKING")
+								MiniMapTracking_Update()
+							</OnLoad>
+							<OnClick>
+								ToggleDropDownMenu(1, nil, SyncUI_MinimapTrackingDropDown, self, -175, -5)
+							</OnClick>
+							<OnEvent function="MiniMapTracking_Update"/>
+						</Scripts>
+					</Button>
+					<Button parentKey="Switch">
+						<Size x="16" y="16" />
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT" x="7" y="-7" />
+						</Anchors>
+						<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Resize" />
+						<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Resize" alphaMode="ADD" />
+						<Scripts>
+							<OnClick>
+								local frame = SyncUI_Minimap.ButtonFrame
+								if frame:IsShown() then
+									frame:Hide()
+									SyncUI_CharData.MinimapButtonToggle = true
+								else
+									frame:Show()
+									SyncUI_CharData.MinimapButtonToggle = false
+								end
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame parentKey="ButtonFrame" hidden="false">
+				<Size x="36" y="36" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="SyncUI_Minimap" relativePoint="BOTTOMLEFT" x="-13" y="-5" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="Button1" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button2" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button1" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button3" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button2" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button4" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button3" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button5" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button4" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button6" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button5" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button7" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button8" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button7" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button9" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button8" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button10" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button9" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button11" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button10" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button12" inherits="SyncUI_MinimapButtonTemplate">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.Button11" relativePoint="RIGHT" x="-10" y="" />
+						</Anchors>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						self:RegisterEvent("PLAYER_ENTERING_WORLD")
+					</OnLoad>
+					<OnEvent function="SyncUI_MinimapButtonFrame_OnEvent" />
+					<OnUpdate function="SyncUI_MinimapButtonFrame_OnUpdate" />
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_Minimap_OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_MinimapTrackingDropDown" inherits="UIDropDownMenuTemplate" clampedToScreen="true" id="1" hidden="true">
+		<Scripts>
+			<OnLoad function="MiniMapTrackingDropDown_OnLoad" />
+		</Scripts>
+	</Frame>
+
+</UI>

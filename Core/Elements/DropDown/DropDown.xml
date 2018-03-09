@@ -1,0 +1,126 @@
+<Ui>
+
+	<Include file="DropDown.lua"/>
+	
+	<Button name="SyncUI_DropDownButtonTemplate" virtual="true">
+		<Size x="128" y="20" />
+		<Anchors>
+			<Anchor point="LEFT" x="15" y="0" />
+			<Anchor point="RIGHT" x="-15" y="0" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="ListDot" file="Interface\AddOns\SyncUI\Media\Textures\Elements\CheckButton" hidden="true">
+					<Size x="12" y="12" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+					<TexCoords left="0" right="1" top="0" bottom="0.25" />
+				</Texture>
+				<Texture parentKey="Icon">
+					<Size x="20" y="20" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK" textureSubLevel="1">
+				<Texture parentKey="ListChecked" file="Interface\AddOns\SyncUI\Media\Textures\Elements\CheckButton" hidden="true">
+					<Size x="12" y="12" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+					<TexCoords left="0" right="1" top="0.25" bottom="0.5" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text" justifyH="LEFT" maxLines="1">
+			<Anchors>
+				<Anchor point="TOPLEFT" relativeKey="$parent.Icon" relativePoint="TOPRIGHT" x="5" y="0" />
+				<Anchor point="BOTTOMRIGHT" />
+			</Anchors>
+		</ButtonText>
+		<!--HighlightTexture alphaMode="ADD">
+			<Size x="" y="14" />
+			<Anchors>
+				<Anchor point="CENTER" />
+				<Anchor point="LEFT" relativeKey="$parent.Text" x="-5" />
+				<Anchor point="RIGHT" relativeKey="$parent.Text" x="5" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture-->
+		<Frames>
+			<Button parentKey="Divider" inherits="SyncUI_DividerTemplate">
+				<Anchors>
+					<Anchor point="LEFT" x="5" />
+					<Anchor point="RIGHT" x="-5" /> 
+				</Anchors>
+			</Button>
+			<Button parentKey="MouseHandler">
+				<Anchors>
+					<Anchor point="TOPLEFT"	/>
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+				<Scripts>
+					<OnEnter>
+						if self:GetParent().tooltipFunc then
+							self:GetParent().tooltipFunc(self:GetParent(),button)
+						end
+						self:GetParent():GetParent()
+						
+						SyncUI_DropDownMenu_StopFading(self:GetParent():GetParent())
+					</OnEnter>
+					<OnLeave>
+						GameTooltip_Hide()
+						SyncUI_DropDownMenu_StartFading(self:GetParent():GetParent())
+					</OnLeave>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				self.Text:SetVertexColor(0.4,1,0)
+				
+				if self.tooltipFunc then
+					self.tooltipFunc(self,button)
+				end			
+				
+				SyncUI_DropDownMenu_StopFading(self:GetParent())
+			</OnEnter>
+			<OnLeave>
+				self.Text:SetVertexColor(1,1,1)
+				
+				GameTooltip_Hide()
+				SyncUI_DropDownMenu_StartFading(self:GetParent())
+			</OnLeave>
+			<OnClick>
+				if self.clickFunc then
+					self.clickFunc(self,button)
+				end
+	
+				self:GetParent():Hide()
+			</OnClick>
+		</Scripts>
+	</Button>
+	
+	<Frame name="SyncUI_DropDownMenuTemplate" hidden="true" virtual="true" />
+
+	<Frame name="SyncUI_DropDownListTemplate" inherits="SyncUI_BackdropTemplate" frameStrata="HIGH" toplevel="true" clampedToScreen="true" parent="SyncUI_UIParent" hidden="true" virtual="true">
+		<Size x="138" y="100" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Scripts>
+			<OnShow function="SyncUI_DropDownMenu_OnShow" />
+			<OnHide function="SyncUI_DropDownMenu_OnHide" />
+			<OnUpdate function ="SyncUI_DropDownMenu_OnUpdate" />
+			<OnEnter function ="SyncUI_DropDownMenu_StopFading" />
+			<OnLeave function ="SyncUI_DropDownMenu_StartFading" />
+		</Scripts>
+	</Frame>
+	
+	<Frame name="SyncUI_DropDownList1" inherits="SyncUI_DropDownListTemplate" />
+	<Frame name="SyncUI_DropDownList2" inherits="SyncUI_DropDownListTemplate" />
+
+</Ui>

@@ -1,0 +1,12 @@
+## Interface: 73000
+## Title: |cFF66FF00Sync|cFFFFFFFFUI
+## Version: 1.5.3
+## Author: Syncrow
+## Notes: Graphical User Interface Replacement
+## SavedVariables: SyncUI_Data
+## SavedVariablesPerCharacter: SyncUI_CharData
+
+Localization\Localization.xml
+Core\Core.xml
+Bindings.xml
+Modules\Modules.xml

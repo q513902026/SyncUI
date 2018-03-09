@@ -1,0 +1,36 @@
+<Ui>
+
+	<Include file="StatusBar.lua"/>
+
+	<StatusBar name="SyncUI_StatusBarTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture file="Interface\AddOns\SyncUI\Media\Textures\Elements\StatusBar-BgFile" />
+			</Layer>
+		</Layers>
+		<BarTexture parentKey="BarTex" file="Interface\AddOns\SyncUI\Media\Textures\Elements\StatusBar-Fill" />
+		<BarColor r="0.65" g="0.65" b="0.65" />
+	</StatusBar>
+
+	<StatusBar name="SyncUI_AnimatedStatusBarTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture file="Interface\AddOns\SyncUI\Media\Textures\Elements\StatusBar-BgFile" />
+			</Layer>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Fill" file="Interface\AddOns\SyncUI\Media\Textures\Elements\StatusBar-Animated" />
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad function="SyncUI_AnimatedStatusBar_OnLoad" />
+		</Scripts>
+		<BarTexture parentKey="BarTex" />
+	</StatusBar>
+
+	<Frame name="SyncUI_AnimatedStatusBarFrame">
+		<Scripts>
+			<OnUpdate function="SyncUI_AnimatedStatusBarFrame_OnUpdate" />
+		</Scripts>
+	</Frame>
+
+</Ui>

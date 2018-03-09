@@ -1,0 +1,122 @@
+<Ui>
+	
+	<Script file="Alerts.lua" />
+	
+	<Frame name="SyncUI_AlertFrameTemplate" inherits="SyncUI_BackdropTemplate" hidden="true" virtual="true">
+		<Size x="250" y="70" />
+		<Animations>
+			<AnimationGroup parentKey="Spawn" setToFinalAlpha="true">
+				<!-- Preset -->
+				<Translation offsetX="-160" offsetY="0" duration="0" order="1" />
+				<Alpha fromAlpha="1" toAlpha="0" duration="0" order="1" />
+				<Alpha childKey="Flash" fromAlpha="1" toAlpha="0" duration="0" order="1" />
+				
+				<!-- Fade In -->
+				<Alpha smoothing="IN_OUT" fromAlpha="0" toAlpha="1" duration="0.5" order="2" />
+				<Translation smoothing="IN_OUT" offsetX="160" offsetY="0" duration="0.5" order="2" />
+				
+				<!-- Shiny -->
+				<Alpha childKey="Flash" fromAlpha="0" toAlpha="0.5" duration="0.2" order="3" />
+				<Translation childKey="Flash" offsetX="160" offsetY="0" duration="1" order="3" />
+				<Alpha childKey="Flash" startDelay="0.35" fromAlpha="0.5" toAlpha="0" duration="0.5" order="3" />
+			</AnimationGroup>
+			<AnimationGroup parentKey="Despawn" setToFinalAlpha="true">
+				<Alpha startDelay="3.5" fromAlpha="1" toAlpha="0" duration="0.5" parentKey="alpha" />
+				<Translation startDelay="3.5" smoothing="IN" offsetX="-160" offsetY="0" duration="0.5" parentKey="trans" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent():Hide()						
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Title" inherits="SyncUI_GameFontShadow_Medium" justifyH="CENTER" justifyV="CENTER">
+					<Size x="" y="20" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="65" y="-11" />
+						<Anchor point="TOPRIGHT" x="-15" y="" />
+					</Anchors>
+					<Color r="0.6" g="1" b="0" />
+				</FontString>
+				<FontString parentKey="Text" inherits="SyncUI_GameFontShadow_Medium" justifyH="CENTER" justifyV="MIDDLE">
+					<Size x="" y="20" />
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="65" y="11" />
+						<Anchor point="BOTTOMRIGHT" x="-15" y="" />
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="ARTWORK" textureSubLevel="1">
+				<Texture parentKey="Skull" file="Interface/LFGFrame/UI-LFG-ICON-HEROIC" hidden="true">
+					<Size x="30" y="30" />
+					<Anchors>
+						<Anchor point="TOP" relativeKey="$parent.Title" x="0" y="10" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Display" inherits="SyncUI_LayerWithNoEdgeTemplate">
+				<Size x="60" y="60" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5" y="-5" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Icon">
+							<Anchors>
+								<Anchor point="TOPLEFT" x="8" y="-8" />
+								<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+							</Anchors>
+							<TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Large" justifyH="RIGHT" justifyV="BOTTOM">
+							<Size x="50" y="20" />
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Divider" inherits="SyncUI_DividerTemplate">
+				<Anchors>
+					<Anchor point="LEFT" x="65" y="" />
+					<Anchor point="RIGHT" x="-15" y="" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Flash" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\AchievementFrame\UI-Achievement-Alert-Glow" alphaMode="ADD">
+							 <Size x="67" y="80" />
+							<Anchors>
+								<Anchor point="BOTTOMLEFT" x="30" y="-2" />
+							</Anchors>
+							<TexCoords left="0.78125" right="0.912109375" top="0" bottom="0.28125" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnEnter function="SyncUI_AlertFrame_OnEnter" />
+			<OnLeave function="SyncUI_AlertFrame_OnLeave" />
+		</Scripts>
+	</Frame>
+	
+	<Button name="SyncUI_AlertFrame" inherits="SyncUI_AlertFrameTemplate" parent="SyncUI_UIParent">
+		<Scripts>
+			<OnLoad function="SyncUI_AlertFrame_OnLoad" />
+			<OnEvent function="SyncUI_AlertFrame_OnEvent" />
+			<OnShow function="SyncUI_AlertFrame_OnShow" />
+			<OnHide function="SyncUI_AlertFrame_OnHide" />
+			<OnClick function="SyncUI_AlertFrame_OnClick" />
+		</Scripts>
+	</Button>
+	
+</Ui>

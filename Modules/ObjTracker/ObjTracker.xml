@@ -1,0 +1,156 @@
+<Ui>
+
+	<Script file="ObjTracker.lua" />
+
+	<CheckButton name="SyncUI_ObjFilterButtonTemplate" inherits="SyncUI_CheckButtonTemplate" topLevel="true" frameLevel="5" virtual="true">
+		<HitRectInsets left="2" right="2" top="2" bottom="2" />
+		<Scripts>
+			<OnClick function="SyncUI_ObjTracker_FilterButton_OnClick" />
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_TOP")
+				GameTooltip:AddLine(self.tooltipText,1,1,1)
+				GameTooltip:Show()
+			</OnEnter>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</CheckButton>
+	
+	<Frame name="SyncUI_ObjTracker" parent="SyncUI_UIParent" >
+		<Size x="280" y="40" />
+		<Anchors>
+			<Anchor point="TOP" relativeTo="SyncUI_Minimap" relativePoint="BOTTOM" x="0" y="-50" />
+		</Anchors>
+		<!--Frames>
+			<Frame parentKey="Header" setAllPoints="true" hidden="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+					<Texture parentKey="Background" desaturated="true" atlas="Objective-Header" useAtlasSize="true">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-2" y="6" />
+						</Anchors>
+					</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Text" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT" text="SYNCUI_STRING_OBJ_TRACKER">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeKey="$parent.Background" x="33" y="-21" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<CheckButton parentKey="QuestToggle" inherits="SyncUI_ObjFilterButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-48" y="-12" />
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.module = "Quests"
+						self.tooltipText = SYNCUI_STRING_OBJ_TRACKER_FILTER_QUESTS
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton parentKey="AchieveToggle" inherits="SyncUI_ObjFilterButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-32" y="-12" />
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self.module = "Achievements"
+						self.tooltipText = SYNCUI_STRING_OBJ_TRACKER_FILTER_ACHIEVEMENTS
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+			<CheckButton parentKey="FadeToggle" inherits="SyncUI_ObjFilterButtonTemplate" topLevel="true" frameLevel="5">
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-16" y="-12" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\CollapseButton">
+					<TexCoords left="0" right="1" top="0" bottom="0.5" />
+				</NormalTexture>
+				<CheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\CollapseButton">
+					<TexCoords left="0" right="1" top="0.5" bottom="1" />
+				</CheckedTexture>
+				<Scripts>
+					<OnLoad>
+						self.module = "All"
+					</OnLoad>
+				</Scripts>
+			</CheckButton>
+
+			<Button parentKey="QuickItem" name="SyncUI_ObjQuickItem" inherits="QuestObjectiveItemButtonTemplate" topLevel="true" frameLevel="5" hidden="true">
+				<Size x="38" y="38" />
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Header" relativePoint="LEFT" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Background" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+							<Size x="32" y="32" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<TexCoords left="0.1640625" right="0.3125" top="0" bottom="0.59375" />
+						</Texture>
+					</Layer>
+					<Layer level="BACKGROUND" textureSubLevel="1">
+						<Texture parentKey="icon">
+							<Size x="32" y="32" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+						</Texture>
+					</Layer>			
+					<Layer level="BORDER">
+						<Texture parentKey="Border" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+							<Size x="42" y="42" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<TexCoords left="0" right="0.1640625" top="0" bottom="0.65625" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Hotkey" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-3" y="-4" />
+							</Anchors>
+						</FontString>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
+							<Size x="38" y="38" />
+							<Anchors>
+								<Anchor point="CENTER" />
+							</Anchors>
+							<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
+						</Texture>
+					</Layer>
+				</Layers>
+				<NormalTexture />
+				<PushedTexture />
+				<HighlightTexture>
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="0.25" />
+				</HighlightTexture>
+				<Frames>
+					<Cooldown parentKey="Cooldown" inherits="CooldownFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="1" y="-1" />
+							<Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+						</Anchors>
+					</Cooldown>
+				</Frames>
+			</Button>
+		</Frames-->
+		<Scripts>
+			<OnLoad function="SyncUI_ObjTracker_OnLoad" />
+			<OnEvent function="SyncUI_ObjTracker_OnEvent" />
+		</Scripts>
+	</Frame>
+	
+</Ui>

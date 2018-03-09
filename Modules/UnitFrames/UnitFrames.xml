@@ -1,0 +1,615 @@
+<Ui>
+
+	<Include file="Elements\Elements.xml"/>
+
+	<Script file="UnitFrames.lua" />
+
+	<Button name="SyncUI_UnitFrameTemplate" inherits="SecureUnitButtonTemplate" frameStrata="LOW" toplevel="true" enableMouse="true" virtual="true">
+		<Scripts>
+			<OnUpdate function="SyncUI_UnitFrame_OnUpdate" />
+			<OnEnter function="SyncUI_UnitFrame_OnEnter" />
+			<OnLeave>
+				GameTooltip:FadeOut()
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_SmallUnitFrameTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="106" y="44" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true" minValue="0" maxValue="100">
+				<Size x="86" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Pet">
+							<TexCoords left="0" right="0.828125" top="0" bottom="0.6875" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium">
+							<Size x="76" y="22" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Pet">
+							<Size x="16" y="44" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.875" right="1" top="0" bottom="0.6875" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Pet">
+							<Size x="16" y="44" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.875" top="0" bottom="0.6875" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+	</Button>	
+
+	
+	<Button name="SyncUI_PlayerFrame" inherits="SyncUI_UnitFrameTemplate, SecureHandlerStateTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="230" y="52" />
+		<Animations>
+			<AnimationGroup parentKey="Combat_FadeIn" setToFinalAlpha="true">
+				<Alpha childKey="Combat" duration="0.5" order="1" fromAlpha="0" toAlpha="1" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().Combat_FadeOut:Stop()
+						self:GetParent().Combat:Show()
+					</OnPlay>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="Combat_FadeOut" setToFinalAlpha="true">
+				<Alpha childKey="Combat" duration="0.5" order="1" fromAlpha="1" toAlpha="0" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().Combat_FadeIn:Stop()
+					</OnPlay>
+					<OnFinished>
+						self:GetParent().Combat:Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+
+			<AnimationGroup parentKey="Resting_FadeIn" setToFinalAlpha="true">
+				<Alpha childKey="Resting" duration="0.5" order="1" fromAlpha="0" toAlpha="1" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().Resting_FadeOut:Stop()
+						self:GetParent().Resting:Show()
+					</OnPlay>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="Resting_FadeOut" setToFinalAlpha="true">
+				<Alpha childKey="Resting" duration="0.5" order="1" fromAlpha="1" toAlpha="0" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().Resting_FadeIn:Stop()
+					</OnPlay>
+					<OnFinished>
+						self:GetParent().Resting:Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true" minValue="0" maxValue="100">
+				<Size x="210" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true" minValue="0" maxValue="100">
+				<Size x="148" y="6" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="41" y="6" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate" />
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture name="$parentOverlay" inherits="TotalAbsorbBarOverlayTemplate" />
+					</Layer>
+				</Layers>
+			</Frame>
+			<StatusBar name="SyncUI_PlayerCastingBar" inherits="SyncUI_CastingBarTemplate">
+				<Scripts>
+					<OnLoad>
+						SyncUI_DisableFrame("CastingBarFrame")
+						SyncUI_RegisterDragFrame(self, SYNCUI_STRING_PLACEMENT_TOOL_LABEL_CASTBAR, nil, true)
+						SyncUI_CastingBar_OnLoad(self)
+					</OnLoad>
+				</Scripts>
+			</StatusBar>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<TexCoords left="0" right="0.8984375" top="0" bottom="0.8125" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" x="" y="" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Mana" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="BOTTOM" relativeKey="$parent.$parent.ManaBar" x="" y="-5" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="PvPTimer" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+							<Size x="100" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="2" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Group" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+							<Size x="100" y="10" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-14" y="2" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.9375" right="1" top="0" bottom="0.8125" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.9375" top="0" bottom="0.8125" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<Frame parentKey="Combat" hidden="true">
+				<Size x="30" y="30" />
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.HealthBar" x="1" y="1" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Indicator-Combat" />
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Resting" hidden="true">
+				<Size x="24" y="16" />
+				<Anchors>
+					<Anchor point="CENTER" relativeKey="$parent.Combat" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Indicator-Rested">
+							<TexCoords left="0" right="0.75" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_PlayerFrame_OnLoad" />
+			<OnEvent function="SyncUI_PlayerFrame_OnEvent" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_TargetFrame" inherits="SyncUI_UnitFrameTemplate, SecureHandlerStateTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="230" y="52" />
+		<Animations>
+			<AnimationGroup parentKey="SlideBuffsDown">
+				<Translation childKey="BuffHeader" smoothing="OUT" duration="0.3" order="1" offsetX="0" offsetY="-28" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().BuffHeader:SetPoint("TOPLEFT", self:GetParent(), "BOTTOMLEFT", 8, -28)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideBuffsUp">
+				<Translation childKey="BuffHeader" smoothing="IN" duration="0.3" order="1" offsetX="0" offsetY="28" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().BuffHeader:SetPoint("TOPLEFT", self:GetParent(), "BOTTOMLEFT", 8, 0)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="PushLabel">
+				<Translation childKey="Name" smoothing="IN" duration="0.3" order="1" offsetX="20" offsetY="0" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().Name:SetPoint("TOPLEFT", 34, 2)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="PullLabel">
+				<Translation childKey="Name" smoothing="IN" duration="0.3" order="1" offsetX="-20" offsetY="0" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().Name:SetPoint("TOPLEFT", 14, 2)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="210" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="148" y="6" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="41" y="6" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<StatusBar parentKey="CastingBar" inherits="SyncUI_CastingBarTemplate" useParentLevel="true" toplevel="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="38" y="-2" />
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						self:GetParent().SlideBuffsUp:Finish()
+						self:GetParent().SlideBuffsDown:Play()
+					</OnShow>
+					<OnHide>
+						self:GetParent().SlideBuffsDown:Finish()
+						self:GetParent().SlideBuffsUp:Play()
+					</OnHide>
+				</Scripts>
+			</StatusBar>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<TexCoords left="0" right="0.8984375" top="0" bottom="0.8125" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" x="" y="" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Mana" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="BOTTOM" relativeKey="$parent.$parent.ManaBar" x="" y="-5" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+							<Size x="" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="2" />
+								<Anchor point="TOPRIGHT" x="-49" y="2" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="PvPTimer" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+							<Size x="30" y="10" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-14" y="2" />
+							</Anchors>
+						</FontString>
+
+						<Texture parentKey="Death" file="Interface\WorldStateFrame\SkullBones" hidden="true">
+							<Size x="24" y="24" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.HealthBar" x="" y="5" />
+							</Anchors>
+							<TexCoords left="0" right="0.5" top="0" bottom="0.5" />
+						</Texture>
+						<Texture parentKey="Disconnect" file="Interface\CHARACTERFRAME\Disconnect-Icon" hidden="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.HealthBar" />
+							</Anchors>
+							<TexCoords left="0.8" right="0.2" top="0.2" bottom="0.8" />
+						</Texture>
+						<Texture parentKey="RaidMark" file="Interface\TargetingFrame\UI-RaidTargetingIcons" hidden="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="7" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.9375" right="1" top="0" bottom="0.8125" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.9375" top="0" bottom="0.8125" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_TargetFrame_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_FocusFrame" inherits="SyncUI_UnitFrameTemplate, SecureHandlerStateTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="230" y="52" />
+		<Animations>
+			<AnimationGroup parentKey="SlideBuffsDown">
+				<Translation childKey="BuffHeader" smoothing="OUT" duration="0.3" order="1" offsetX="0" offsetY="-28" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().BuffHeader:SetPoint("TOPLEFT", self:GetParent(), "BOTTOMLEFT", 8, -28)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideBuffsUp">
+				<Translation childKey="BuffHeader" smoothing="IN" duration="0.3" order="1" offsetX="0" offsetY="28" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().BuffHeader:SetPoint("TOPLEFT", self:GetParent(), "BOTTOMLEFT", 8, 0)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="PushLabel">
+				<Translation childKey="Name" smoothing="IN" duration="0.3" order="1" offsetX="20" offsetY="0" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().Name:SetPoint("TOPLEFT", 34, 2)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="PullLabel">
+				<Translation childKey="Name" smoothing="IN" duration="0.3" order="1" offsetX="-20" offsetY="0" />
+				<Scripts>
+					<OnFinished>
+						self:GetParent().Name:SetPoint("TOPLEFT", 14, 2)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="210" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="148" y="6" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="41" y="6" />
+				</Anchors>
+				<Color r="1" g="1" b="1" />
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<StatusBar parentKey="CastingBar" inherits="SyncUI_CastingBarTemplate" useParentLevel="true" toplevel="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="38" y="-2" />
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						self:GetParent().SlideBuffsUp:Finish()
+						self:GetParent().SlideBuffsDown:Play()
+					</OnShow>
+					<OnHide>
+						self:GetParent().SlideBuffsDown:Finish()
+						self:GetParent().SlideBuffsUp:Play()
+					</OnHide>
+				</Scripts>
+			</StatusBar>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<TexCoords left="0" right="0.8984375" top="0" bottom="0.8125" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" x="" y="" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Mana" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="BOTTOM" relativeKey="$parent.$parent.ManaBar" x="" y="-5" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+							<Size x="" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="2" />
+								<Anchor point="TOPRIGHT" x="-49" y="2" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="PvPTimer" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+							<Size x="30" y="10" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-14" y="2" />
+							</Anchors>
+						</FontString>
+
+						<Texture parentKey="Death" file="Interface\WorldStateFrame\SkullBones" hidden="true">
+							<Size x="24" y="24" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.HealthBar" x="" y="5" />
+							</Anchors>
+							<TexCoords left="0" right="0.5" top="0" bottom="0.5" />
+						</Texture>
+						<Texture parentKey="Disconnect" file="Interface\CHARACTERFRAME\Disconnect-Icon" hidden="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.HealthBar" />
+							</Anchors>
+							<TexCoords left="0.8" right="0.2" top="0.2" bottom="0.8" />
+						</Texture>
+						<Texture parentKey="RaidMark" file="Interface\TargetingFrame\UI-RaidTargetingIcons" hidden="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="7" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.9375" right="1" top="0" bottom="0.8125" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.9375" top="0" bottom="0.8125" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_FocusFrame_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_PetFrame" inherits="SecureHandlerStateTemplate, SyncUI_SmallUnitFrameTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Scripts>
+			<OnLoad function="SyncUI_PetFrame_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_ToTFrame" inherits="SyncUI_SmallUnitFrameTemplate" parent="SyncUI_TargetFrame" hidden="true">
+		<Scripts>
+			<OnLoad function="SyncUI_ToTFrame_OnLoad" />
+			<OnEnter function="SyncUI_UnitFrame_OnEnter" />
+			<OnLeave function="SyncUI_UnitFrame_OnLeave"/>
+			<OnUpdate function="SyncUI_UnitFrame_OnUpdate" />
+			<OnDragStart>
+				if self.isMovable then
+					self:StartMoving()
+				end
+			</OnDragStart>
+			<OnDragStop>
+				if self.isMovable then
+					self:StopMovingOrSizing()
+				end
+			</OnDragStop>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_ToFFrame" inherits="SyncUI_SmallUnitFrameTemplate" parent="SyncUI_FocusFrame" hidden="true">
+		<Scripts>
+			<OnLoad function="SyncUI_ToFFrame_OnLoad" />
+			<OnEnter function="SyncUI_UnitFrame_OnEnter" />
+			<OnLeave function="SyncUI_UnitFrame_OnLeave"/>
+			<OnUpdate function="SyncUI_UnitFrame_OnUpdate" />
+			<OnDragStart>
+				if self.isMovable then
+					self:StartMoving()
+				end
+			</OnDragStart>
+			<OnDragStop>
+				if self.isMovable then
+					self:StopMovingOrSizing()
+				end
+			</OnDragStop>
+		</Scripts>
+	</Button>
+
+	<Include file="UnitGroups.xml" />
+	
+</Ui>

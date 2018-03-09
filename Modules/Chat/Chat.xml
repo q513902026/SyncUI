@@ -1,0 +1,117 @@
+<UI>
+
+	<Script file="Chat.lua"/>
+	<Script file="Hyperlinks.lua"/>
+	
+	<Frame name="SyncUI_ChatFrameBarTemplate" frameStrata="HIGH" virtual="true">
+		<Size x="40" y="40" />
+		<Frames>
+			<Button parentKey="ScrollBtn">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-12" y="-12" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\ScrollDown" alpha="0.5" />
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\ScrollDown" />
+				<Scripts>
+					<OnClick>
+						self:GetParent():GetParent():ScrollToBottom()
+					</OnClick>
+				</Scripts>
+			</Button>			
+		</Frames>
+	</Frame>
+
+	<Frame name="SyncUI_ChatFrame" frameStrata="MEDIUM" parent="SyncUI_UIParent">
+		<Size x="200" y="100" />
+		<Anchors>
+			<Anchor point="BOTTOMLEFT" />
+		</Anchors>
+		<Animations>
+			<AnimationGroup parentKey="SlideIn" setToFinalAlpha="true">
+				<Translation duration="0" order="1" offsetX="-50" offsetY="0" />
+				<Alpha smoothing="OUT" duration="0.5" order="2" fromAlpha="0" toAlpha="1" />
+				<Translation smoothing="OUT" duration="0.5" order="2" offsetX="50" offsetY="0" />
+				<Scripts>
+					<OnPlay>
+						if self:GetParent().SlideOut:IsPlaying() then
+							self:GetParent().SlideOut:Stop()
+						end
+						self:GetParent():Show()
+					</OnPlay>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideOut" setToFinalAlpha="true">
+                <Alpha smoothing="OUT" duration="0.5" order="2" fromAlpha="1" toAlpha="0" />
+				<Translation smoothing="OUT" duration="0.5" order="2" offsetX="-100" offsetY="0" />
+				<Scripts>
+					<OnPlay>
+						if self:GetParent().SlideIn:IsPlaying() then
+							self:GetParent().SlideIn:Stop()
+						end
+					</OnPlay>
+					<OnStop>
+						self:GetParent():Hide()
+					</OnStop>
+					<OnFinished>
+						self:GetParent():Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Scripts>
+			<OnLoad function="SyncUI_ChatFrame_OnLoad" />
+			<OnEvent function="SyncUI_ChatFrame_OnEvent" />
+		</Scripts>
+	</Frame>
+	
+	<Button name ="SyncUI_ChatToggle" motionScriptsWhileDisabled="true" parent="SyncUI_UIParent">
+		<HitRectInsets left="4" right="4" top="0" bottom="0" />
+		<Size x="80" y="16" />
+		<Anchors>
+			<Anchor point="BOTTOM" relativeTo="SyncUI_InfoBar" relativePoint="TOP" y="-6" />
+			<Anchor point="RIGHT" relativeTo="SyncUI_ActionBar" relativePoint="LEFT" x="-20" />
+		</Anchors>
+		<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\MicroMenu-HoverButton-Down">
+			<TexCoords left="0" right="0.625" top="0" bottom="0.5" />
+		</NormalTexture>
+		<PushedTexture file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\MicroMenu-HoverButton-Down">
+			<TexCoords left="0" right="0.625" top="0.5" bottom="1" />
+		</PushedTexture>
+		<Frames>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\Actionbars\MicroMenu-HoverButton-Glow">
+							<Size x="86" y="21" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-3" y="2" />
+							</Anchors>
+							<TexCoords left="0" right="0.671875" top="0" bottom="0.65625" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>			
+		<Scripts>
+			<OnLoad>
+				self:SetButtonState("NORMAL")
+			</OnLoad>
+			<OnClick>
+				if SyncUI_ChatFrame:IsShown() then
+					self:SetNormalTexture(SYNCUI_MEDIA_PATH..[[ActionBars\MicroMenu-HoverButton-Up]])
+					self:SetPushedTexture(SYNCUI_MEDIA_PATH..[[ActionBars\MicroMenu-HoverButton-Up]])
+					SyncUI_CharData.ChatToggle = true
+					SyncUI_ChatFrame.SlideOut:Play()
+				else
+					self:SetNormalTexture(SYNCUI_MEDIA_PATH..[[ActionBars\MicroMenu-HoverButton-Down]])
+					self:SetPushedTexture(SYNCUI_MEDIA_PATH..[[ActionBars\MicroMenu-HoverButton-Down]])
+					SyncUI_CharData.ChatToggle = false
+					SyncUI_ChatFrame.SlideIn:Play()
+					ChatFrame1EditBox:Hide()
+				end
+			</OnClick>
+		</Scripts>
+	</Button>
+	
+</UI>

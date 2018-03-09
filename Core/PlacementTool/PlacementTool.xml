@@ -1,0 +1,167 @@
+<Ui>
+	<Script file="PlacementTool.lua" />
+	
+	<Button name="SyncUI_DragFrameTemplate" frameStrata="HIGH" setAllPoints="true" enableMouse="true" virtual="true">
+		<Animations>
+			<AnimationGroup parentKey="Flashing" looping="REPEAT">
+				<Alpha smoothing="OUT" duration="0.25" order="1" fromAlpha="0.25" toAlpha="1"/>
+				<Alpha smoothing="OUT" duration="0.25" order="2" fromAlpha="1" toAlpha="0.25"/>
+			</AnimationGroup>
+		</Animations>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Border">
+					<Color r="0.4" g="1" b="0" a="0.5" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Header" inherits="SyncUI_GameFontShadow_Medium" setAllPoints="true" justifyH="CENTER" />
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button parentKey="ResizeButton" hidden="true">
+				<Size x="12" y="12" />
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+				<NormalTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Up" />
+				<HighlightTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Highlight" />
+				<PushedTexture file="Interface\ChatFrame\UI-ChatIM-SizeGrabber-Down" />
+				<Scripts>
+					<OnLoad>
+						self:SetAlpha(0)
+					</OnLoad>
+					<OnEnter>
+						self:SetAlpha(1)
+					</OnEnter>
+					<OnLeave>
+						self:SetAlpha(0)
+					</OnLeave>
+					<OnMouseDown>
+						self:SetButtonState("PUSHED", true)
+						self:GetHighlightTexture():Hide()
+						self:GetParent().parent:StartSizing("BOTTOMRIGHT")
+					</OnMouseDown>
+					<OnMouseUp>
+						self:SetButtonState("NORMAL", false)
+						self:GetHighlightTexture():Show()
+						self:GetParent().parent:StopMovingOrSizing()
+					</OnMouseUp>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self:RegisterForDrag("LeftButton")
+				self:RegisterForClicks("RightButtonDown")
+			</OnLoad>
+			<OnClick function="SyncUI_DragFrame_OnClick" />
+			<OnEnter function="SyncUI_DragFrame_OnEnter" />
+			<OnLeave function="SyncUI_DragFrame_OnLeave" />
+		</Scripts>
+	</Button>
+	
+	<Frame name="SyncUI_PlacementTool" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="HIGH" movable="true" clampedToScreen="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="160" y="180" />
+		<Anchors>
+			<Anchor point="TOP" x="0" y="-200" />
+		</Anchors>
+		<Frames>
+			<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="2" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Select">
+				<Size x="150" y="50" />
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-10" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PLACEMENT_TOOL_SELECT">
+							<Size x="200" y="15" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="10" y="-5" />
+							</Anchors>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+						<Size x="150" y="35" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-10" y="3" />
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_PlacementTool_SelectSpec_InitDropDown)
+							</OnLoad>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame inherits="SyncUI_DividerTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Select" relativePoint="BOTTOMLEFT" x="5" y="-10" />
+					<Anchor point="TOPRIGHT" relativeKey="$parent.Select" relativePoint="BOTTOMRIGHT" x="-5" y="-10" />
+				</Anchors>
+			</Frame>
+			<Button parentKey="Reset" inherits="SyncUI_OptionsButtonTemplate" text="RESET_POSITION">
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Select" relativePoint="BOTTOM" x="" y="-20" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						StaticPopup_Show("SYNCUI_RESET_POSITIONS")
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Frame parentKey="Copy">
+				<Size x="150" y="50" />
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.Reset" relativePoint="BOTTOM" x="" y="" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PLACEMENT_TOOL_COPY">
+							<Size x="200" y="15" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="10" y="-5" />
+							</Anchors>
+							<Color r="1" g="1" b="1" />
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+						<Size x="150" y="35" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-10" y="3" />
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_PlacementTool_CopySpec_InitDropDown)
+							</OnLoad>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_PlacementTool_OnLoad" />
+			<OnEvent function="SyncUI_PlacementTool_OnEvent" />
+			<OnShow function="SyncUI_PlacementTool_OnShow" />
+			<OnHide function="SyncUI_PlacementTool_OnHide" />
+			<OnDragStart>
+				self:StartMoving()
+			</OnDragStart>
+			<OnDragStop>
+				self:StopMovingOrSizing()
+			</OnDragStop>
+		</Scripts>
+	</Frame>
+
+</Ui>

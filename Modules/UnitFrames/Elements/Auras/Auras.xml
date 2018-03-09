@@ -1,0 +1,187 @@
+<Ui>
+
+	<Script file="Auras.lua"/>
+
+	<Frame name="SyncUI_AuraHeaderTemplate" virtual="true">
+		<Scripts>
+			<OnEvent function="SyncUI_AuraHeader_OnEvent" />
+			<OnUpdate function="SyncUI_AuraHeader_OnUpdate" />
+		</Scripts>
+	</Frame>
+	
+	<Frame name="SyncUI_AuraTemplate" virtual="true">
+		<Size x="40" y="40" />
+		<Layers>
+			<Layer level="BACKGROUND" textureSubLevel="1">
+				<Texture parentKey="Icon" setAllPoints="true">
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Charge" setAllPoints="true" justifyH="RIGHT" justifyV="BOTTOM" inherits="SyncUI_GameFontNormal_Medium">
+					<Anchors>
+						<Anchor point="BOTTOM" x="1" y="4" />
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Time" justifyH="CENTER" justifyV="MIDDLE" inherits="SyncUI_GameFontNormal_Medium" />
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown parentKey="Cooldown" setAllPoints="true" inherits="CooldownFrameTemplate" />
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Cooldown:SetReverse(true)
+				self.Cooldown:SetHideCountdownNumbers(true) 
+				self.timer = 0
+			</OnLoad>
+			<OnEnter function="SyncUI_AuraButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_SmallAuraTemplate" hidden="true" virtual="true">
+		<Size x="25" y="25" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon">
+					<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Charge" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+					<Size x="32" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="1" y="0" />
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Time" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER" justifyV="CENTER">
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown parentKey="Cooldown" inherits="CooldownFrameTemplate" setAllPoints="true" useParentLevel="true" />
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Cooldown:SetReverse(true)
+				self.Cooldown:SetHideCountdownNumbers(true) 
+			</OnLoad>
+			<OnUpdate function="SyncUI_AuraButton_OnUpdate" />
+			<OnEnter function="SyncUI_AuraButton_OnEnter" />
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>		
+	</Frame>
+
+	<Button name="SyncUI_SecureAuraTemplate" inherits="SyncUI_AuraTemplate, SecureActionButtonTemplate" virtual="true">
+        <Attributes>
+            <Attribute name="type" value="cancelaura" />
+        </Attributes>				
+		<Scripts>
+            <OnLoad>
+                self:RegisterForClicks("RightButtonUp")
+				self.Cooldown:SetReverse(true)
+				self.Cooldown:SetHideCountdownNumbers(true)
+				self.spellID = nil
+				self.timer = 0
+            </OnLoad>
+            <OnEnter>
+				local spellID = self.spellID
+				
+                GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT",-33,-2)
+                GameTooltip:SetUnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
+				--GameTooltip:AddDivider()		
+				--GameTooltip:AddLine(SYNCUI_STRING_SPELLID..spellID,1,1,1)
+				GameTooltip:Show()
+            </OnEnter>
+            <OnLeave function="GameTooltip_Hide"/>
+			<OnUpdate function="SyncUI_AuraButton_OnUpdate" />
+        </Scripts>
+    </Button>
+
+	<!-- Special Aura Bars -->
+	<Frame name="SyncUI_ReactiveAuraBar" frameStrata="LOW" toplevel="true" parent="SyncUI_UIParent">
+		<Size x="228" y="38" />
+		<Frames>
+			<Frame parentKey="Aura1" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="BOTTOMRIGHT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura2" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura1" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura3" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura2" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura4" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura3" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura5" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura4" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura6" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura5" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			
+			<Frame parentKey="Aura7" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="BOTTOM" relativeKey="$parent.Aura1" relativePoint="TOP" x="0" y="-2" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura8" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura7" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura9" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura8" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura10" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura9" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura11" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura10" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+			<Frame parentKey="Aura12" inherits="SyncUI_AuraTemplate">
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Aura11" relativePoint="LEFT" />
+				</Anchors>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				SyncUI_RegisterDragFrame(self,SYNCUI_STRING_AURAS_REACTIVE_AURAS)
+				self:RegisterUnitEvent("UNIT_AURA", "player")
+				self.unitID = "player"
+				self.auraType = "Buff"
+				self.maxAuras = 12
+				
+				self.GetUnit = function()
+					return self.unitID;
+				end
+			</OnLoad>
+			<OnEvent function="SyncUI_ReactiveAuraBar_OnEvent" />
+		</Scripts>
+	</Frame>
+
+</Ui>

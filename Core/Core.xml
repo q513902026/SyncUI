@@ -1,0 +1,508 @@
+<UI>
+
+	<Script file="Core.lua"/>
+
+	<Frame name="SyncUI_UIParent">
+		<Animations>
+			<AnimationGroup parentKey="FadeIn" setToFinalAlpha="true">
+				<Alpha smoothing="IN" duration="0.5" order="1" fromAlpha="0" toAlpha="1" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().FadeOut:Stop()
+						self:GetParent():Show()
+					</OnPlay>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="FadeOut" setToFinalAlpha="true">
+				<Alpha smoothing="OUT" duration="0.5" order="1" fromAlpha="1" toAlpha="0" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().FadeIn:Stop()
+					</OnPlay>
+					<OnStop>
+						self:GetParent():Hide()
+					</OnStop>
+					<OnFinished>
+						self:GetParent():Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Anchors>
+			<Anchor point="TOPLEFT" />
+			<Anchor point="BOTTOMRIGHT" />
+		</Anchors>
+		<Scripts>
+			<OnLoad function="SyncUI_UIParent_OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_DisableDriver" inherits="SecureHandlerStateTemplate" hidden="true" />
+	
+	<!-- Glow Frame Template -->
+	<Frame name="SyncUI_FrameGlowUpdater">
+		<Scripts>
+			<OnLoad>
+				self.fadeInTime = 2
+				self.fadeOutTime = 2
+
+				self.r, self.g, self.b = 1,0,0
+				self.mode = "pulse"
+			</OnLoad>
+			<OnUpdate function="SyncUI_FrameGlow_OnUpdate" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_GlowScriptTemplate" virtual="true">
+		<Scripts>
+			<OnLoad function="SyncUI_FrameGlow_OnRegister" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_BorderGlowFrameTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="TopLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Size x="64" y="32" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="-10" y="10" />
+					</Anchors>
+					<TexCoords left="0" right="0.5" top="0" bottom="0.25" />
+				</Texture>
+				<Texture parentKey="TopRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="10" y="10" />
+					</Anchors>
+					<TexCoords left="0.75" right="1" top="0" bottom="0.25" />
+				</Texture>
+				<Texture parentKey="TopCenter" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.TopRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.5" right="0.75" top="0" bottom="0.25" />
+				</Texture>
+
+				<Texture parentKey="BottomLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="-10" y="-10" />
+					</Anchors>
+					<TexCoords left="0" right="0.25" top="0.75" bottom="1" />
+				</Texture>
+				<Texture parentKey="BottomRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Size x="64" y="32" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="10" y="-10" />
+					</Anchors>
+					<TexCoords left="0.5" right="1" top="0.75" bottom="1" />
+				</Texture>
+				<Texture parentKey="BottomCenter" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BottomLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.25" right="0.5" top="0.75" bottom="1" />
+				</Texture>
+				
+				<Texture parentKey="CenterLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="BOTTOMLEFT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomLeft" relativePoint="TOPRIGHT" />
+					</Anchors>
+					<TexCoords left="0" right="0.25" top="0.25" bottom="0.75" />
+				</Texture>
+				<Texture parentKey="CenterRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="TOPRIGHT" />
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.75" right="1" top="0.25" bottom="0.75" />
+				</Texture>
+				<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.CenterLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.CenterRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.25" right="0.75" top="0.25" bottom="0.75" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Top" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Glow">
+							<Size x="64" y="32" />
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" x="-10" y="10"/>
+							</Anchors>
+						</Texture>
+						<Texture parentKey="Bottom" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\FrameBackdrop-Glow">
+							<Size x="64" y="32" />
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" x="10" y="-10" />
+							</Anchors>
+							<TexCoords left="1" right="0" top="1" bottom="0" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+	</Frame>
+
+	
+	<!-- Backdrop Templates -->
+	<Frame name="SyncUI_BackdropTemplate" virtual="true">
+		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
+			<EdgeSize val="16" />
+			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
+		</Backdrop>
+		<HitRectInsets left="5" right="5" top="5" bottom="5" />
+	</Frame>
+	
+	<Frame name="SyncUI_LayerBackdropTemplate" virtual="true">
+		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
+			<EdgeSize val="16" />
+			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
+			<Color r="1" g="1" b="1" a="0.35" />
+		</Backdrop>
+	</Frame>
+
+	<Frame name="SyncUI_LayerWithNoEdgeTemplate" virtual="true">
+		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-EdgeFile">
+			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
+			<EdgeSize val="16" />
+			<Color r="1" g="1" b="1" a="0.35" />
+		</Backdrop>
+	</Frame>
+
+	<Frame name="SyncUI_LayerFrameTemplate" virtual="true">
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="TopLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Size x="64" y="32" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="-8" y="8" />
+					</Anchors>
+					<TexCoords left="0" right="0.5" top="0" bottom="0.25" />
+				</Texture>
+				<Texture parentKey="TopRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="8" y="8" />
+					</Anchors>
+					<TexCoords left="0.75" right="1" top="0" bottom="0.25" />
+				</Texture>
+				<Texture parentKey="TopCenter" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.TopRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.5" right="0.75" top="0" bottom="0.25" />
+				</Texture>
+
+				<Texture parentKey="BottomLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Size x="32" y="32" />
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="-8" y="-8" />
+					</Anchors>
+					<TexCoords left="0" right="0.25" top="0.75" bottom="1" />
+				</Texture>
+				<Texture parentKey="BottomRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Size x="64" y="32" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="8" y="-8" />
+					</Anchors>
+					<TexCoords left="0.5" right="1" top="0.75" bottom="1" />
+				</Texture>
+				<Texture parentKey="BottomCenter" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BottomLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.25" right="0.5" top="0.75" bottom="1" />
+				</Texture>
+				
+				<Texture parentKey="CenterLeft" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="BOTTOMLEFT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomLeft" relativePoint="TOPRIGHT" />
+					</Anchors>
+					<TexCoords left="0" right="0.25" top="0.25" bottom="0.75" />
+				</Texture>
+				<Texture parentKey="CenterRight" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="TOPRIGHT" />
+						<Anchor point="TOPLEFT" relativeKey="$parent.TopRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.75" right="1" top="0.25" bottom="0.75" />
+				</Texture>
+				<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-BgFile">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.CenterLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.CenterRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.25" right="0.75" top="0.25" bottom="0.75" />
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	
+	<!-- Misc -->
+	<Frame name="SyncUI_DividerTemplate" virtual="true">
+		<Size x="" y="2" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Top">
+					<Size x="" y="1" />
+					<Anchors>
+						<Anchor point="TOPLEFT" />
+						<Anchor point="TOPRIGHT" />
+					</Anchors>
+					<Color r="0" g="0" b="0" a="1" />
+				</Texture>
+				<Texture parentKey="Bottom">
+					<Size x="" y="1" />
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" />
+						<Anchor point="BOTTOMRIGHT" />
+					</Anchors>
+					<Color r="1" g="1" b="1" a="0.15" />
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Button name="SyncUI_CloseButtonTemplate" virtual="true">
+		<Size x="17" y="17" />
+		<NormalTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="0.5" />
+		<HighlightTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="1" />
+		<Scripts>
+			<OnClick>
+				local frame = self:GetParent()
+				
+				frame:Hide()
+				
+				if frame.fadeTimer or frame.forceFading then
+					SyncUI_StopFrameFading(frame)
+				end
+			</OnClick>
+		</Scripts>
+	</Button>
+
+	<EditBox name="SyncUI_EditBoxTemplate" autoFocus="false" letters="25" virtual="true">
+		<Size x="120" y="19" />
+		<FontString justifyH="CENTER" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium" />
+		<TextInsets left="0" right="15" top="0" bottom="0" />
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Instructions" inherits="SyncUI_GameFontShadow_Medium" justifyH="CENTER" setAllPoints="true">
+					<Color r="0.35" g="0.35" b="0.35"/>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Backdrop" inherits="SyncUI_LayerWithNoEdgeTemplate" useParentLevel="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-8" y="8" />
+					<Anchor point="BOTTOMRIGHT" x="8" y="-8" />
+				</Anchors>
+			</Frame>
+			<Button parentKey="clearButton" name="$parentClearButton" hidden="true">
+				<Size x="17" y="17" />
+				<Anchors>
+					<Anchor point="RIGHT" x="0" y="0" />
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="texture" file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="0.5" />
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnEnter>
+						self.texture:SetAlpha(1.0)
+					</OnEnter>
+					<OnLeave>
+						self.texture:SetAlpha(0.5)
+					</OnLeave>
+					<OnClick function="SearchBoxTemplateClearButton_OnClick" />
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.Instructions:SetText(SYNCUI_STRING_ENTER_NAME)
+			</OnLoad>
+			<OnEditFocusGained>
+				self:SetText("")
+				self.clearButton:Show()
+				self.Instructions:Hide()
+			</OnEditFocusGained>
+			<OnEditFocusLost>
+				self:SetText("")
+				self.clearButton:Hide()
+				self.Instructions:Show()
+			</OnEditFocusLost>
+			<OnEnterPressed>
+				SyncUI_BagCategoryMenu_AddCategory()
+				self:ClearFocus()
+			</OnEnterPressed>
+			<OnEscapePressed>
+				self:ClearFocus()
+			</OnEscapePressed>
+		</Scripts>
+		
+	</EditBox>
+
+	<EditBox name="SyncUI_SearchBoxTemplate" inherits="SyncUI_EditBoxTemplate" letters="16" virtual="true">
+		<FontString justifyH="LEFT" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium">
+			<Size x="150" y="18" />
+			<Anchors>
+				<Anchor point="LEFT" x="25" y="0" />
+			</Anchors>
+		</FontString>
+		<TextInsets left="16" right="15" top="0" bottom="0" />
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Instructions" justifyH="LEFT" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="16" y="0" />
+						<Anchor point="BOTTOMRIGHT" x="0" y="0" />
+					</Anchors>
+					<Color r="0.35" g="0.35" b="0.35"/>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture name="$parentSearchIcon" file="Interface\Common\UI-Searchbox-Icon" parentKey="searchIcon">
+					<Size x="14" y="14"/>
+					<Anchors>
+						<Anchor point="LEFT" x="3" y="-1" />
+					</Anchors>
+					<Color r="0.6" g="0.6" b="0.6" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				self.Instructions:SetText(SEARCH)
+			</OnLoad>
+			<OnEscapePressed function="EditBox_ClearFocus" />
+			<OnEnterPressed function="EditBox_ClearFocus" />
+			<OnEditFocusLost function="SearchBoxTemplate_OnEditFocusLost" />
+			<OnEditFocusGained function="SearchBoxTemplate_OnEditFocusGained" />
+		</Scripts>
+	</EditBox>
+
+	
+	<!-- Loading Animation -->	
+	<Frame name="SyncUI_LoadingFrameTemplate" alpha="0.5" virtual="true">
+		<Size x="40" y="36" />
+		<Animations>
+			<AnimationGroup parentKey="Anim" setToFinalAlpha="true" looping="REPEAT">
+				<Alpha childKey="hex1" order="1" duration="0.1" startDelay="0.5" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex1" order="1" duration="0.1" startDelay="0.5" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex2" order="2" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex2" order="2" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex3" order="3" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex3" order="3" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex4" order="4" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex4" order="4" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex5" order="5" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex5" order="5" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex6" order="6" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex6" order="6" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				<Alpha childKey="hex7" order="7" duration="0.1" fromAlpha="0" toAlpha="1" />
+				<Scale childKey="hex7" order="7" duration="0.1" fromScaleX="0.5" fromScaleY="0.5" toScaleX="1" toScaleY="1" />
+				
+				<Alpha childKey="hex1" order="8" duration="0.1" startDelay="0.2" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex1" order="8" duration="0.1" startDelay="0.2" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex2" order="9" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex2" order="9" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex3" order="10" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex3" order="10" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex4" order="11" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex4" order="11" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex5" order="12" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex5" order="12" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex6" order="13" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex6" order="13" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+				<Alpha childKey="hex7" order="14" duration="0.1" fromAlpha="1" toAlpha="0" />
+				<Scale childKey="hex7" order="14" duration="0.1" fromScaleX="1" fromScaleY="1" toScaleX="0.5" toScaleY="0.5" />
+			</AnimationGroup>
+		</Animations>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="hex1" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="-9" y="15" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex2" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="9" y="15" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex3" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="18" y="0" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex4" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="9" y="-15" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex5" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="-9" y="-15" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex6" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" x="-18" y="0" />
+					</Anchors>
+				</Texture>
+				<Texture parentKey="hex7" file="Interface\AddOns\SyncUI\Media\Textures\Icons\Hexagon" alpha="0">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnShow>
+				self.Anim:Play()
+			</OnShow>
+			<OnHide>
+				self.Anim:Stop()
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+	<Frame>
+		<Size x="30" y="30" />
+		<Anchors>
+			<Anchor point="CENTER" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture />
+			</Layer>
+		</Layers>
+	</Frame>
+	
+	<Include file="Elements\Elements.xml" />
+	<Include file="Options\Options.xml" />
+	<Include file="PlacementTool\PlacementTool.xml" />
+	
+</UI>

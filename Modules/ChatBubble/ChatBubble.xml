@@ -1,0 +1,12 @@
+<UI>
+
+	<Script file="ChatBubble.lua" />
+	
+	<Frame name="SyncUI_ChatBubble">
+		<Scripts>
+			<OnLoad function="SyncUI_ChatBubble_OnLoad" />
+			<OnEvent function="SyncUI_ChatBubble_OnEvent" />
+		</Scripts>
+	</Frame>
+
+</UI>

@@ -1,0 +1,351 @@
+<Ui>
+
+	<Script file="GroupControl.lua" />
+
+	<!-- Group Control -->
+	<Frame name="SyncUI_GroupControl" inherits="SecureHandlerStateTemplate" parent="SyncUI_UIParent" hidden="true">
+		<Size x="490" y="37" />
+		<Anchors>
+			<Anchor point="TOP" x="0" y="3" />
+		</Anchors>
+		<Animations>
+			<AnimationGroup parentKey="SlideIn" setToFinalAlpha="true">
+				<Translation duration="0" order="1" offsetX="0" offsetY="50" />
+				
+				<Alpha smoothing="OUT" duration="0.75" startDelay="0.5" order="2" fromAlpha="0" toAlpha="1" />
+				<Translation smoothing="OUT" duration="0.75" startDelay="0.5" order="2" offsetX="0" offsetY="-50" />
+			</AnimationGroup>
+		</Animations>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="BorderTexLeft" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Border">
+					<Size x="96" y="37" />
+					<Anchors>
+						<Anchor point="TOPLEFT" />
+					</Anchors>
+					<TexCoords left="0" right="0.75" top="0" bottom="0.578125" />
+				</Texture>
+				<Texture parentKey="BorderTexRight" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Border">
+					<Size x="96" y="37" />
+					<Anchors>
+						<Anchor point="TOPRIGHT" />
+					</Anchors>
+					<TexCoords left="0.75" right="0" top="0" bottom="0.578125" />
+				</Texture>
+				<Texture parentKey="BorderTexCenter" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Border">
+					<Size x="0" y="37" />
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BorderTexLeft" relativePoint="TOPRIGHT" />
+						<Anchor point="BOTTOMRIGHT" relativeKey="$parent.BorderTexRight" relativePoint="BOTTOMLEFT" />
+					</Anchors>
+					<TexCoords left="0.75" right="1" top="0" bottom="0.578125" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Glow">
+							<Size x="128" y="64" />
+							<Anchors>
+								<Anchor point="TOPLEFT" />
+							</Anchors>
+							<TexCoords left="0" right="1" top="0" bottom="1" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Glow">
+							<Size x="128" y="64" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" />
+							</Anchors>
+							<TexCoords left="1" right="0" top="0" bottom="1" />
+						</Texture>
+						<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\GroupControl\GroupControl-Glow">
+							<Size x="0" y="64" />
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+								<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+							</Anchors>
+							<TexCoords left="0.75" right="1" top="0" bottom="1" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<CheckButton parentKey="Toggle" inherits="SecureHandlerClickTemplate, SecureHandlerStateTemplate">
+				<Size x="16" y="16" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="14" y="-6" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Minus" />
+				<CheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Plus" />
+				<Scripts>
+					<OnLoad>
+						SecureHandler_OnLoad(self)
+						RegisterStateDriver(self, "visibility", "[group:raid]show; hide")
+					</OnLoad>
+					<OnEnter>
+						GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+						
+						if self:GetChecked() then
+							GameTooltip:AddLine(SYNCUI_STRING_GROUP_CONTROL_MAXIMIZE_RAID, 1,1,1)
+						else
+							GameTooltip:AddLine(SYNCUI_STRING_GROUP_CONTROL_MINIMIZE_RAID, 1,1,1)
+						end
+		
+						GameTooltip:Show()
+					</OnEnter>
+					<OnLeave function="GameTooltip_Hide" />
+				</Scripts>
+			</CheckButton>
+			<Button parentKey="RaidTool" inherits="SecureHandlerClickTemplate, SyncUI_TextButtonTemplate" text="SYNCUI_STRING_RAID_TOOL">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="75" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="GroupLayout" inherits="SecureHandlerClickTemplate, SyncUI_TextButtonTemplate" text="SYNCUI_STRING_GROUP_CONTROL_LAYOUT_NORMAL">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.RaidTool" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="LootSpec" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" text="LOOT">
+				<Size x="120" y="35" />
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.GroupLayout" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+
+			<Frame name="SyncUI_RaidToolMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+				<Size x="160" y="180" />
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.RaidTool" relativePoint="BOTTOM" x="0" y="-10" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Button1" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_RAID_TOOL_COMPILATION">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-14" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button2" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_RAID_TOOL_LOCKOUTS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button3" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_RAID_TOOL_WORLD_MARKS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button4" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="READY_CHECK">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="-10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button5" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="ROLE_POLL">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button4" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+
+					<Frame parentKey="Div" inherits="SyncUI_DividerTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Button3" relativePoint="BOTTOMLEFT" x="5" y="-4" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.Button3" relativePoint="BOTTOMRIGHT" x="-5" y="-4" />
+						</Anchors>
+					</Frame>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_GroupLayoutMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+				<Size x="160" y="95" />
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.GroupLayout" relativePoint="BOTTOM" x="0" y="-10" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="CENTER" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_GROUP_CONTROL_LAYOUT">
+									<Size x="200" y="20" />
+									<Anchors>
+										<Anchor point="TOP" x="0" y="-10" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+					</Frame>
+
+					<Button parentKey="Button1" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_GROUP_CONTROL_LAYOUT_NORMAL">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-25" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button2" inherits="SecureHandlerClickTemplate, SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_GROUP_CONTROL_LAYOUT_HEAL">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_LootSpecMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+				<Size x="160" y="100" />
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.LootSpec" relativePoint="BOTTOM" x="0" y="-10" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+
+					<Button parentKey="Button0" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" id="0">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="10" y="-14" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button1" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button0" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button2" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button3" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" id="3">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+					<Button parentKey="Button4" inherits="SecureHandlerClickTemplate, SyncUI_IconTextButtonTemplate" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+					</Button>
+				</Frames>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_GroupControl_OnLoad" />
+			<OnEvent function="SyncUI_GroupControl_OnEvent" />
+			<OnShow>
+				self.SlideIn:Play()
+			</OnShow>
+		</Scripts>
+	</Frame>
+	
+	<!-- World Marker -->
+	<Button name="SyncUI_WorldMarkerButtonTemplate" inherits="SecureActionButtonTemplate, SyncUI_LayerBackdropTemplate" virtual="true">
+		<Size x="35" y="35" />
+		<NormalTexture parentKey="Icon" alpha="0.5">
+			<Size x="15" y="15" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+		</NormalTexture>
+		<HighlightTexture parentKey="Highlight">
+			<Size x="15" y="15" />
+			<Anchors>
+				<Anchor point="CENTER" />
+			</Anchors>
+		</HighlightTexture>
+		<NormalFont style="SyncUI_GameFontSpecial" />
+		<ButtonText parentKey="Text" justifyH="CENTER" justifyV="BOTTOM" text="•">
+			<Size x="20" y="20" />
+			<Anchors>
+				<Anchor point="BOTTOMLEFT" x="9" y="" />
+			</Anchors>
+		</ButtonText>
+		<Scripts>
+			<OnLoad function="SyncUI_WorldMarkerButton_OnLoad" />
+			<OnShow function="SyncUI_WorldMarkerButton_OnShow" />
+			<OnEnter>
+				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
+				GameTooltip:AddLine(SYNCUI_STRING_RAID_TOOL_CLEAR_WORLD_MARKS,1,1,1)
+				GameTooltip:Show()
+			</OnEnter>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_WorldMarkerBar" inherits="SyncUI_BackdropTemplate" movable="true" clampedToScreen="true" parent="SyncUI_GroupControl" hidden="true">
+		<Size x="330" y="45" />
+		<Anchors>
+			<Anchor point="TOP" relativeTo="SyncUI_GroupControl" relativePoint="BOTTOM" x="0" y="5" />
+		</Anchors>
+		<Frames>
+			<Button parentKey="Marker1" inherits="SyncUI_WorldMarkerButtonTemplate" id="8">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker2" inherits="SyncUI_WorldMarkerButtonTemplate" id="4">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker1" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker3" inherits="SyncUI_WorldMarkerButtonTemplate" id="1">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker2" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker4" inherits="SyncUI_WorldMarkerButtonTemplate" id="2">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker3" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker5" inherits="SyncUI_WorldMarkerButtonTemplate" id="3">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker4" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker6" inherits="SyncUI_WorldMarkerButtonTemplate" id="6">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker5" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker7" inherits="SyncUI_WorldMarkerButtonTemplate" id="5">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker6" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Marker8" inherits="SyncUI_WorldMarkerButtonTemplate" id="7">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker7" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+			</Button>
+			<Button parentKey="ClearButton" inherits="SecureActionButtonTemplate, SyncUI_TextButtonTemplate" id="0" text="REMOVE_WORLD_MARKERS">
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Marker8" relativePoint="RIGHT" x="-10" y="0" />
+				</Anchors>
+				<Scripts>
+					<OnShow>
+						self:RegisterForClicks("AnyUp")
+						self:SetAttribute("type", "macro")
+						self:SetAttribute("macrotext1", "/cwm 0")
+					</OnShow>
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_WorldMarkerBar_OnLoad" />
+			<OnUpdate function="SyncUI_WorldMarkerBar_OnUpdate" />
+		</Scripts>
+	</Frame>
+
+
+</Ui>

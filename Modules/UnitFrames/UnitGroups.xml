@@ -1,0 +1,819 @@
+<Ui>
+
+	<!-- Party -->
+	<Button name="SyncUI_PartyFrameTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="158" y="52" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="138" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="96" y="6" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="31" y="6" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="32" />
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate" />
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate" />
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Party">
+							<TexCoords left="0" right="0.6171875" top="0" bottom="0.8125" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Medium">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+							<Size x="130" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="28" y="2" />
+							</Anchors>
+						</FontString>
+						<Texture parentKey="Role" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Role-Icons">
+							<Size x="10" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="2" />
+							</Anchors>
+							<TexCoords left="0" right="0.5625" top="0" bottom="0.5625"/>
+						</Texture>
+						<Texture parentKey="StatusIcon" forceAlpha="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.9375" right="1" top="0" bottom="0.8125" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.9375" top="0" bottom="0.8125" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_PartyFrame_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_PartyFrameTemplate2" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="78" y="38" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture>
+					<Color r="0" g="0" b="0" a="0.5" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<StatusBar parentKey="HealthBar" name="$parentHealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="2" y="-2" />
+					<Anchor point="BOTTOMRIGHT" x="-2" y="2" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="44"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture name="$parentOverlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontShadow_Medium">
+							<Size x="68" y="8" />
+							<Anchors>
+								<Anchor point="CENTER" relativeTo="$parentHealthBar" x="" y="1" />
+							</Anchors>
+						</FontString>
+						<Texture parentKey="Role" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Role-Icons">
+							<Size x="12" y="12" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-3" y="-3" />
+							</Anchors>
+							<TexCoords left="0" right="0.5625" top="0" bottom="0.5625" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="StatusIcon" file="Interface\RaidFrame\Raid-Icon-Rez">
+							<Size x="22" y="22" />
+							<Anchors>
+								<Anchor point="CENTER" relativeTo="$parentHealthBar" />
+							</Anchors>
+						</Texture>
+						<!--Texture parentKey="Dispel" file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\RaidFrame_Heal" hidden="true">
+							<TexCoords left="0" right="0.65625" top="0.5" bottom="0.84375" />
+						</Texture-->
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_PartyFrame_OnLoad" />
+		</Scripts>
+	</Button>
+	
+	<Frame name="SyncUI_PartyFrameContainer" inherits="SecureHandlerStateTemplate" clampedToScreen="true" parent="SyncUI_UIParent">
+		<Scripts>
+			<OnLoad>
+				SyncUI_UnitGroupContainer_OnLoad(self, "party")
+				RegisterStateDriver(self, "visibility", "[group:raid][nogroup] hide; show")
+			</OnLoad>
+			<OnEvent function="SyncUI_UnitGroupContainer_OnEvent" />
+		</Scripts>
+	</Frame>
+
+
+	<!-- Raid -->
+	<Button name="SyncUI_RaidMemberTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="113" y="28" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true" minValue="0" maxValue="100">
+				<Size x="93" y="13"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-9" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="13"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BORDER">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Raid">
+							<TexCoords left="0" right="0.8828125" top="0" bottom="0.875" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium">
+							<Size x="83" y="13" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</FontString>
+						<Texture parentKey="Role" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Role-Icons">
+							<Size x="10" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="3" y="-3"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="StatusIcon" file="Interface\RaidFrame\Raid-Icon-Rez">
+							<Size x="18" y="18" />
+							<Anchors>
+								<Anchor point="RIGHT" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_RaidMember_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_RaidMemberTemplate2" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="84" y="44" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" name="$parentHealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true" minValue="0" maxValue="100">
+				<Size x="74" y="34"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5" y="-5"/>
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="44"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="$parentHealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture name="$parentOverlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<!--Layer level="BORDER">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\RaidFrame_Heal">
+							<TexCoords left="0" right="0.65625" top="0" bottom="0.34375" />
+						</Texture>
+					</Layer-->
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium">
+							<Size x="68" y="8" />
+							<Anchors>
+								<Anchor point="CENTER" relativeTo="$parentHealthBar" x="" y="1" />
+							</Anchors>
+						</FontString>
+						<Texture parentKey="Role" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\Role-Icons">
+							<Size x="10" y="10" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-7" y="-7"/>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture parentKey="StatusIcon" file="Interface\RaidFrame\Raid-Icon-Rez">
+							<Size x="22" y="22" />
+							<Anchors>
+								<Anchor point="CENTER" relativeTo="$parentHealthBar" />
+							</Anchors>
+						</Texture>
+						<!--Texture parentKey="Dispel" file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\RaidFrame_Heal" hidden="true">
+							<TexCoords left="0" right="0.65625" top="0.5" bottom="0.84375" />
+						</Texture-->
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_RaidMember_OnLoad" />
+		</Scripts>
+	</Button>
+	
+	<Frame name="SyncUI_RaidFrameContainer" clampedToScreen="true" parent="SyncUI_UIParent">
+		<Scripts>
+			<OnLoad>	
+				SyncUI_UnitGroupContainer_OnLoad(self, "raid")
+			</OnLoad>
+			<OnEvent function="SyncUI_UnitGroupContainer_OnEvent" />
+		</Scripts>
+	</Frame>
+
+	
+	<!-- Bosses -->
+	<Button name="SyncUI_BossFrameTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="158" y="52" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="138" y="32" />
+				<Anchors>
+					<Anchor point="TOPLEFT" x="10" y="-6" />
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="96" y="6" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="31" y="6" />
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="26"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+		
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Party">
+							<TexCoords left="0" right="0.6171875" top="0" bottom="0.8125" />
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Medium">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Name" inherits="SyncUI_GameFontNormal_Medium" justifyH="LEFT">
+							<Size x="130" y="10" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="14" y="2" />
+							</Anchors>
+						</FontString>
+						<Texture parentKey="RaidMark" file="Interface\TargetingFrame\UI-RaidTargetingIcons" hidden="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-15" y="4" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-4" y="" />
+							</Anchors>
+							<TexCoords left="0.9375" right="1" top="0" bottom="0.8125" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\UnitFrames\UnitFrame-Normal">
+							<Size x="16" y="52" />
+							<Anchors>
+								<Anchor point="TOPRIGHT"  x="4" y="" />
+							</Anchors>
+							<TexCoords left="1" right="0.9375" top="0" bottom="0.8125" />
+						</Texture>	
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_BossFrame_OnLoad" />
+		</Scripts>
+	</Button>
+
+	<Frame name="SyncUI_BossFrameContainer" clampedToScreen="true" parent="SyncUI_UIParent">
+		<Size x="158" y="280" />
+		<Frames>
+			<Button parentKey="Boss1" name="SyncUI_BossFrame1" inherits="SyncUI_BossFrameTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Boss2" name="SyncUI_BossFrame2" inherits="SyncUI_BossFrameTemplate" id="2">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Boss1" relativePoint="BOTTOMLEFT" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Boss3" name="SyncUI_BossFrame3" inherits="SyncUI_BossFrameTemplate" id="3">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Boss2" relativePoint="BOTTOMLEFT" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Boss4" name="SyncUI_BossFrame4" inherits="SyncUI_BossFrameTemplate" id="4">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Boss3" relativePoint="BOTTOMLEFT" x="0" y="-5" />
+				</Anchors>
+			</Button>
+			<Button parentKey="Boss5" name="SyncUI_BossFrame5" inherits="SyncUI_BossFrameTemplate" id="5">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.Boss4" relativePoint="BOTTOMLEFT" x="0" y="-5" />
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				SyncUI_RegisterDragFrame(self, BOSS)
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+	
+	<!-- Arena -->
+	<Script file="ArenaFrame.lua"/>
+
+	<Frame name="SyncUI_ArenaFrame_DiminishTemplate" hidden="true" virtual="true" >
+		<Size x="33" y="33" />
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon">
+					<Size x="23" y="23" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Border" file="Interface\AddOns\SyncUI\Media\Textures\Elements\Auras\AuraBorder">
+					<TexCoords left="0" right="0.515625" top="0" bottom="0.515625" />
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY" textureSubLevel="1">
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="-4" y="5"/>
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Timer" inherits="SyncUI_GameFontNormal_Small">
+					<Anchors>
+						<Anchor point="CENTER" y="0"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown parentKey="Cooldown" inherits="CooldownFrameTemplate" useParentLevel="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="5" y="-5" />
+					<Anchor point="BOTTOMRIGHT" x="-5" y="5" />
+				</Anchors>
+			</Cooldown>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.type = 0
+				self.getTime = 0
+				self.iconTex = 0
+				self.drcount = 0
+			</OnLoad>
+		</Scripts>
+	</Frame>
+	
+	<Button name="SyncUI_ArenaPetFrameTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="42" y="52" />
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="30" y="8"/>
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="6" y="6"/>
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Icon">
+							<Size x="30" y="30" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="6" y="-6" />
+							</Anchors>
+							<TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9" />
+						</Texture>
+					</Layer>
+					<Layer level="BORDER">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\ArenaFrame_Border">
+							<TexCoords left="0.75" right="0.9140625" top="0" bottom="0.8125"/>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_ArenaPetFrame_OnLoad" />
+			<OnShow function="SyncUI_ArenaPetFrame_OnShow" />
+		</Scripts>
+	</Button>
+	
+	<Button name="SyncUI_ArenaFrameTemplate" inherits="SyncUI_UnitFrameTemplate" virtual="true">
+		<Size x="167" y="62"/>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="86" y="26"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="15" y="-15"/>
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="68" y="9"/>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.HealthBar" relativePoint="BOTTOM" x="0" y="-1"/>
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="AbsorbBar" useParentLevel="true">
+				<Size x="0" y="26"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
+				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
+					</Layer>
+					<Layer level="ARTWORK" textureSubLevel="1">
+						<Texture parentKey="Overlay" inherits="TotalAbsorbBarOverlayTemplate"/>
+					</Layer>
+				</Layers>
+			</Frame>
+			<Frame parentKey="Trinket">
+				<Size x="28" y="28"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-6" y="-19" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Icon">
+							<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString parentKey="Text" setAllPoints="true" inherits="SyncUI_GameFontNormal_Medium">
+							<Anchors>
+								<Anchor point="CENTER" x="1" y="0" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Cooldown parentKey="cooldown" useParentLevel="true" inherits="CooldownFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="1" y="-1" />
+							<Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+						</Anchors>
+					</Cooldown>
+				</Frames>
+				<Scripts>
+					<OnLoad>
+						if UnitFactionGroup("player") == "Alliance" then
+							self.Icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01")
+						elseif UnitFactionGroup("player") == "Horde" then
+							self.Icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_02")
+						end
+					</OnLoad>
+					<OnEvent function="SyncUI_ArenaFrame_OnTrinketUse" />
+				</Scripts>
+			</Frame>			
+			<Frame parentKey="Crowd" hidden="true">
+				<Size x="28" y="28"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-36" y="-19" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND" textureSubLevel="1">
+						<Texture parentKey="Icon">
+							<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<FontString parentKey="Text" setAllPoints="true" inherits="SyncUI_GameFontNormal_Medium">
+							<Anchors>
+								<Anchor point="CENTER" x="1" y="0" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Frames>
+					<Cooldown parentKey="cooldown" useParentLevel="true" inherits="CooldownFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="1" y="-1" />
+							<Anchor point="BOTTOMRIGHT" x="-1" y="1" />
+						</Anchors>
+					</Cooldown>
+				</Frames>
+				<Scripts>
+					<OnEvent function="SyncUI_ArenaFrame_SetCrowdControl" />
+				</Scripts>
+			</Frame>			
+
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Spec">
+							<Size x="28" y="28"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-36" y="-19" />
+							</Anchors>
+							<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/>
+						</Texture>
+					</Layer>
+					<Layer level="BORDER">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\ArenaFrame_Border">
+							<TexCoords left="0" right="0.65234375" top="0" bottom="0.96875"/>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontOutline_Small">
+							<Size x="65" y="9" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="25.5" y="-3" />
+							</Anchors>
+						</FontString>
+						<FontString parentKey="Health" inherits="SyncUI_GameFontNormal_Small">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar"/>
+							</Anchors>
+						</FontString>
+						<Texture parentKey="StatusIcon" forceAlpha="true">
+							<Size x="20" y="20" />
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.$parent.HealthBar" />
+							</Anchors>
+						</Texture>
+						<Texture parentKey="Faction" file="Interface\TargetingFrame\UI-PVP-Horde">
+							<Size x="30" y="30"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-43" y="0" />
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			
+			<Button name="$parentPetFrame" inherits="SyncUI_ArenaPetFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="" y="-7" />
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_ArenaFrame_OnLoad" />
+			<OnShow function="SyncUI_ArenaFrame_OnShow" />
+			<OnHide function="SyncUI_ArenaFrame_OnHide" />
+		</Scripts>
+	</Button>	
+
+	<Frame name="SyncUI_ArenaPrepFrameTemplate" frameStrata="LOW" toplevel="true" virtual="true">
+		<Size x="167" y="62"/>
+		<Frames>
+			<StatusBar parentKey="HealthBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
+				<Size x="86" y="26"/>
+				<Anchors>
+					<Anchor point="TOPLEFT" x="15" y="-15"/>
+				</Anchors>
+			</StatusBar>
+			<StatusBar parentKey="ManaBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true">
+				<Size x="68" y="9"/>
+				<Anchors>
+					<Anchor point="TOP" relativeKey="$parent.HealthBar" relativePoint="BOTTOM" x="0" y="-1"/>
+				</Anchors>
+			</StatusBar>
+			<Frame parentKey="Trinket">
+				<Size x="28" y="28"/>
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="-6" y="-19" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Icon">
+							<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/>
+						</Texture>
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad>
+						if UnitFactionGroup("player") == "Alliance" then
+							self.Icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_01")
+						elseif UnitFactionGroup("player") == "Horde" then
+							self.Icon:SetTexture("Interface\\Icons\\inv_jewelry_trinketpvp_02")
+						end
+					</OnLoad>
+				</Scripts>
+			</Frame>			
+			<Frame parentKey="ArtFrame" setAllPoints="true">
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="Spec">
+							<Size x="28" y="28"/>
+							<Anchors>
+								<Anchor point="TOPRIGHT" x="-36" y="-19" />
+							</Anchors>
+							<TexCoords left="0.05" right="0.95" top="0.05" bottom="0.95"/>
+						</Texture>
+					</Layer>
+					<Layer level="BORDER">
+						<Texture file="Interface\AddOns\SyncUI\Media\Textures\UI-Mods\UnitFrames\ArenaFrame_Border">
+							<TexCoords left="0" right="0.65234375" top="0" bottom="0.96875"/>
+						</Texture>
+					</Layer>
+					<Layer level="ARTWORK">
+						<FontString parentKey="Name" inherits="SyncUI_GameFontOutline_Small">
+							<Size x="65" y="9" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="25.5" y="-3" />
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.unitID = "arena"..self:GetID()
+				self.Name = self.ArtFrame.Name
+				self.Spec = self.ArtFrame.Spec
+			</OnLoad>
+		</Scripts>
+	</Frame>	
+
+	<Frame name="SyncUI_ArenaFrameContainer" clampedToScreen="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="167" y="318"/>
+		<Anchors>
+			<Anchor point="RIGHT" x="-150" y="50"/>
+		</Anchors>
+		<Frames>
+			<Button name="SyncUI_ArenaFrame1" inherits="SyncUI_ArenaFrameTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOP" />
+				</Anchors>
+			</Button>
+			<Button name="SyncUI_ArenaFrame2" inherits="SyncUI_ArenaFrameTemplate" id="2">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaFrame1" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Button>
+			<Button name="SyncUI_ArenaFrame3" inherits="SyncUI_ArenaFrameTemplate" id="3">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaFrame2" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Button>
+			<Button name="SyncUI_ArenaFrame4" inherits="SyncUI_ArenaFrameTemplate" id="4">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaFrame3" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Button>
+			<Button name="SyncUI_ArenaFrame5" inherits="SyncUI_ArenaFrameTemplate" id="5">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaFrame4" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Button>
+		</Frames>
+		<!--Scripts>
+			<OnLoad>
+				self:SetScale(0.85)
+				SyncUI_RegisterDragFrame(self,ARENA)
+			</OnLoad>
+		</Scripts-->
+	</Frame>
+	
+	<Frame name="SyncUI_ArenaPrepFrameContainer" frameStrata="LOW" toplevel="true" clampedToScreen="true" parent="SyncUI_UIParent" hidden="true">
+		<Size x="167" y="318"/>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="SyncUI_ArenaFrameContainer" />
+		</Anchors>
+		<Frames>
+			<Frame name="SyncUI_ArenaPrepFrame1" inherits="SyncUI_ArenaPrepFrameTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOP" />
+				</Anchors>
+			</Frame>
+			<Frame name="SyncUI_ArenaPrepFrame2" inherits="SyncUI_ArenaPrepFrameTemplate" id="2">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaPrepFrame1" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Frame>
+			<Frame name="SyncUI_ArenaPrepFrame3" inherits="SyncUI_ArenaPrepFrameTemplate" id="3">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaPrepFrame2" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Frame>
+			<Frame name="SyncUI_ArenaPrepFrame4" inherits="SyncUI_ArenaPrepFrameTemplate" id="4">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaPrepFrame3" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Frame>
+			<Frame name="SyncUI_ArenaPrepFrame5" inherits="SyncUI_ArenaPrepFrameTemplate" id="5">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="SyncUI_ArenaPrepFrame4" relativePoint="BOTTOM" x="0" y="-2"/>
+				</Anchors>
+			</Frame>
+		</Frames>
+		<!--Scripts>
+			<OnLoad function="SyncUI_ArenaPrepFrame_OnLoad" />
+			<OnEvent function="SyncUI_ArenaPrepFrame_OnEvent" />
+		</Scripts-->
+	</Frame>
+	
+</Ui>

@@ -1,0 +1,7 @@
+<Ui>
+
+	<Include file="Auras\Auras.xml" />
+	<Include file="CastingBar\CastingBar.xml" />
+	<Include file="ResourceBar\ResourceBar.xml" />
+	
+</Ui>

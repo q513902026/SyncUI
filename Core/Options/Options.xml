@@ -1,0 +1,1714 @@
+<Ui>
+
+	<Script file="Options.lua" />
+	
+	<!-- Templates -->
+	<CheckButton name="SyncUI_CheckButtonTemplate" virtual="true">
+		<Size x="16" y="16" />
+		<HitRectInsets left="0" right="-225" top="-2" bottom="-2" />
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text" justifyH="LEFT">
+			<Size x="250" y="16" />
+			<Anchors>
+				<Anchor point="LEFT" relativePoint="RIGHT" x="5" y="0" />
+			</Anchors>
+			<DisabledColor r="0.5" g="0.5" b="0.5" />
+		</ButtonText>
+		<PushedTextOffset x="0" y="0" />
+		<DisabledColor r="0.5" g="0.5" b="0.5" />
+		<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\CheckButton">
+			<TexCoords left="0" right="1" top="0" bottom="0.25" />
+		</NormalTexture>
+		<CheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\CheckButton">
+			<TexCoords left="0" right="1" top="0.25" bottom="0.5" />
+		</CheckedTexture>
+		<DisabledCheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\CheckButton">
+			<TexCoords left="0" right="1" top="0.5" bottom="0.75" />
+		</DisabledCheckedTexture>
+		<Scripts>
+			<OnEnable>
+				self:GetFontString():SetTextColor(1,1,1)
+			</OnEnable>
+			<OnDisable>
+				self:GetFontString():SetTextColor(0.35,0.35,0.35)
+			</OnDisable>
+			<OnEnter>
+				self:GetFontString():SetTextColor(0.4,1,0)
+			</OnEnter>
+			<OnLeave>
+				self:GetFontString():SetTextColor(1,1,1)
+			</OnLeave>
+		</Scripts>
+	</CheckButton>
+
+	<Button name="SyncUI_DropDownBtnTemplate" inherits="SyncUI_BackdropTemplate" virtual="true">
+		<HitRectInsets left="6" right="6" top="6" bottom="6" />
+		<Size x="135" y="35" />		
+		<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\DropDownBtn">
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPRIGHT" x="-8" y="-8" />
+			</Anchors>
+			<TexCoords left="0.125" right="0.421875" top="0.25" bottom="0.84375" />
+		</NormalTexture>
+		<!--PushedTexture file="Interface\AddOns\SyncUI\Media\Textures\Elements\DropDownBtn">
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPRIGHT" x="-8" y="-8" />
+			</Anchors>
+			<TexCoords left="0.625" right="0.921875" top="0.25" bottom="0.84375" />
+		</PushedTexture-->
+		<HighlightTexture>
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPRIGHT" x="-8" y="-8" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="IconEdge">
+					<Size x="1" y="19" />
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="-27" y="-8" />
+					</Anchors>
+					<Color r="0" g="0" b="0" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<PushedTextOffset x="0" y="0" />
+		<ButtonText parentKey="Text" justifyH="LEFT">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="13" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-33" y="8" />
+			</Anchors>
+		</ButtonText>
+		<Frames>
+			<Frame parentKey="Menu" />
+		</Frames>
+		<Scripts>
+			<OnClick>
+				SyncUI_DropDownMenu_Toggle(self.Menu, nil, "TOPLEFT", self, "BOTTOMLEFT", 0, 14)
+			</OnClick>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_IconButtonTemplate" virtual="true">
+		<Size x="48" y="35" />
+		<Backdrop edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
+			<EdgeSize val="16" />
+		</Backdrop>
+		<Layers>
+			<Layer level="BACKGROUND" textureSubLevel="-1">
+				<Texture parentKey="Icon">
+					<Size x="32" y="19" />
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+					<TexCoords left="0.05" right="0.95" top="0.25" bottom="0.85" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<HighlightTexture>
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Scripts>
+			<OnLeave function="GameTooltip_Hide" />
+			<OnEnable>
+				self.Icon:SetDesaturated(false)
+			</OnEnable>
+			<OnDisable>
+				self.Icon:SetDesaturated(true)
+			</OnDisable>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_TextButtonTemplate" inherits="SyncUI_BackdropTemplate" virtual="true">
+		<Size x="120" y="35" />
+		<HighlightTexture>
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<DisabledFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text" justifyH="CENTER">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+		</ButtonText>
+		<Scripts>
+			<OnEnable>
+				self:GetFontString():SetTextColor(1,1,1)
+			</OnEnable>
+			<OnDisable>
+				self:GetFontString():SetTextColor(0.5,0.5,0.5)
+			</OnDisable>
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_IconTextButtonTemplate" inherits="SyncUI_BackdropTemplate" virtual="true">
+		<HitRectInsets left="6" right="6" top="6" bottom="6" />
+		<Size x="150" y="35" />		
+		<NormalTexture parentKey="Icon">
+			<Size x="19" y="19" />
+			<Anchors>
+				<Anchor point="TOPLEFT" x="8" y="-8" />
+			</Anchors>
+			<TexCoords left="0.075" right="0.925" top="0.075" bottom="0.925" />
+		</NormalTexture>
+		<HighlightTexture parentKey="Highlight">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="28" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+			<Color r="1" g="1" b="1" a="0.25" />
+		</HighlightTexture>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="IconEdge">
+					<Size x="1" y="19" />
+					<Anchors>
+						<Anchor point="TOPLEFT" x="27" y="-8" />
+					</Anchors>
+					<Color r="0" g="0" b="0" />
+				</Texture>
+			</Layer>
+		</Layers>
+		<NormalFont style="SyncUI_GameFontShadow_Medium" />
+		<ButtonText parentKey="Text">
+			<Anchors>
+				<Anchor point="TOPLEFT" x="28" y="-8" />
+				<Anchor point="BOTTOMRIGHT" x="-8" y="8" />
+			</Anchors>
+		</ButtonText>
+		<Scripts>
+			<OnEnable>
+				self.Text:SetVertexColor(1,1,1)
+				self.Icon:SetDesaturated(false)
+			</OnEnable>
+			<OnDisable>
+				self.Text:SetVertexColor(0.5,0.5,0.5)
+				self.Icon:SetDesaturated(true)
+			</OnDisable>
+			<OnLeave function="GameTooltip_Hide" />
+		</Scripts>
+	</Button>
+
+	<Button name="SyncUI_OptionsButtonTemplate" inherits="SyncUI_TextButtonTemplate" virtual="true">
+		<Size x="150" y="35" />
+	</Button>
+
+	
+	<Frame name="SyncUI_OptionPanel_AuraLineTemplate" hidden="true" virtual="true">
+		<Size x="0" y="20" />
+		<Anchors>
+			<Anchor point="LEFT" x="5" y="" />
+			<Anchor point="RIGHT" x="-15" y="" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Icon">	
+					<Size x="20" y="20" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+					<TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9" />
+				</Texture>
+				<FontString parentKey="Name" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT">
+					<Size x="195" y="10" />
+					<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Icon" relativePoint="RIGHT" x="5" y="0" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button parentKey="Delete" alpha="0">
+				<Size x="17" y="17" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="0" y="-1" />
+				</Anchors>
+				<NormalTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="0.5" />
+				<HighlightTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="1" />
+				<Scripts>
+					<OnEnter>
+						self:SetAlpha(1)
+					</OnEnter>
+					<OnLeave>
+						if not self:GetParent():IsMouseOver() then
+							self:SetAlpha(0)
+						end
+					</OnLeave>
+					<OnClick function="SyncUI_OptionPanel_ReactiveAuraLine_OnDelete" />
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				self.Name:SetTextColor(0.4,1,0)
+				self.Delete:SetAlpha(1)
+			</OnEnter>
+			<OnLeave>
+				self.Name:SetTextColor(1,1,1)
+				self.Delete:SetAlpha(0)
+			</OnLeave>
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_OptionPanel_BrokerButtonTemplate" hidden="true" virtual="true">
+		<Size x="236" y="20" />
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Icon">	
+					<Size x="20" y="20" />
+					<Anchors>
+						<Anchor point="LEFT" />
+					</Anchors>
+					<TexCoords left="0.1" right="0.9" top="0.1" bottom="0.9" />
+				</Texture>
+				<FontString parentKey="Name" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT">
+					<Size x="95" y="10" />
+					<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Icon" relativePoint="RIGHT" x="5" y="0" />
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Server" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT">
+					<Size x="95" y="10" />
+					<Anchors>
+						<Anchor point="LEFT" relativeKey="$parent.Name" relativePoint="RIGHT" x="5" y="0" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button parentKey="Delete" alpha="0">
+				<Size x="17" y="17" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="0" y="-1" />
+				</Anchors>
+				<NormalTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="0.5" />
+				<HighlightTexture file="Interface\FriendsFrame\ClearBroadcastIcon" alpha="1" />
+				<Scripts>
+					<OnEnter>
+						self:SetAlpha(1)
+					</OnEnter>
+					<OnLeave>
+						if not self:GetParent():IsMouseOver() then
+							self:SetAlpha(0)
+						end
+					</OnLeave>
+					<OnClick function="SyncUI_OptionPanel_BrokerButton_DeleteInfo" />
+				</Scripts>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				self.Name:SetTextColor(0.4,1,0)
+				self.Server:SetTextColor(0.4,1,0)
+				self.Delete:SetAlpha(1)
+			</OnEnter>
+			<OnLeave>
+				self.Name:SetTextColor(1,1,1)
+				self.Server:SetTextColor(1,1,1)
+				self.Delete:SetAlpha(0)
+			</OnLeave>
+		</Scripts>
+	</Frame>
+	
+	<CheckButton name="SyncUI_OptionPanel_FontButtonTemplate" inherits="SyncUI_CheckButtonTemplate" virtual="true">
+		<Scripts>
+			<OnClick function="SyncUI_OptionPanel_Font_FontCheckButton_OnClick" />
+		</Scripts>
+	</CheckButton>
+
+
+	<!-- Option Menu -->
+	<Frame name="SyncUI_OptionsMenu" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="HIGH" parent="SyncUI_UIParent" hidden="true">
+		<Size x="160" y="264" />
+		<Anchors>
+			<Anchor point="TOP" relativeTo="UIParent" x="0" y="-270"/>
+		</Anchors>
+		<Animations>
+			<AnimationGroup parentKey="SlideIn" setToFinalAlpha="true">
+				<Translation duration="0" order="1" offsetX="-50" offsetY="0"/>
+				<Alpha smoothing="OUT" duration="0.7" order="2" fromAlpha="0" toAlpha="1"/>
+				<Translation smoothing="OUT" duration="0.7" order="2" offsetX="50" offsetY="0"/>
+				<Scripts>
+					<OnPlay>
+						self:GetParent().SlideOut:Stop()
+						self:GetParent().SlideToLeft:Stop()
+						self:GetParent().SlideToRight:Stop()
+						self:GetParent().KeyBoardBlock:Show()
+						self:GetParent():Show()
+					</OnPlay>
+					<OnFinished>
+						self:GetParent().KeyBoardBlock:Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideOut" setToFinalAlpha="true">
+                <Alpha smoothing="OUT" duration="0.5" order="2" fromAlpha="1" toAlpha="0"/>
+				<Translation smoothing="OUT" duration="0.5" order="2" offsetX="200" offsetY="0"/>
+				<Scripts>
+					<OnPlay>
+						self:GetParent().SlideIn:Stop()
+						self:GetParent().SlideToLeft:Stop()
+						self:GetParent().SlideToRight:Stop()
+						self:GetParent().KeyBoardBlock:Show()
+					</OnPlay>
+					<OnFinished>
+						self:GetParent():Hide()
+						self:GetParent().KeyBoardBlock:Hide()
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideToLeft">
+				<Translation smoothing="IN_OUT" duration="0.7" order="1" offsetX="-250" offsetY="0" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().KeyBoardBlock:Show()
+					</OnPlay>
+					<OnFinished>
+						self:GetParent().KeyBoardBlock:Hide()
+						self:GetParent():ClearAllPoints()
+						self:GetParent():SetPoint("CENTER",UIParent,-250,75)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+			<AnimationGroup parentKey="SlideToRight">
+				<Translation smoothing="IN_OUT" duration="0.7" order="1" offsetX="250" offsetY="0"/>
+				<Alpha target="SyncUI_OptionPanelFrame" smoothing="IN_OUT" duration="0.7" order="1" fromAlpha="1" toAlpha="0" />
+				<Scripts>
+					<OnPlay>
+						self:GetParent().KeyBoardBlock:Show()
+					</OnPlay>
+					<OnFinished>
+						SyncUI_OptionPanelFrame:Hide()
+						self:GetParent().KeyBoardBlock:Hide()
+						self:GetParent():ClearAllPoints()
+						self:GetParent():SetPoint("CENTER",UIParent,0,75)
+					</OnFinished>
+				</Scripts>
+			</AnimationGroup>
+		</Animations>
+		<Frames>
+			<Button parentKey="SlideArrowLeft" hidden="true">
+				<Size x="16" y="82" />
+				<Anchors>
+					<Anchor point="RIGHT" relativePoint="LEFT" x="-5" y="0" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+					<TexCoords left="0" right="0.25" top="0" bottom="0.640625" />
+				</NormalTexture>
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+					<TexCoords left="0.25" right="0.5" top="0" bottom="0.640625" />
+				</HighlightTexture>
+				<Frames>
+					<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+						<Size x="32" y="82" />
+						<Anchors>
+							<Anchor point="LEFT" x="-12" y="0" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+									<TexCoords left="0.5" right="1" top="0" bottom="0.640625" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnClick>
+						if not self:IsShown() or SyncUI_OptionsMenu.SlideToLeft:IsPlaying() or SyncUI_OptionsMenu.SlideToRight:IsPlaying() then
+							return
+						end
+						
+						SyncUI_OptionsMenu.BlizzMenu:Show()
+						SyncUI_OptionsMenu.SyncMenu:Hide()			
+						SyncUI_OptionsMenu.SlideToRight:Play()
+						SyncUI_OptionsMenu.SlideArrowRight:Show()
+						
+						self:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="SlideArrowRight">
+				<Size x="16" y="82" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="RIGHT" x="5" y="0" />
+				</Anchors>
+				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+					<TexCoords left="0.25" right="0" top="0" bottom="0.640625" />
+				</NormalTexture>
+				<HighlightTexture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+					<TexCoords left="0.5" right="0.25" top="0" bottom="0.640625" />
+				</HighlightTexture>
+				<Frames>
+					<Frame parentKey="Glow" inherits="SyncUI_GlowScriptTemplate" setAllPoints="true">
+						<Size x="32" y="82" />
+						<Anchors>
+							<Anchor point="RIGHT" x="12" y="0" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<Texture file="Interface\AddOns\SyncUI\Media\Textures\Options-SlideArrow">
+									<TexCoords left="1" right="0.5" top="0" bottom="0.640625" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnClick>
+						if not self:IsShown() or SyncUI_OptionsMenu.SlideToLeft:IsPlaying() or SyncUI_OptionsMenu.SlideToRight:IsPlaying() then
+							return
+						end
+						
+						SyncUI_OptionsMenu.BlizzMenu:Hide()
+						SyncUI_OptionsMenu.SyncMenu:Show()
+						SyncUI_OptionPanelFrame:Show()
+						SyncUI_OptionPanelFrame_HidePanels()
+						
+						SyncUI_OptionsMenu.SlideToLeft:Play()
+						SyncUI_OptionsMenu.SlideArrowLeft:Show()
+						
+						self:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+
+			<Frame parentKey="BlizzMenu" inherits="SyncUI_LayerFrameTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="2" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+				</Anchors>
+				<Frames>
+					<Button parentKey="System" inherits="SyncUI_OptionsButtonTemplate" text="SYSTEMOPTIONS_MENU">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="10" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								HideUIPanel(GameMenuFrame)
+								ShowUIPanel(VideoOptionsFrame)
+								VideoOptionsFrame.lastFrame = GameMenuFrame
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Interface" inherits="SyncUI_OptionsButtonTemplate" text="UIOPTIONS_MENU">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.System" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								HideUIPanel(GameMenuFrame)
+								InterfaceOptionsFrame:Show()
+								InterfaceOptionsFrame.lastFrame = GameMenuFrame
+								InterfaceOptionsFrameCancel:SetScript("OnClick",function() InterfaceOptionsFrame:Hide() end)
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="KeyBinds" inherits="SyncUI_OptionsButtonTemplate" text="KEY_BINDINGS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Interface" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								HideUIPanel(GameMenuFrame)
+								KeyBindingFrame_LoadUI()
+								KeyBindingFrame:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="Macros" inherits="SyncUI_OptionsButtonTemplate" text="MACROS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.KeyBinds" relativePoint="BOTTOM" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								HideUIPanel(GameMenuFrame)
+								ShowMacroFrame()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Addons" inherits="SyncUI_OptionsButtonTemplate" text="ADDONS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Macros" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local frame = ACP_AddonList or AddonList
+
+								ShowUIPanel(frame)								
+								HideUIPanel(GameMenuFrame)
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="Logout" inherits="SyncUI_OptionsButtonTemplate" text="LOGOUT" hidden="true">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Addons" relativePoint="BOTTOM"/>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if not IsResting() then
+									HideUIPanel(GameMenuFrame)
+								end
+								GameMenuButtonLogout:Click();
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Exit" inherits="SyncUI_OptionsButtonTemplate" text="EXIT_GAME" hidden="true">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Logout" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>								
+								if not IsResting() then
+									HideUIPanel(GameMenuFrame)
+								end
+								GameMenuButtonQuit:Click();
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="Support" inherits="SyncUI_TextButtonTemplate" text="GAMEMENU_HELP">
+						<Size x="80" y="35" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Exit" relativePoint="BOTTOMLEFT" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								ToggleHelpFrame()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Store" inherits="SyncUI_TextButtonTemplate" text="SYNCUI_STRING_STORE">
+						<Size x="80" y="35" />
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativeKey="$parent.Exit" relativePoint="BOTTOMRIGHT" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								ToggleStoreUI()
+							</OnClick>
+						</Scripts>
+					</Button>
+				</Frames>
+			</Frame>
+			<Frame parentKey="SyncMenu" inherits="SyncUI_LayerFrameTemplate" hidden="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="-5" y="2" />
+					<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+				</Anchors>
+				<Frames>
+					<Button parentKey="Appearance" inherits="SyncUI_OptionsButtonTemplate" text="APPEARANCE_LABEL">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="10" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Appearance:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Auras" inherits="SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_AURAS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Appearance" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Aura:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="UnitFrames" inherits="SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_UNITFRAMES">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Auras" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_UnitFrames:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Quests" inherits="SyncUI_OptionsButtonTemplate" text="TRACKER_HEADER_QUESTS">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.UnitFrames" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Quest:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Misc" inherits="SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_MISC">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Quests" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Misc:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="Broker" inherits="SyncUI_OptionsButtonTemplate" hidden="true" text="Broker">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Misc" relativePoint="BOTTOM" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Broker:Show()
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button parentKey="Profiles" inherits="SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_PROFILES">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Broker" relativePoint="BOTTOM" x="0" y="10" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								SyncUI_OptionPanelFrame_HidePanels()
+								SyncUI_OptionPanel_Profiles:Show()
+							</OnClick>
+							<OnDisable>
+								self:GetFontString():SetTextColor(0.5,0.5,0.5)
+								if SyncUI_OptionPanel_Profiles:IsShown() then
+									SyncUI_OptionPanel_Profiles:Hide()
+								end
+							</OnDisable>
+						</Scripts>
+					</Button>
+
+					<Button parentKey="PlacementTool" inherits="SyncUI_OptionsButtonTemplate" text="SYNCUI_STRING_PLACEMENT_TOOL">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Profiles" relativePoint="BOTTOM" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if UnitAffectingCombat("player") then
+									UIErrorsFrame:AddMessage(ERR_NOT_IN_COMBAT,1,0,0)
+								else
+									HideUIPanel(GameMenuFrame)
+									ShowUIPanel(SyncUI_PlacementTool)
+								end
+							</OnClick>
+						</Scripts>
+					</Button>
+
+				</Frames>
+			</Frame>
+
+			<EditBox parentKey="KeyBoardBlock">
+				<Scripts>
+					<OnShow>
+						self:SetFocus()
+					</OnShow>
+					<OnHide>
+						self:ClearFocus()
+					</OnHide>
+				</Scripts>
+			</EditBox>
+		</Frames>
+		<Scripts>
+			<OnLoad function="SyncUI_OptionsMenu_OnLoad" />
+			<OnEvent function="SyncUI_OptionsMenu_OnEvent" />
+			<OnShow>
+				self:ClearAllPoints()
+				self:SetPoint("CENTER", UIParent, 0, 75)
+			</OnShow>
+			<OnHide>
+				--self:EnableKeyboard(false)
+				self:ClearAllPoints()
+				self:SetPoint("CENTER",UIParent,0,75)
+				self.SlideArrowRight:Show()
+				self.SlideArrowLeft:Hide()
+				self.BlizzMenu:Show()
+				self.SyncMenu:Hide()
+				SyncUI_OptionPanelFrame:Hide()
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+	<Frame name="SyncUI_OptionPanelFrame" parent="SyncUI_OptionsMenu">
+		<Frames>
+			<Frame name="SyncUI_OptionPanel_Appearance" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="146" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>	
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="ColorMode">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_APPEARANCE_COLOR_MODE">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Appearance_ColorMode_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame parentKey="DisplayMode">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPRIGHT" relativeKey="$parent.ContentLayer" x="-20" y="-15" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="DISPLAY_MODE">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Appearance_DisplayMode_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame inherits="SyncUI_DividerTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ColorMode" relativePoint="BOTTOMLEFT" x="" y="-10" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.DisplayMode" relativePoint="BOTTOMRIGHT" x="" y="-10" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Fonts">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ColorMode" relativePoint="BOTTOMLEFT" x="" y="-16" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_APPEARANCE_FONTS">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Appearance_Fonts_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame parentKey="UIScale">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Fonts" relativePoint="TOPRIGHT" x="5" y="" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="UI_SCALE">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Appearance_UIScale_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_Aura" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="368" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="General" inherits="SyncUI_LayerFrameTemplate">
+						<Size x="" y="145" />
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="TOPRIGHT" x="5" y="2" />
+						</Anchors>
+						<Frames>
+							<CheckButton parentKey="DurationTimer" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_AURAS_NUMERIC_TIMERS">
+								<Anchors>
+									<Anchor point="TOPLEFT" x="20" y="-20" />
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local profile = SyncUI_GetProfile()
+										local parent = self:GetParent()
+										if self:GetChecked() then
+											profile.Options.Auras.DurationTimer = true
+											parent.DurationColor:SetEnabled(true)
+											parent.DurationSpiral:SetEnabled(true)
+										else
+											profile.Options.Auras.DurationTimer = false
+											parent.DurationColor:SetEnabled(false)
+											parent.DurationSpiral:SetEnabled(false)
+										end
+									</OnClick>
+								</Scripts>
+							</CheckButton>
+							<CheckButton parentKey="DurationColor" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_AURAS_COLORIZE_TIMER">
+								<HitRectInsets left="0" right="-210" top="-2" bottom="-2" />
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.DurationTimer" relativePoint="BOTTOM" x="15" y="-14" />
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local profile = SyncUI_GetProfile()
+										if self:GetChecked() then
+											profile.Options.Auras.DurationColor = true
+										else
+											profile.Options.Auras.DurationColor = false
+										end
+									</OnClick>
+								</Scripts>
+							</CheckButton>
+							<CheckButton parentKey="DurationSpiral" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_AURAS_DISABLE_SPIRAL">
+								<HitRectInsets left="0" right="-210" top="-2" bottom="-2" />
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.DurationColor" relativePoint="BOTTOM" x="0" y="-14" />
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local profile = SyncUI_GetProfile()
+										if self:GetChecked() then
+											profile.Options.Auras.DurationSpiral = true
+										else
+											profile.Options.Auras.DurationSpiral = false
+										end
+									</OnClick>
+								</Scripts>
+							</CheckButton>
+							<CheckButton parentKey="DebuffFilter" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_AURAS_FILTER_DEBUFFS">
+								<HitRectInsets left="0" right="-210" top="-2" bottom="-2" />
+								<Anchors>
+									<Anchor point="TOP" relativeKey="$parent.DurationSpiral" relativePoint="BOTTOM" x="-15" y="-14" />
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										local profile = SyncUI_GetProfile()
+										if self:GetChecked() then
+											profile.Options.Auras.DebuffFilter = true
+										else
+											profile.Options.Auras.DebuffFilter = false
+										end
+									</OnClick>
+								</Scripts>
+							</CheckButton>
+						</Frames>
+					</Frame>
+					<Frame parentKey="ReactiveAuras" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.General" relativePoint="BOTTOMLEFT" x="0" y="-10" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="24" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="CENTER" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_AURAS_REACTIVE_AURAS">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="BOTTOM" relativePoint="TOP" x="0" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<ScrollFrame parentKey="ScrollFrame" inherits="SyncUI_ScrollFrameTemplate2" hidden="true">
+								<Anchors>
+									<Anchor point="TOPLEFT" x="15" y="-15" />
+									<Anchor point="BOTTOMRIGHT" x="-15" y="15" />
+								</Anchors>
+								<Scripts>
+									<OnVerticalScroll>
+										SyncUI_ScrollFrame_OnVerticalScroll(self, offset, 20, SyncUI_OptionPanel_ReactiveAura_UpdateScrollFrame)
+									</OnVerticalScroll>
+									<OnShow function="SyncUI_OptionPanel_ReactiveAura_UpdateScrollFrame" />
+								</Scripts>
+							</ScrollFrame>
+
+							<Frame parentKey="Line1" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="1">
+								<Anchors>
+									<Anchor point="TOPLEFT" x="20" y="-20" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line2" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="2">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line1" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line3" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="3">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line2" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line4" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="4">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line3" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line5" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="5">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line4" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line6" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="6">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line5" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+							<Frame parentKey="Line7" inherits="SyncUI_OptionPanel_AuraLineTemplate" id="7">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Line6" relativePoint="BOTTOMLEFT" x="0" y="-1" />
+								</Anchors>
+							</Frame>
+
+							<EditBox parentKey="EnterID" inherits="SyncUI_EditBoxTemplate" numeric="true" letters="6" autoFocus="false">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="8" y="-1" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										self.Instructions:SetText(SYNCUI_STRING_AURAS_ENTER_SPELL_ID)
+									</OnLoad>
+									<OnEnterPressed>
+										SyncUI_OptionPanel_ApplyReactiveAura(self)
+										--self:ClearFocus()
+									</OnEnterPressed>
+									<OnEscapePressed>
+										self:ClearFocus()
+									</OnEscapePressed>
+								</Scripts>
+							</EditBox>
+							<Button parentKey="Create" inherits="SyncUI_TextButtonTemplate" text="BATTLETAG_CREATE">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.EnterID" relativePoint="TOPRIGHT" x="0" y="8" />
+								</Anchors>
+								<Scripts>
+									<OnClick function="SyncUI_OptionPanel_ApplyReactiveAura" />
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnShow function="SyncUI_OptionPanel_Aura_OnShow"  />
+				</Scripts>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_UnitFrames" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="112" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+					<CheckButton parentKey="DefaultRaid" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_UNITFRAMES_USEDEFAULT">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="20" y="-20" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								if StaticPopup_Visible("SYNCUI_USEDEFAULTRAID") or StaticPopup_Visible("SYNCUI_NOTUSEDEFAULTRAID") then
+									if self:GetChecked() then
+										self:SetChecked(false)
+									else
+										self:SetChecked(true)
+									end
+									return
+								end
+
+								if self:GetChecked() then
+									StaticPopup_Hide("SYNCUI_NOTUSEDEFAULTRAID")
+									StaticPopup_Show("SYNCUI_USEDEFAULTRAID")
+								else
+									StaticPopup_Hide("SYNCUI_USEDEFAULTRAID")
+									StaticPopup_Show("SYNCUI_NOTUSEDEFAULTRAID")
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<Frame parentKey="Sorting">
+						<Size x="" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.DefaultRaid" relativePoint="BOTTOMLEFT" x="-5" y="-10" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.DefaultRaid" relativePoint="BOTTOMRIGHT" x="-5" y="-10" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_UNITFRAMES_SORTBY">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_UnitFrames_Sorting_InitDropDown, 1)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_Quest" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="142" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+					<CheckButton parentKey="Accept" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_QUESTS_AUTO_ACCEPT">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="20" y="-20" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Quests.Accept = true
+									
+									self:GetParent().Daily:SetEnabled(true)
+								else
+									profile.Options.Quests.Accept = false
+									
+									self:GetParent().Daily:SetEnabled(false)
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="Daily" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_QUESTS_INCLUDE_DAILY">
+						<HitRectInsets left="0" right="-210" top="-2" bottom="-2" />
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Accept" relativePoint="BOTTOM" x="15" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Quests.Daily = true
+								else
+									profile.Options.Quests.Daily = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="TurnIn" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_QUESTS_AUTO_TURN_IN">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Daily" relativePoint="BOTTOM" x="-15" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Quests.TurnIn = true
+								else
+									profile.Options.Quests.TurnIn = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="Share" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_QUESTS_AUTO_SHARE">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.TurnIn" relativePoint="BOTTOM" x="0" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Quests.Share = true
+								else
+									profile.Options.Quests.Share = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="DisableTracker" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_QUESTS_DISABLE_TRACKER" hidden="true">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Share" relativePoint="BOTTOM" x="0" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Quests.DisableTracker = true
+									SyncUI_DisableFrame(ObjectiveTrackerFrame,true)
+								else
+									profile.Options.Quests.DisableTracker = false
+									ObjectiveTrackerFrame:SetParent(SyncUI_ObjTracker)
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_Misc" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="172" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+					<CheckButton parentKey="SkipCinematics" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_MISC_SKIP_CINEMATIC">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="20" y="-20" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Misc.SkipCinematics = true
+								else
+									profile.Options.Misc.SkipCinematics = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="DisableAFK" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_MISC_DISABLE_AFK">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.SkipCinematics" relativePoint="BOTTOM" x="0" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Misc.DisableAFK = true
+								else
+									profile.Options.Misc.DisableAFK = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="AutoSellJunk" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_MISC_AUTO_SELL">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.DisableAFK" relativePoint="BOTTOM" x="0" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Misc.AutoSellJunk = true
+								else
+									profile.Options.Misc.AutoSellJunk = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="AutoRepair" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_MISC_AUTO_REPAIR">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.AutoSellJunk" relativePoint="BOTTOM" x="0" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								local parent = self:GetParent()
+								if self:GetChecked() then
+									profile.Options.Misc.AutoRepair = true
+									parent.UseGuildRepair:SetEnabled(true)
+								else
+									profile.Options.Misc.AutoRepair = false
+									parent.UseGuildRepair:SetEnabled(false)
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+					<CheckButton parentKey="UseGuildRepair" inherits="SyncUI_CheckButtonTemplate" text="SYNCUI_STRING_MISC_GUILD_REPAIR">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.AutoRepair" relativePoint="BOTTOM" x="15" y="-14" />
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								local profile = SyncUI_GetProfile()
+								if self:GetChecked() then
+									profile.Options.Misc.UseGuildRepair = true
+								else
+									profile.Options.Misc.UseGuildRepair = false
+								end
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+				</Frames>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_Broker" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="275" y="205" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerWithNoEdgeTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="-10" />
+							<Anchor point="BOTTOMRIGHT" x="-4" y="10" />
+						</Anchors>
+					</Frame>
+					<ScrollFrame parentKey="ScrollFrame" name="$parent_ScrollFrame" inherits="SyncUI_ScrollFrameTemplate2" hidden="true">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+							<Anchor point="BOTTOMRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="15" />
+						</Anchors>
+						<Scripts>
+							<OnVerticalScroll>
+								SyncUI_ScrollFrame_OnVerticalScroll(self, offset, 20, SyncUI_OptionPanel_Broker_UpdateScrollFrame)
+							</OnVerticalScroll>
+							<OnShow function="SyncUI_OptionPanel_Broker_UpdateScrollFrame" />
+						</Scripts>
+					</ScrollFrame>
+
+					<Frame parentKey="Button1" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="20" y="-20" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button2" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="2">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button3" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="3">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button4" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="4">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button3" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button5" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="5">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button4" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button6" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="6">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button5" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Button7" inherits="SyncUI_OptionPanel_BrokerButtonTemplate" id="7">
+						<Anchors>
+							<Anchor point="TOP" relativeKey="$parent.Button6" relativePoint="BOTTOM" x="0" y="-1" />
+						</Anchors>
+					</Frame>
+				</Frames>
+				<Scripts>
+					<OnShow function="SyncUI_OptionPanel_Broker_OnShow" />
+				</Scripts>
+			</Frame>
+			<Frame name="SyncUI_OptionPanel_Profiles" inherits="SyncUI_BorderGlowFrameTemplate" hidden="true">
+				<Size x="300" y="212" />
+				<Anchors>
+					<Anchor Point="TOPLEFT" relativeTo="SyncUI_OptionsMenu" relativePoint="TOPRIGHT" x="20" y="0" />
+				</Anchors>
+				<Frames>
+					<Frame parentKey="ContentLayer" inherits="SyncUI_LayerFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="-5" y="2" />
+							<Anchor point="BOTTOMRIGHT" x="5" y="-2" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Creation">
+						<Size x="" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" x="15" y="-15" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.ContentLayer" x="-15" y="-15" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PROFILES_CREATE">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<EditBox parentKey="EnterName" inherits="SyncUI_EditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="" y="-5" />
+								</Anchors>
+								<Scripts>
+									<OnEnterPressed function="SyncUI_CreateProfile" />
+									<OnTextChanged>
+										if self:GetText() and self:GetText() ~= "" then
+											self:GetParent().Create:Show()
+										else
+											self:GetParent().Create:Hide()
+										end
+									</OnTextChanged>
+								</Scripts>
+							</EditBox>
+							<Button parentKey="Create" inherits="SyncUI_TextButtonTemplate" text="BATTLETAG_CREATE" hidden="true">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.EnterName" relativePoint="TOPRIGHT" x="12" y="8" />
+								</Anchors>
+								<Scripts>
+									<OnClick function="SyncUI_CreateProfile" />
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame inherits="SyncUI_DividerTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Creation" relativePoint="BOTTOMLEFT" x="" y="-10" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.Creation" relativePoint="BOTTOMRIGHT" x="" y="-10" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Selection">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Creation" relativePoint="BOTTOMLEFT" x="" y="-16" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PROFILES_SELECT">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Profiles_Selection_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame parentKey="Deletion">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Selection" relativePoint="TOPRIGHT" x="5" y="" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PROFILES_DELETE">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Profiles_Deletion_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+					<Frame inherits="SyncUI_DividerTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Selection" relativePoint="BOTTOMLEFT" x="" y="-10" />
+							<Anchor point="TOPRIGHT" relativeKey="$parent.Deletion" relativePoint="BOTTOMRIGHT" x="" y="-10" />
+						</Anchors>
+					</Frame>
+					<Frame parentKey="Copy">
+						<Size x="135" y="50" />
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeKey="$parent.Selection" relativePoint="BOTTOMLEFT" x="" y="-16" />
+						</Anchors>
+						<Layers>
+							<Layer level="ARTWORK">
+								<FontString parentKey="Header" justifyH="LEFT" inherits="SyncUI_GameFontShadow_Medium" text="SYNCUI_STRING_PROFILES_COPY">
+									<Size x="200" y="15" />
+									<Anchors>
+										<Anchor point="TOPLEFT" x="10" y="-5" />
+									</Anchors>
+									<Color r="1" g="1" b="1" />
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button parentKey="DropDown" inherits="SyncUI_DropDownBtnTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Header" relativePoint="BOTTOMLEFT" x="-8" y="3" />
+								</Anchors>
+								<Scripts>
+									<OnLoad>
+										SyncUI_DropDownMenu_Initialize(self.Menu, SyncUI_OptionPanel_Profiles_Copy_InitDropDown)
+									</OnLoad>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+
+				</Frames>
+			</Frame>
+		</Frames>
+	</Frame>	
+
+
+	<!-- Installer -->
+	<Frame name="SyncUI_Installer" inherits="SyncUI_BorderGlowFrameTemplate" frameStrata="FULLSCREEN_DIALOG" parent="SyncUI_UIParent" hidden="true">
+		<Size x="328" y="158" />
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent" />
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Header" inherits="SyncUI_GameFontOutline_Huge" text="SYNCUI_STRING_INSTALL_WELCOME">
+					<Anchors>
+						<Anchor point="TOP" x="0" y="-30" />
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Text" inherits="SyncUI_GameFontOutline_Medium" justifyV="CENTER" wordwrap="true" text="SYNCUI_STRING_INSTALL_CONTINUE">
+					<Size x="264" y="30" />
+					<Anchors>
+						<Anchor point="TOP" x="0" y="-57" />
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button parentKey="Install" inherits="SyncUI_OptionsButtonTemplate" enableMouse="false" text="SYNCUI_STRING_INSTALL_BTN_INSTALL">
+				<Anchors>
+					<Anchor point="BOTTOM" x="0" y="30"  />
+				</Anchors>
+				<Animations>
+					<AnimationGroup parentKey="Despawn">
+						<Alpha smoothing="OUT" duration="0.75" order="1" fromAlpha="1" toAlpha="0"/>
+						<Scripts>
+							<OnFinished>
+								SyncUI_Installer.Install:ClearAllPoints()
+								SyncUI_Installer.Install:SetPoint("CENTER",UIParent,-250,75)
+								SyncUI_Installer.Install:Hide()
+								SyncUI_Installer.LoadingBar:Show()
+								SyncUI_Installer.LoadingBar.Spawn:Play()
+								SyncUI_Installer.Text:SetText(SYNCUI_STRING_INSTALL_IN_PROGRESS)
+							</OnFinished>
+						</Scripts>
+					</AnimationGroup>
+				</Animations>
+				<Scripts>
+					<OnClick>
+						SyncUI_CharData.Installed = true
+						self.Despawn:Play()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button parentKey="Finish" inherits="SyncUI_OptionsButtonTemplate" enableMouse="false" text="SYNCUI_STRING_INSTALL_BTN_FINISH" hidden="true">
+				<Anchors>
+					<Anchor point="BOTTOM" x="0" y="30"  />
+				</Anchors>
+				<Animations>
+					<AnimationGroup parentKey="Spawn">
+						<Alpha smoothing="OUT" duration="0.75" order="1" fromAlpha="0" toAlpha="1"/>
+					</AnimationGroup>
+				</Animations>
+				<Scripts>
+					<OnClick>
+						ReloadUI()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Frame parentKey="LoadingBar" hidden="true">
+				<Size x="260" y="32" />
+				<Anchors>
+					<Anchor point="BOTTOMLEFT" x="34" y="30"  />
+				</Anchors>
+				<Animations>
+					<AnimationGroup parentKey="Spawn">
+						<Alpha duration="0" order="0" fromAlpha="0" toAlpha="0" />
+						<Alpha smoothing="OUT" startDelay="0.2" duration="0.5" order="1" fromAlpha="0" toAlpha="1" />
+						<Scripts>
+							<OnFinished>
+								SyncUI_Installer.StartProgress = true
+							</OnFinished>
+						</Scripts>
+					</AnimationGroup>
+					<AnimationGroup parentKey="Despawn">
+						<Alpha smoothing="OUT" startDelay="0.5" duration="1" order="1" fromAlpha="1" toAlpha="0" />
+						<Scripts>
+							<OnFinished>
+								SyncUI_Installer.LoadingBar:Hide()
+								SyncUI_Installer.Finish:Show()
+								SyncUI_Installer.Finish.Spawn:Play()
+								SyncUI_Installer.Text:SetText(SYNCUI_STRING_INSTALL_COMPLETE)
+							</OnFinished>
+						</Scripts>
+					</AnimationGroup>
+				</Animations>
+				<Frames>
+					<StatusBar parentKey="Progress" inherits="SyncUI_AnimatedStatusBarTemplate" minValue="0" maxValue="100" defaultValue="0" useParentLevel="true">
+						<Size x="250" y="22" />
+						<Anchors>
+							<Anchor point="CENTER" />
+						</Anchors>
+						<Layers>
+							<Layer level="OVERLAY">
+								<FontString parentKey="Text" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER" />
+							</Layer>
+						</Layers>
+						<BarColor r="0" g="1" b="0.6" />
+					</StatusBar>
+					<!--Frame parentKey="Border" setAllPoints="true">
+						<Layers>
+							<Layer level="ARTWORK">
+								<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\Options\Installer.tga">
+									<Size x="32" y="32" />
+									<Anchors>
+										<Anchor point="TOPLEFT" />
+									</Anchors>
+									<TexCoords left="0.75" right="0.8125" top="0" bottom="0.125" />
+								</Texture>
+								<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\Options\Installer.tga">
+									<Size x="32" y="32" />
+									<Anchors>
+										<Anchor point="TOPRIGHT" />
+									</Anchors>
+									<TexCoords left="0.9375" right="1" top="0" bottom="0.125" />
+								</Texture>
+								<Texture parentKey="Middle" file="Interface\AddOns\SyncUI\Media\Textures\Options\Installer.tga">
+									<Anchors>
+										<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+										<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+									</Anchors>
+									<TexCoords left="0.8125" right="0.9375" top="0" bottom="0.125" />
+								</Texture>
+							</Layer>
+						</Layers>
+					</Frame-->
+				</Frames>
+			</Frame>
+			
+			<!-- Specials -->
+			<EditBox parentKey="HotKeyBlocker" />
+			<Frame parentKey="Dimmer" useParentLevel="true" enableMouse="true">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="UIParent" /> 
+					<Anchor point="BOTTOMRIGHT" relativeTo="UIParent" /> 
+				</Anchors>				
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture>
+							<Color r="0" g="0" b="0" a="0.9" />
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				self.progress = 0
+				self.update = 0
+			</OnLoad>
+			<OnShow>
+				self.HotKeyBlocker:SetFocus()
+			</OnShow>
+			<OnUpdate function="SyncUI_Installer_UpdateProgress" />
+		</Scripts>
+	</Frame>
+
+</Ui>
