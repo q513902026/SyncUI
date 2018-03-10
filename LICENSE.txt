@@ -2,7 +2,7 @@
 
 The contents of this addon, excluding third-party resources, are copyrighted to its authors with all rights reserved.
 
-(http://www.wowinterface.com/downloads/fileinfo.php?id=23949)
+(http://www.wowinterface.com/downloads/info24574-SyncUI)
 
 The author of this addon hereby grants you the following rights:
 
