@@ -105,7 +105,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 			if UnitCastingInfo(unitID) then
 				spell = select(1, UnitCastingInfo(unitID))
 				icon = select(3, UnitCastingInfo(unitID))
-				noInterrupt = select(7, UnitCastingInfo(unitID))
+				noInterrupt = select(8, UnitCastingInfo(unitID))
 				
 				if noInterrupt then
 					r,g,b = 1,0,0
@@ -119,7 +119,6 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 				icon = select(3, UnitChannelInfo(unitID))	
 				r,g,b = 0,1,0		
 			end
-			
 			SetCastStart(self,spell,icon,r,g,b)
 		else
 			self:Hide()
@@ -127,15 +126,15 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 	end
 	
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		if select(2, ...) == "SPELL_INTERRUPT" then
-			if select(4, ...) == UnitGUID(unitID) then
+		if select(2, CombatLogGetCurrentEventInfo() ) == "SPELL_INTERRUPT" then
+			if select(4, CombatLogGetCurrentEventInfo() ) == UnitGUID(unitID) then
 				self.Spell:SetText(BATTLE_PET_MESSAGE_SPELL_LOCK)
 				self.interrupted = true
 			end
 		end
 		
-		if select(2, ...) == "UNIT_DIED" then
-			if select(4, ...) == UnitGUID(unitID) then
+		if select(2, CombatLogGetCurrentEventInfo() ) == "UNIT_DIED" then
+			if select(4, CombatLogGetCurrentEventInfo() ) == UnitGUID(unitID) then
 				SetCastStop(self)
 			end
 		end
@@ -164,11 +163,11 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 	end
 
 	if event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START" then
-		local name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID;
+		local name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID;
 		local r,g,b
 
 		if event == "UNIT_SPELLCAST_START" then
-			name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID = UnitCastingInfo(unitID);
+			name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID = UnitCastingInfo(unitID);
 			
 			if noInterrupt then
 				r,g,b = 1,0,0
@@ -178,7 +177,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 		end
 		
 		if event == "UNIT_SPELLCAST_CHANNEL_START" then
-			name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID = UnitChannelInfo(unitID);
+			name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID = UnitChannelInfo(unitID);
 			
 			if noInterrupt then
 				r,g,b = 1,0,0
@@ -186,8 +185,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 				r,g,b = 0,1,0
 			end
 		end
-		
-		SetCastStart(self,spell,icon,r,g,b)
+		SetCastStart(self,name,texture,r,g,b)
 	end
 
 	if event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
@@ -231,7 +229,6 @@ function SyncUI_CastingBar_OnUpdate(self)
 	if UnitCastingInfo(unitID) or UnitChannelInfo(unitID) then
 		self:SetMinMaxValues(0, maxValue)
 		self:SetValue(value)
-
 		if timer >= 0.1 then
 			self.Timer:SetText(timer)
 		else
