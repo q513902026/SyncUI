@@ -6,7 +6,7 @@ local function UpdateButton(self)
 	local index = self:GetID()
 
 	if LootSlotHasItem(index) then
-		local texture, item, count,currency, quality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(index)
+		local texture, item, count, currency, quality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(index)
 
 		if texture then
 			self:SetNormalTexture(texture)

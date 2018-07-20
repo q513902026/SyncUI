@@ -103,7 +103,7 @@ end
 -- Minimap --
 -------------
 	SYNCUI_STRING_CLOCK_TOGGLE_DISPLAY = "|cFF66FF00Shift+左击|r 切换本地/服务器计时"
-	SYNCUI_STRING_CLOCK_TOGGLE_HOUR_MODE = "|cFF66FF00左击|r 切换专精"
+	SYNCUI_STRING_CLOCK_TOGGLE_HOUR_MODE = "|cFF66FF00左击|r 切换24小时时间制"
 	SYNCUI_STRING_CLOCK_TOGGLE_STOPWATCH = "|cFF66FF00右击|r 打开计时器"
 --------------
 -- TalentUI --

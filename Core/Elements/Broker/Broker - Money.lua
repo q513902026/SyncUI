@@ -35,7 +35,7 @@ local function GetMoneyString(money)
 	end
 	
 	if gold >= 1000000 then
-		string = format("%.2f", gold/1000000)..SECOND_NUMBER_CAP.."|TInterface\\MoneyFrame\\UI-GoldIcon:%d:%d:2:0|t"
+			string = format("%.2f", gold/1000000)..SECOND_NUMBER_CAP.."|TInterface\\MoneyFrame\\UI-GoldIcon:%d:%d:2:0|t"
 	elseif gold >= 10000 then
 		string = format(GOLD_AMOUNT_TEXTURE_STRING, BreakUpLargeNumbers(gold))
 	elseif gold >= 100 then
