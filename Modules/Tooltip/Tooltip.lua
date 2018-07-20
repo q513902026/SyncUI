@@ -358,7 +358,7 @@ local function Hook_SetUnit(self,unit)
 end
 
 local function Hook_SetUnitAura(self, unitID, index, filter)
-	local spellID = select(11, UnitAura(unitID, index, filter))
+	local spellID = select(10, UnitAura(unitID, index, filter))
 	
 	if spellID then
 		self:AddDivider()
