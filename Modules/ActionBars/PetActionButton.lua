@@ -57,7 +57,7 @@ local function ClearButton(self)
 end
 
 local function UpdateIcon(self, action)
-	local name, subText, icon, isToken = GetPetActionInfo(action)
+	local name, icon, isToken = GetPetActionInfo(action)
 	
 	if isToken then
 		texture = _G[icon]
@@ -82,7 +82,7 @@ local function UpdateUsable(self, action)
 end
 
 local function UpdateState(self, action)
-	local isActive, autoCastAllowed, autoCastEnabled = select(5, GetPetActionInfo(action))
+	local isActive, autoCastAllowed, autoCastEnabled = select(4, GetPetActionInfo(action))
 	
 	self.Checked:SetShown(isActive or autoCastAllowed)
 
