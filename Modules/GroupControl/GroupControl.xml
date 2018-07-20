@@ -272,7 +272,6 @@
 		</ButtonText>
 		<Scripts>
 			<OnLoad function="SyncUI_WorldMarkerButton_OnLoad" />
-			<OnShow function="SyncUI_WorldMarkerButton_OnShow" />
 			<OnEnter>
 				GameTooltip:SetOwner(self, "ANCHOR_BOTTOM")
 				GameTooltip:AddLine(SYNCUI_STRING_RAID_TOOL_CLEAR_WORLD_MARKS,1,1,1)

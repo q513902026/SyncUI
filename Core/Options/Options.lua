@@ -308,11 +308,14 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	
+	
 	GameMenuFrame:SetAlpha(0)
 	GameMenuFrame:EnableMouse(false)
 	GameMenuFrame:SetFrameStrata("BACKGROUND")
 	GameMenuFrame:HookScript("OnShow",function()
 		self.SlideIn:Play()
+		GameMenuButtonLogout:SetPoint("TOP", self.BlizzMenu.Addons, "BOTTOM")
+		GameMenuButtonQuit:SetPoint("TOP", GameMenuButtonLogout, "BOTTOM", 0, 10)
 	end)
 	GameMenuFrame:HookScript("OnHide",function()
 		self.SlideOut:Play()
@@ -341,7 +344,6 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	GameMenuButtonLogout:SetParent(self.BlizzMenu);
 	GameMenuButtonLogout:ClearAllPoints();
 	GameMenuButtonLogout:SetPoint("TOP", self.BlizzMenu.Addons, "BOTTOM");
-	GameMenuButtonLogout.SetPoint = function() end;
 	GameMenuButtonLogout:SetBackdrop(backdrop);
 	GameMenuButtonLogout:SetHitRectInsets(5,5,5,5);
 	GameMenuButtonLogout:EnableMouse(true);

@@ -218,7 +218,7 @@
 	<Script file="Broker - Latency.lua" />
 	<Script file="Broker - Memory.lua" />
 	<Script file="Broker - Money.lua" />
-	<Script file="Broker - Artifact.lua" />
-	<Script file="Broker - WorldQuests.lua" />	
+	<!--Script file="Broker - Artifact.lua" /-->
+	<!--Script file="Broker - WorldQuests.lua" /-->	
 	
 </Ui>

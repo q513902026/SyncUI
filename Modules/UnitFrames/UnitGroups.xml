@@ -107,9 +107,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="44"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentHealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate"/>
@@ -179,9 +176,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="13"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
@@ -239,9 +233,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="44"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="$parentHealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate"/>
@@ -320,9 +311,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="26"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
@@ -526,9 +514,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="26"/>
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>

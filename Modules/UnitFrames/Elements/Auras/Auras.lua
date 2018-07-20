@@ -38,9 +38,9 @@ local function UpdateAuraIndex(self, auraType, unitID)
 		local spellID
 
 		if auraType == "Buff" then
-			spellID = select(11, UnitBuff(unitID,index))
+			spellID = select(10, UnitBuff(unitID,index))
 		elseif auraType == "Debuff" then
-			spellID = select(11, UnitDebuff(unitID,index))
+			spellID = select(10, UnitDebuff(unitID,index))
 		end
 		
 		if self.spellID == spellID then
@@ -61,7 +61,7 @@ local function UpdateSecureHeader(self)
 			
 			if aura then
 				local index = aura:GetID()
-				local name,_,icon,charge,_,duration,expire,_,_,_,spellID = UnitAura(unitID, index, filter)
+				local name, icon, charge, dispelType, duration, expire,_,_,_,spellID = UnitAura(unitID, index, filter)
 				
 				if name then
 					UpdateAura(aura, icon, charge, duration, expire, spellID, true)
@@ -85,12 +85,12 @@ local function SetUnitAura(self)
 		local aura = self["AuraButton"..index]
 
 		if aura then
-			local icon, charge, duration, expire, caster, spellID
+			local name, icon, charge, duration, expire, caster, spellID
 			
 			aura:Hide()
 			
 			if auraType == "Buff" then
-				icon, charge, _, duration, expire, caster, _, _, spellID = select(3, UnitBuff(unitID, index, filter))
+				name, icon, charge, dispelType, duration, expire, caster, _, _, spellID = UnitBuff(unitID, index, filter)
 			end
 			
 			if auraType == "Debuff" then
@@ -112,7 +112,7 @@ local function SetUnitAura(self)
 					--]]
 				end
 				
-				icon, charge, _, duration, expire, caster, _, _, spellID = select(3, UnitDebuff(unitID, index, filter))
+				name, icon, charge, dispelType, duration, expire, caster, _, _, spellID = UnitDebuff(unitID, index, filter)
 			end
 
 			if spellID then
@@ -151,9 +151,8 @@ local function SetReactiveAura(self, index, max)
 	end
 
 	local unitID = "player"
-	local icon, charge = select(3, UnitBuff(unitID,index))
-	local duration, expire, caster = select(6, UnitBuff(unitID,index))
-	local spellID = select(11, UnitBuff(unitID,index))
+	local name, icon, charge, dispelType, duration, expire, caster = UnitBuff(unitID,index)
+	local spellID = select(10, UnitBuff(unitID,index))
 		
 	if spellID then
 		for _, AuraFilterID in pairs(profile.ReactiveAuras) do

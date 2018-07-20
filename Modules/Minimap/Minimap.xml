@@ -93,7 +93,7 @@
 								self.pending = 0
 							</OnLoad>
 							<OnEvent>
-								local pending = CalendarGetNumPendingInvites()
+								local pending = C_Calendar.GetNumPendingInvites()
 								if pending > self.pending then
 									self.Notification:Show()
 									self.pending = pending
@@ -106,7 +106,7 @@
 								ToggleCalendar()
 							</OnClick>
 							<OnUpdate>
-								self.Text.String:SetText(select(3, CalendarGetDate()))
+								self.Text.String:SetText(select(3, C_Calendar.GetDate()))
 							</OnUpdate>
 						</Scripts>
 					</Button>
@@ -126,7 +126,7 @@
 							</OnLoad>
 							<OnEvent function="SyncUI_Minimap_Mail_OnEvent" />
 							<OnEnter function="SyncUI_Minimap_Mail_OnEnter" />            
-							<OnLeave function="GameTooltip_Hide" />
+							<OnLeave function="" />
 						</Scripts>
 					</Button>
 					<Button parentKey="Garrison">
@@ -173,7 +173,7 @@
 								GameTooltip:SetText(GARRISON_LANDING_PAGE_TITLE, 1,1,1)
 								GameTooltip:Show()
 							</OnEnter>
-							<OnLeave function="GameTooltip:Hide" />
+							<OnLeave function="GameTooltip_Hide" />
 						</Scripts>
 					</Button>
 					<Frame parentKey="Queue">

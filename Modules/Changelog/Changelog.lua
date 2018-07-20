@@ -2,9 +2,9 @@
 local version = GetAddOnMetadata("SyncUI", "Version")
 
 local maxLines, ChangeLogData = 5, {
-	"Bugfixes:",
-		"• Chat Bubbles: fixed an issue, occured every time a chat bubble was skinned while in an instance.",
-		"• Alerts: fixed error message occurrence.",
+	"Updated for 8.0 prepatch:",
+	"Some Modules are currently disabled:",
+		"• TalentUI",
 }
 
 local function ModifiedString(text)

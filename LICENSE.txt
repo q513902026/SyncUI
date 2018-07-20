@@ -1,8 +1,8 @@
-﻿Copyright © 2014-2018 Yves Petsche <syncrowx@gmail.com>.
+﻿Copyright © 2014-2018 Yves Petsche <syncrow@gmx.de>.
 
 The contents of this addon, excluding third-party resources, are copyrighted to its authors with all rights reserved.
 
-(http://www.wowinterface.com/downloads/info24574-SyncUI)
+(http://www.wowinterface.com/downloads/fileinfo.php?id=23949)
 
 The author of this addon hereby grants you the following rights:
 

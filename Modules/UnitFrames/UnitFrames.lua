@@ -490,8 +490,8 @@ function SyncUI_PlayerFrame_OnLoad(self)
 	self.RaidMark = self.ArtFrame.RaidMark
 	self.PvPTimer = self.ArtFrame.PvPTimer
 	self:SetAttribute('toggleForVehicle', true)
-	
-	SyncUI_CreateSecureAuraHeader(self, "TOPRIGHT", SyncUI_UIParent, "TOPRIGHT", -195, -10, self.unitID, "Buff", 10, 2, -38, -38, 152, 38, "SyncUI_SecureAuraTemplate", SYNCUI_STRING_PLACEMENT_TOOL_LABEL_BUFFS)
+
+	SyncUI_CreateSecureAuraHeader(self, "TOPRIGHT", SyncUI_UIParent, "TOPRIGHT", -195, -10, self.unitID, "Buff", 10, 2, -44, -44, 152, 38, "SyncUI_SecureAuraTemplate", SYNCUI_STRING_PLACEMENT_TOOL_LABEL_BUFFS)
 	SyncUI_CreateAuraHeader(self, "RIGHT", self, "LEFT", 0, 0, self.unitID, "Debuff", 10, 1, -38, -38, 152, 38, "SyncUI_AuraTemplate", SYNCUI_STRING_PLACEMENT_TOOL_LABEL_DEBUFFS)
 
 	SyncUI_RegisterDragFrame(self, PLAYER)

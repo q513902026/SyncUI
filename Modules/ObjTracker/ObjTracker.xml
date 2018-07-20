@@ -18,7 +18,7 @@
 	<Frame name="SyncUI_ObjTracker" parent="SyncUI_UIParent" >
 		<Size x="280" y="40" />
 		<Anchors>
-			<Anchor point="TOP" relativeTo="SyncUI_Minimap" relativePoint="BOTTOM" x="0" y="-50" />
+			<Anchor point="TOP" relativeTo="MinimapBorder" relativePoint="BOTTOM" x="0" y="-50" />
 		</Anchors>
 		<!--Frames>
 			<Frame parentKey="Header" setAllPoints="true" hidden="true">

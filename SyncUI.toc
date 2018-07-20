@@ -1,6 +1,6 @@
-## Interface: 73000
+## Interface: 80000
 ## Title: |cFF66FF00Sync|cFFFFFFFFUI
-## Version: 1.5.3
+## Version: 8.0.1
 ## Author: Syncrow
 ## Notes: Graphical User Interface Replacement
 ## SavedVariables: SyncUI_Data

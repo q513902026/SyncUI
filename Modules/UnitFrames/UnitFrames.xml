@@ -25,9 +25,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="32" />
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
@@ -138,9 +135,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="32" />
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture name="$parentFill" inherits="TotalAbsorbBarTemplate" />
@@ -296,9 +290,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="32" />
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
@@ -457,9 +448,6 @@
 			</StatusBar>
 			<Frame parentKey="AbsorbBar" useParentLevel="true">
 				<Size x="0" y="32" />
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeKey="$parent.HealthBar:GetStatusBarTexture()" relativePoint="TOPRIGHT"/>
-				</Anchors>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture parentKey="Fill" inherits="TotalAbsorbBarTemplate"/>
@@ -576,7 +564,9 @@
 		<Scripts>
 			<OnLoad function="SyncUI_ToTFrame_OnLoad" />
 			<OnEnter function="SyncUI_UnitFrame_OnEnter" />
-			<OnLeave function="SyncUI_UnitFrame_OnLeave"/>
+			<OnLeave>
+				GameTooltip:FadeOut()
+			</OnLeave>
 			<OnUpdate function="SyncUI_UnitFrame_OnUpdate" />
 			<OnDragStart>
 				if self.isMovable then
@@ -595,7 +585,9 @@
 		<Scripts>
 			<OnLoad function="SyncUI_ToFFrame_OnLoad" />
 			<OnEnter function="SyncUI_UnitFrame_OnEnter" />
-			<OnLeave function="SyncUI_UnitFrame_OnLeave"/>
+			<OnLeave>
+				GameTooltip:FadeOut()
+			</OnLeave>
 			<OnUpdate function="SyncUI_UnitFrame_OnUpdate" />
 			<OnDragStart>
 				if self.isMovable then

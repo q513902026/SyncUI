@@ -28,7 +28,7 @@ local FuckUp_AddOnButtons = {
 -- Minimap
 local function CleanUp()
 	local frames = {
-		"MiniMapVoiceChatFrame",
+		--"MiniMapVoiceChatFrame",
 		"MiniMapWorldMapButton",
 		"MinimapZoneTextButton",
 		"MiniMapMailFrame",

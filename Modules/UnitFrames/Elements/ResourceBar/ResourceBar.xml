@@ -167,9 +167,6 @@
 						</Layers>
 					</Frame>
 				</Frames>
-				<Scripts>
-					<OnUpdate function="SyncUI_ResourceTypeBar_OnUpdate" />
-				</Scripts>
 			</Frame>
 			<Frame parentKey="AlternateBar" setAllPoints="true" hidden="true">
 				<Frames>
@@ -279,9 +276,6 @@
 						</Layers>
 					</Frame>
 				</Frames>
-				<Scripts>
-					<OnUpdate function="SyncUI_StaggerBar_OnUpdate" />
-				</Scripts>
 			</Frame>
 			<Button parentKey="StatueButton" inherits="SyncUI_StatueTemplate" hidden="true" id="1">
 				<Anchors>
@@ -324,9 +318,6 @@
 						</Layers>
 					</Frame>
 				</Frames>
-				<Scripts>
-					<OnUpdate function="SyncUI_TotemBar_OnUpdate" />
-				</Scripts>
 			</Frame>
 		</Frames>
 		<Scripts>

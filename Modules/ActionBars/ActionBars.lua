@@ -639,7 +639,7 @@ end
 function SyncUI_PetBattleBar_OnLoad(self)
 	self:RegisterEvent("PET_BATTLE_OPENING_START")
 	self:RegisterEvent("PET_BATTLE_OPENING_DONE")
-	self:RegisterEvent("PET_BATTLE_TURN_STARTED")
+	--self:RegisterEvent("PET_BATTLE_TURN_STARTED")
 	self:RegisterEvent("PET_BATTLE_PET_CHANGED")
 	
 	RegisterStateDriver(self, "visibility", "[petbattle] show; hide")

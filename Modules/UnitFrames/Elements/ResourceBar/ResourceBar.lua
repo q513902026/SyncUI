@@ -3,6 +3,12 @@ local maxTokens = 6
 local class = select(2, UnitClass("player"))
 local prevComboPoints = 0
 
+local SPELL_POWER_ARCANE_CHARGES = SPELL_POWER_ARCANE_CHARGES or Enum.PowerType.ArcaneCharges
+local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER or Enum.PowerType.HolyPower
+local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS or Enum.PowerType.SoulShards
+local SPELL_POWER_CHI = SPELL_POWER_CHI or Enum.PowerType.Chi
+local SPELL_POWER_COMBO_POINTS = SPELL_POWER_COMBO_POINTS or Enum.PowerType.ComboPoints
+
 local BorderTable = {
 	[4] = {
 		["Size"] = {42,10},

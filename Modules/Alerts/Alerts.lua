@@ -34,16 +34,16 @@ local function SetupCriteria(self, type, achievementID, criteriaString)
 end
 
 local function SetupScenario(self, type)
-	local name, typeID, subtypeID, textureFilename, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards = GetLFGCompletionReward()
-	local _, _, _, _, hasBonusStep, isBonusStepComplete = C_Scenario.GetInfo()
+	local name, typeID, subtypeID, texture = GetLFGCompletionReward();
+	local hasBonusStep, isBonusStepComplete = select(5, C_Scenario.GetInfo());
 	
 	self.Text:SetText(name)
-	self.Display.Icon:SetTexture("Interface\\LFGFrame\\LFGIcon-"..textureFilename)
+	self.Display.Icon:SetTexture(texture or "Interface\\LFGFrame\\LFGIcon-Dungeon")
 	self.type = type
 end
 
 local function SetupDungeonComplete(self, type)
-	local name, typeID, subtypeID, textureFilename, moneyBase, moneyVar, experienceBase, experienceVar, numStrangers, numRewards = GetLFGCompletionReward()
+	local name, typeID, subtypeID, texture = GetLFGCompletionReward();
 
 	if subtypeID == LFG_SUBTYPEID_HEROIC then
 		name = name.." ("..PLAYER_DIFFICULTY2..")"
@@ -52,9 +52,9 @@ local function SetupDungeonComplete(self, type)
 		--self.Skull:Hide()
 	end
 	
-	self.Title:SetText(DUNGEON_COMPLETED)
-	self.Text:SetText(name)
-	self.Display.Icon:SetTexture("Interface\\LFGFrame\\LFGIcon-"..textureFilename)
+	self.Title:SetText(DUNGEON_COMPLETED);
+	self.Text:SetText(name);
+	self.Display.Icon:SetTexture(texture or "Interface\\LFGFrame\\LFGIcon-Dungeon");
 	self.type = type
 end
 

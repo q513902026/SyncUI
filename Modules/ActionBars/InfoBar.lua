@@ -1,4 +1,3 @@
-
 local MAX_TOKENS = 10
 
 local function UpdateExpBar(self, useBonusExp)
@@ -71,7 +70,7 @@ end
 
 function SyncUI_InfoBar_OnLoad(self)
 	if UnitLevel("player") == MAX_PLAYER_LEVEL then
-		self.HonorBar:Show()
+		--self.HonorBar:Show()
 		self.ExpBar:Hide()
 		self.BonusExpBar:Hide()
 	else
@@ -259,11 +258,12 @@ function SyncUI_MicroMenuButton_OnLoad(self)
 	
 	-- Set Attributes
 	if index == 1 then
-		local race, sex = select(2, UnitRace("player")), UnitSex("player")
+		local race = string.upper(select(2, UnitRace("player")));
+		local sex = (UnitSex("player") == 3) and "FEMALE" or "MALE"
 		local isHorde = UnitFactionGroup("player") == "Horde" and race ~= "Pandaren"
-		local left, right, top, bottom = unpack(SYNCUI_CHARACTER_ICONS[race][sex])
+		local left, right, top, bottom = unpack(SYNCUI_RACE_ICON_TCOORDS[race.."_"..sex])
 		local adj = 0.01
-		
+
 		if isHorde then
 			self:GetNormalTexture():SetTexCoord(right-adj, left+adj, top+adj, bottom-adj)
 		else
@@ -280,5 +280,3 @@ function SyncUI_MicroMenuButton_OnLoad(self)
 		self:SetAttribute("clickbutton", MicroFrameRef[index])
 	end
 end
-
-

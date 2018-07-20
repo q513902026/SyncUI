@@ -16,7 +16,7 @@
 	<Include file="NamePlates\NamePlates.xml" />
 	<Include file="ObjTracker\ObjTracker.xml" />
 	<Include file="ReadyCheck\ReadyCheck.xml" />
-	<Include file="TalentUI\TalentUI.xml" />
+	<!--Include file="TalentUI\TalentUI.xml" /-->
 	<!--Include file="TalkingHead\TalkingHead.xml" /-->
 	<Include file="Tooltip\Tooltip.xml" />
 	

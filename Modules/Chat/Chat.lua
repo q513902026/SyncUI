@@ -53,11 +53,11 @@ local function SetupChatWindow(window)
 		window.tab:GetFontString():SetTextColor(1,1,1)
 		window.btnFrame:Hide()
 		window.Background:Hide()
-		window.resizeButton:ClearAllPoints()
-		window.resizeButton:SetPoint("BOTTOMRIGHT",31,-10)
-		window.resizeButton:SetNormalTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
-		window.resizeButton:SetPushedTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
-		window.resizeButton:SetHighlightTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		window.ResizeButton:ClearAllPoints()
+		window.ResizeButton:SetPoint("BOTTOMRIGHT",31,-10)
+		window.ResizeButton:SetNormalTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		window.ResizeButton:SetPushedTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		window.ResizeButton:SetHighlightTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
 		
 		-- Fix undocked frames after login/reload
 		if not window.isDocked then

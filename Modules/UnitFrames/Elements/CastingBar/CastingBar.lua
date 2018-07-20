@@ -104,8 +104,8 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 
 			if UnitCastingInfo(unitID) then
 				spell = select(1, UnitCastingInfo(unitID))
-				icon = select(4, UnitCastingInfo(unitID))
-				noInterrupt = select(9, UnitCastingInfo(unitID))
+				icon = select(3, UnitCastingInfo(unitID))
+				noInterrupt = select(7, UnitCastingInfo(unitID))
 				
 				if noInterrupt then
 					r,g,b = 1,0,0
@@ -116,7 +116,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 			
 			if UnitChannelInfo(unitID) then
 				spell = select(1, UnitChannelInfo(unitID))
-				icon = select(4, UnitChannelInfo(unitID))	
+				icon = select(3, UnitChannelInfo(unitID))	
 				r,g,b = 0,1,0		
 			end
 			
@@ -164,13 +164,11 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 	end
 
 	if event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START" then
-		local spell = select(2, ...)
-		local spellID = select(5, ...)
-		local icon = select(3, GetSpellInfo(spellID))
+		local name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID;
 		local r,g,b
 
 		if event == "UNIT_SPELLCAST_START" then
-			local noInterrupt = select(9, UnitCastingInfo(unitID))
+			name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID = UnitCastingInfo(unitID);
 			
 			if noInterrupt then
 				r,g,b = 1,0,0
@@ -180,7 +178,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 		end
 		
 		if event == "UNIT_SPELLCAST_CHANNEL_START" then
-			local noInterrupt = select(8, UnitChannelInfo(unitID))
+			name, text, texture, startTime, endTime, isTradeSkill, noInterrupt, spellID = UnitChannelInfo(unitID);
 			
 			if noInterrupt then
 				r,g,b = 1,0,0
@@ -211,7 +209,7 @@ function SyncUI_CastingBar_OnUpdate(self)
 	local timer
 	
 	if UnitCastingInfo(unitID) then
-		local spell,_,_,icon,startTime,endTime = UnitCastingInfo(unitID)
+		local spell, _, icon, startTime, endTime = UnitCastingInfo(unitID)
 		
 		if spell then
 			value = GetTime() - (startTime / 1000)
@@ -221,7 +219,7 @@ function SyncUI_CastingBar_OnUpdate(self)
 	end
 
 	if UnitChannelInfo(unitID) then
-		local spell,_,_,icon,startTime,endTime = UnitChannelInfo(unitID)
+		local spell, _, icon, startTime, endTime = UnitChannelInfo(unitID)
 		
 		if spell then
 			value = (endTime / 1000) - GetTime()
