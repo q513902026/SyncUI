@@ -315,7 +315,12 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	GameMenuFrame:HookScript("OnShow",function()
 		self.SlideIn:Play()
 		GameMenuButtonLogout:SetPoint("TOP", self.BlizzMenu.Addons, "BOTTOM")
+		GameMenuButtonLogout.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
+		GameMenuButtonLogout:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
+		
 		GameMenuButtonQuit:SetPoint("TOP", GameMenuButtonLogout, "BOTTOM", 0, 10)
+		GameMenuButtonQuit.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
+		GameMenuButtonQuit:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
 	end)
 	GameMenuFrame:HookScript("OnHide",function()
 		self.SlideOut:Play()
@@ -347,9 +352,7 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	GameMenuButtonLogout:SetBackdrop(backdrop);
 	GameMenuButtonLogout:SetHitRectInsets(5,5,5,5);
 	GameMenuButtonLogout:EnableMouse(true);
-	GameMenuButtonLogout.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
-	GameMenuButtonLogout:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
-	GameMenuButtonLogout.Text:SetSize(150,35)
+
 	
 	GameMenuButtonQuit:SetSize(150,35);
 	GameMenuButtonQuit:SetParent(self.BlizzMenu);
@@ -358,9 +361,6 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	GameMenuButtonQuit:SetBackdrop(backdrop);
 	GameMenuButtonQuit:SetHitRectInsets(5,5,5,5);
 	GameMenuButtonQuit:EnableMouse(true);
-	GameMenuButtonQuit.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
-	GameMenuButtonQuit:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
-	GameMenuButtonQuit.Text:SetSize(150,35)
 	
 	
 	
