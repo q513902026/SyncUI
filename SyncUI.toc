@@ -1,5 +1,5 @@
-## Interface: 80300
-## Title: |cFF66FF00Sync|cFFFFFFFFUI
+## Interface: 90001
+## Title: |cFF66FF00Sync|cFFFFFFFFUI FanUpdate
 ## Version: 8.3.0.3
 ## Author: Syncrow
 ## Notes: Graphical User Interface
