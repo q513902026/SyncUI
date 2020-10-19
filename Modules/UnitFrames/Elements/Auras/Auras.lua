@@ -1,9 +1,9 @@
 
-local function GetColor(timer, point)
-	local perc = timer/point
+local function GetColor(timeLeft, point)
+	local perc = timeLeft/point
 	local r,g,b
 
-	if math.floor(timer) > point then
+	if math.floor(timeLeft) > point then
 		return 0,1,0
 	else
 		if perc > 0.5 then
@@ -14,7 +14,7 @@ local function GetColor(timer, point)
 	end
 end
 
-local function UpdateAura(self, icon, charge, duration, expire, spellID, secure)
+local function UpdateAura(self, icon, charge, duration, expire, spellID, tooltipID, secure)
 	local timeLeft = duration - expire + GetTime()
 	
 	self.spellID = spellID
@@ -29,7 +29,8 @@ local function UpdateAura(self, icon, charge, duration, expire, spellID, secure)
 	end
 	
 	if not secure then
-		self:Show()
+		self:SetID(tooltipID);
+		self:Show();
 	end
 end
 
@@ -60,11 +61,11 @@ local function UpdateSecureHeader(self)
 			local aura = self:GetAttribute("child" .. index)
 			
 			if aura then
-				local index = aura:GetID()
+				local index = aura:GetID();
 				local name, icon, charge, dispelType, duration, expire,_,_,_,spellID = UnitAura(unitID, index, filter)
 				
 				if name then
-					UpdateAura(aura, icon, charge, duration, expire, spellID, true)
+					UpdateAura(aura, icon, charge, duration, expire, spellID, index, true)
 				end
 			end
 		end
@@ -83,7 +84,7 @@ local function SetUnitAura(self)
 	
 	for index = 1, self.maxAuras do
 		local aura = self["AuraButton"..index]
-
+		
 		if aura then
 			local name, icon, charge, duration, expire, caster, spellID
 			
@@ -116,7 +117,7 @@ local function SetUnitAura(self)
 			end
 
 			if spellID then
-				UpdateAura(aura, icon, charge, duration, expire, spellID)
+				UpdateAura(aura, icon, charge, duration, expire, spellID, index, false);
 				
 				if auraType == "Debuff" then
 					if caster == "player" or caster == "pet" or UnitIsFriend("player", unitID) then
@@ -143,14 +144,15 @@ local function SetUnitAura(self)
 	end
 end
 
-local function SetReactiveAura(self, index, max)
+local function SetReactiveAura(self, index, max, isPet)
 	local profile = SyncUI_GetProfile()
 
 	if not profile or not profile.ReactiveAuras then
 		return
 	end
 
-	local unitID = "player"
+	local unitID = isPet and "pet" or "player"
+
 	local name, icon, charge, dispelType, duration, expire, caster = UnitBuff(unitID,index)
 	local spellID = select(10, UnitBuff(unitID,index))
 		
@@ -161,7 +163,7 @@ local function SetReactiveAura(self, index, max)
 					local aura = self["Aura"..i]
 					
 					if aura and aura.spellID == nil then
-						UpdateAura(aura,icon,charge,duration,expire,spellID)
+						UpdateAura(aura,icon,charge,duration,expire,spellID, index, false)
 						UpdateAuraIndex(aura, self.auraType, unitID)
 	
 						return max + 1
@@ -179,13 +181,26 @@ function SyncUI_AuraButton_OnEnter(self)
 	local header = self:GetParent()
 	local unitID = header.unitID or header:GetParent():GetAttribute("unit")
 	local filter = (header.auraType == "Buff") and "HELPFUL" or "HARMFUL";
+	local prefix = "";
 	
+	if filter == "HELPFUL" then
+		prefix = format("|cFF66FF00Buff-ID:|r %d", self.spellID);
+	else
+		prefix = format("|cFF66FF00Debuff-ID:|r %d", self.spellID);
+	end
+
 	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT",-25,0)
-	GameTooltip:SetUnitAura(unitID, self:GetID(), filter)
+	GameTooltip:SetUnitAura(unitID, self:GetID(), filter);
+	GameTooltip:AddDivider();
+	GameTooltip:AddLine(prefix, 1,1,1);
 	GameTooltip:Show()
 end
 
 function SyncUI_AuraButton_OnUpdate(self)
+	if not self:IsVisible() or not self.spellID then
+		return;
+	end
+	
 	local frame = SyncUI_OptionPanel_Aura.General
 	local optTimer = frame.DurationTimer:GetChecked()
 	local optColor = frame.DurationColor:GetChecked()
@@ -198,7 +213,7 @@ function SyncUI_AuraButton_OnUpdate(self)
 	end
 
 	if not optTimer then
-		self.Time:SetText("")
+		self.CooldownTimer:SetText("")
 		return
 	end
 
@@ -207,31 +222,47 @@ function SyncUI_AuraButton_OnUpdate(self)
 	end
 
 	local duration = self.Cooldown:GetCooldownDuration() / 1000
-	local timer = self.timer + duration - GetTime()
+	local timeLeft = self.timer + duration - GetTime()
 
-	if timer then
+	if timeLeft then
 		if self.Icon:IsDesaturated() or not optColor then
-			self.Time:SetVertexColor(1,1,1)
+			self.CooldownTimer:SetVertexColor(1,1,1)
 		else
-			self.Time:SetVertexColor(GetColor(timer, 10))
+			self.CooldownTimer:SetVertexColor(GetColor(timeLeft, 10))
 		end
 
-		if timer >= 3600 then
-			self.Time:SetText(gsub(format(HOUR_ONELETTER_ABBR,math.floor(timer/60/60))," ",""))
-		elseif  timer >= 60 then 
-			self.Time:SetText(gsub(format(MINUTE_ONELETTER_ABBR,math.floor(timer/60))," ",""))
-		elseif timer >= 5 then
-			self.Time:SetText(math.floor(timer))
-		elseif timer >= 0.1 then
-			self.Time:SetText(string.format("%.1f",timer))
+		if timeLeft >= 3600 then
+			self.CooldownTimer:SetText(gsub(format(HOUR_ONELETTER_ABBR,math.floor(timeLeft/60/60))," ",""))
+		elseif  timeLeft >= 60 then 
+			self.CooldownTimer:SetText(gsub(format(MINUTE_ONELETTER_ABBR,math.floor(timeLeft/60))," ",""))
+		elseif timeLeft >= 5 then
+			self.CooldownTimer:SetText(math.floor(timeLeft))
+		elseif timeLeft >= 0.1 then
+			self.CooldownTimer:SetText(string.format("%.1f",timeLeft))
 		else
 			self.timer = 0
-			self.Time:SetText("")
+			self.CooldownTimer:SetText("")
 		end
 	else
 		self.timer = 0
-		self.Time:SetText("")
+		self.CooldownTimer:SetText("")
 	end
+end
+
+function SyncUI_SecureAuraButton_OnEnter(self)
+	local filter = self:GetParent():GetAttribute("filter");
+
+	if filter == "HELPFUL" then
+		prefix = format("|cFF66FF00Buff-ID:|r %d", self.spellID);
+	else
+		prefix = format("|cFF66FF00Debuff-ID:|r %d", self.spellID);
+	end
+	
+	GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT",-33,-2)
+	GameTooltip:SetUnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), filter)
+	GameTooltip:AddDivider()		
+	GameTooltip:AddLine(prefix,1,1,1)
+	GameTooltip:Show()
 end
 
 function SyncUI_ReactiveAuraBar_OnEvent(self)
@@ -248,6 +279,10 @@ function SyncUI_ReactiveAuraBar_OnEvent(self)
 
 	for index = 1, 40 do
 		max = SetReactiveAura(self, index, max)
+	end
+	
+	for index = 1, 40 do
+		max = SetReactiveAura(self, index, max, true)
 	end
 end
 
@@ -294,7 +329,7 @@ function SyncUI_CreateAuraHeader(self, point, relativeTo, relativePoint, xPos, y
 		local pos = i % perRow ~= 0 and i % perRow or perRow
 		local row = math.ceil(i / perRow)
 		
-		header["AuraButton"..i] = CreateFrame("Frame",header:GetName().."AuraButton"..i, header, template)
+		header["AuraButton"..i] = CreateFrame("Frame", header:GetName().."AuraButton"..i, header, template)
 		header["AuraButton"..i]:SetID(i)
 		header["AuraButton"..i]:SetPoint(point, xOffset*(pos-1), yOffset*(row-1))
 	end

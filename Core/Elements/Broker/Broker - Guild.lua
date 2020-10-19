@@ -28,7 +28,7 @@ local function Guild_OnEnter(self)
 	local numMembers,_,numOnline = GetNumGuildMembers()
 	local MotD = GetGuildRosterMOTD()
 
-	GuildRoster()
+	C_GuildInfo.GuildRoster()
 
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	GameTooltip:AddLine(GUILD_MOTD_LABEL..":",0,0.6,1)

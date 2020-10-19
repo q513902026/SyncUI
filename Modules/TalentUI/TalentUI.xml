@@ -128,6 +128,11 @@
 	</Button>
 
 	
+	
+	<Button name="SyncUI_TalentUIToggle" inherits="SecureActionButtonTemplate" />
+	
+	
+	
 	<Frame name="SyncUI_TalentUI" frameStrata="MEDIUM" toplevel="true" parent="SyncUI_UIParent" hidden="true">
 		<Size x="276" y="314" />
 		<Anchors>
@@ -469,7 +474,7 @@
 				</Scripts>
 			</Frame>
 
-			<Frame parentKey="TabFrame" inherits="SyncUI_BackdropTemplate" useParentLevel="true">
+			<!--Frame parentKey="TabFrame" inherits="SyncUI_BackdropTemplate" useParentLevel="true">
 				<Size x="68" y="106" />
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.Talents" relativePoint="TOPRIGHT" x="5" y="-15" />
@@ -494,7 +499,7 @@
 						</Anchors>
 					</Button>
 				</Frames>
-			</Frame>
+			</Frame-->
 		</Frames>
 		<Scripts>
 			<OnLoad function="SyncUI_TalentUI_OnLoad" />
@@ -572,5 +577,4 @@
 			<OnHide function="GameTooltip_Hide" />
 		</Scripts>
 	</Frame>
-
 </Ui>

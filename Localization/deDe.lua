@@ -77,6 +77,7 @@ end
 --------------
 	SYNCUI_STRING_BINDING_USE_ACTIVE_QUEST_ITEM = "Aktives Quest-Item benutzen"
 	SYNCUI_STRING_BINDING_TOGGLE_SIDEBAR = "Seitenleiste Ein-/Ausblenden"
+	SYNCUI_STRING_BINDING_TOGGLE_TALENTUI = "Talente Ein-/Ausblenden"
 -------------------
 -- Group Control --
 -------------------

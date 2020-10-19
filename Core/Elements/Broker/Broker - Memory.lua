@@ -55,18 +55,29 @@ local function Memory_OnClick(self)
 	end
 end
 
-local function Memory_OnUpdate(self)
-	local memory = 0
-
+local function Memory_OnUpdate(self, elapsed)
 	UpdateAddOnMemoryUsage()
+
+	local memory = 0
+	local ownMemory = 0;
 	
 	for i = 1, GetNumAddOns() do
 		if IsAddOnLoaded(i) then
-			memory = memory + GetAddOnMemoryUsage(i)
+			local addOnMemory = GetAddOnMemoryUsage(i);
+			
+			memory = memory + addOnMemory
+
+			if (GetAddOnInfo(i) == "SyncUI") then
+				ownMemory = addOnMemory
+			end
 		end
 	end
 	
-	self:SetText(GetFormattedMemory(memory,true))
+	if (SyncUI_IsDev()) then
+		self:SetText(string.format("%.0f", ownMemory) .. " KB");
+	else
+		self:SetText(GetFormattedMemory(memory,true));
+	end	
 end
 
 local function Memory_OnEnter(self)
@@ -104,7 +115,7 @@ local function Memory_OnEnter(self)
 		if i == 1 then
 			numDiv = divIndex
 		elseif i > 1 and numDiv > divIndex then
-			GameTooltip:AddDivider()
+			--GameTooltip:AddDivider()
 			numDiv = numDiv - 1
 		end
 		

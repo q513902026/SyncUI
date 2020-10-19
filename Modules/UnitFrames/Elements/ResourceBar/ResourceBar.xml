@@ -77,9 +77,9 @@
 	<Button name="SyncUI_StatueTemplate" inherits="SecureActionButtonTemplate" virtual="true">
 		<Size x="48" y="32" />
 		<HitRectInsets left="4" right="4" top="4" bottom="-4" />
-		<Backdrop edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
-			<EdgeSize val="16" />
-		</Backdrop>
+		<KeyValues>
+			<KeyValues key="backdropInfo" value="SYNC_ICON_BACKDROP" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="BORDER">
 				<Texture parentKey="Icon">
@@ -168,6 +168,7 @@
 					</Frame>
 				</Frames>
 			</Frame>
+			
 			<Frame parentKey="AlternateBar" setAllPoints="true" hidden="true">
 				<Frames>
 					<StatusBar parentKey="StatusBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
@@ -194,6 +195,7 @@
 					</Frame>
 				</Frames>
 			</Frame>
+			
 			<Frame parentKey="ComboBar" setAllPoints="true" hidden="true">
 				<Frames>
 					<StatusBar parentKey="Token1" useParentLevel="true" inherits="SyncUI_ResourceTokenTemplate">
@@ -248,6 +250,7 @@
 					</OnHide>
 				</Scripts>
 			</Frame>
+			
 			<Frame parentKey="RuneBar" setAllPoints="true" hidden="true">
 				<Scripts>
 					<OnLoad>
@@ -258,6 +261,7 @@
 					</OnLoad>
 				</Scripts>
 			</Frame>
+			
 			<Frame parentKey="StaggerBar" setAllPoints="true" hidden="true">
 				<Frames>
 					<StatusBar parentKey="StatusBar" inherits="SyncUI_AnimatedStatusBarTemplate" useParentLevel="true">
@@ -277,11 +281,13 @@
 					</Frame>
 				</Frames>
 			</Frame>
+			
 			<Button parentKey="StatueButton" inherits="SyncUI_StatueTemplate" hidden="true" id="1">
 				<Anchors>
 					<Anchor point="RIGHT" relativePoint="LEFT" />
 				</Anchors>
 			</Button>
+			
 			<Frame parentKey="TotemBar" hidden="true">
 				<Size x="192" y="24" />
 				<Anchors>

@@ -3,18 +3,18 @@ local maxLootButtons = 6
 local buttonSize = 38
 
 local function UpdateButton(self)
-	local index = self:GetID()
+	local slot = self:GetID()
 
-	if LootSlotHasItem(index) then
-		local texture, item, count, currency, quality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(index)
+	if LootSlotHasItem(slot) then
+		texture, item, quantity, currencyID, quality, locked, isQuestItem, questId, isActive = GetLootSlotInfo(slot);
 
 		if texture then
 			self:SetNormalTexture(texture)
 			self:SetText(item)
 		end
 		
-		if count > 1 then
-			self.Count:SetText(count)
+		if quantity > 1 then
+			self.Count:SetText(quantity)
 		else
 			self.Count:SetText("")
 		end
@@ -69,8 +69,6 @@ function SyncUI_LootFrame_OnLoad(self)
 
 	SyncUI_DisableFrame(LootFrame)
 	SyncUI_RegisterDragFrame(self,LOOT,nil,true)
-
-	tinsert(UISpecialFrames,self:GetName())
 end
 
 function SyncUI_LootFrame_OnEvent(self, event, ...)
@@ -91,8 +89,8 @@ function SyncUI_LootFrame_OnEvent(self, event, ...)
 	end
 
 	if event == "LOOT_CLOSED" then
-		StaticPopup_Hide("LOOT_BIND")
-		HideUIPanel(self)
+		--StaticPopup_Hide("LOOT_BIND")
+		self:Hide()
 	end
 end
 
@@ -123,7 +121,7 @@ function SyncUI_LootFrame_Show(self)
 		self:Show()
 	else
 		SyncUI_LoadFramePosition(self)
-		ShowUIPanel(self)
+		self:Show();
 	end
 	
 	UpdateAllButtons(self)
@@ -133,7 +131,7 @@ end
 function SyncUI_LootFrame_OnHide(self)
 	CloseLoot()
 	-- Close any loot distribution confirmation windows
-	StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
+	--StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
 	MasterLooterFrame:Hide()
 end
 
@@ -155,7 +153,7 @@ end
 
 function SyncUI_LootButton_OnClick(self, button)
 	-- Close any loot distribution confirmation windows
-	StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
+	--StaticPopup_Hide("CONFIRM_LOOT_DISTRIBUTION")
 	MasterLooterFrame:Hide()
 	
 	local method, LMParty, LMRaid = GetLootMethod()

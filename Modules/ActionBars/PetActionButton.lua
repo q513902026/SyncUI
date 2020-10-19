@@ -52,17 +52,15 @@ local function ClearButton(self)
 		self.Name:SetText("")
 		self.cooldown:Hide()
 		self.action = nil
-		AutoCastShine_AutoCastStop(self.Shine)
+		AutoCastShine_AutoCastStop(self.AutoCastShine)
 	end
 end
 
 local function UpdateIcon(self, action)
-	local name, icon, isToken = GetPetActionInfo(action)
-	
+	local name, texture, isToken, isActive, autoCastAllowed, autoCastEnabled, spellID = GetPetActionInfo(action)
+
 	if isToken then
-		texture = _G[icon]
-	else
-		texture = icon
+		texture = _G[texture];
 	end
 	
 	self.Icon:SetTexture(texture)
@@ -93,9 +91,9 @@ local function UpdateState(self, action)
 	end
 
 	if autoCastEnabled then
-		AutoCastShine_AutoCastStart(self.Shine)
+		AutoCastShine_AutoCastStart(self.AutoCastShine)
     else
-		AutoCastShine_AutoCastStop(self.Shine)
+		AutoCastShine_AutoCastStop(self.AutoCastShine)
     end
 end
 

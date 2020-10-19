@@ -81,7 +81,26 @@ local function UpdateUsable(self, action)
 end
 
 local function UpdateState(self, action)
-	self.Checked:SetShown(IsCurrentAction(action))
+	local isCurrent = IsCurrentAction(action);
+	local isAutoRepeat = IsAutoRepeatAction(action);
+	local isAutoCastPetAction = C_ActionBar.IsAutoCastPetAction(action);
+	local IsEnabledAutoCastPetAction = C_ActionBar.IsEnabledAutoCastPetAction(action);
+	
+	self.Checked:SetShown(isCurrent or isAutoRepeat or isAutoCastPetAction);
+
+	if (isAutoCastPetAction) then
+		self.Checked:SetVertexColor(1, 0.8, 0)
+	else
+		self.Checked:SetVertexColor(1, 1, 1)
+	end
+
+	if (IsEnabledAutoCastPetAction) then
+		self.AutoCastShine:Show();
+		AutoCastShine_AutoCastStart(self.AutoCastShine);
+	else
+		self.AutoCastShine:Hide();
+		AutoCastShine_AutoCastStop(self.AutoCastShine);
+	end
 end
 
 local function UpdateHotKey(self, action)
@@ -227,20 +246,20 @@ local function UpdateFlyout(self, action)
 end
 
 local function UpdateOverlayGlow(self, action)
-	local spellType, index, subType  = GetActionInfo(action)
+	local spellType, index, subType = GetActionInfo(action);
 	
 	if spellType == "spell" and IsSpellOverlayed(index) then
-		ActionButton_ShowOverlayGlow(self)
+		ActionButton_ShowOverlayGlow(self);
 	elseif spellType == "macro" then
-		local _, _, spellID = GetMacroSpell(index)
-		
+		local spellID = GetMacroSpell(index);
+
 		if spellID and IsSpellOverlayed(spellID) then
-			ActionButton_ShowOverlayGlow(self)
+			ActionButton_ShowOverlayGlow(self);
 		else
-			ActionButton_HideOverlayGlow(self)
+			ActionButton_HideOverlayGlow(self);
 		end
 	else
-		ActionButton_HideOverlayGlow(self)
+		ActionButton_HideOverlayGlow(self);
 	end
 end
 

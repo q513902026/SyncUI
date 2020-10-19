@@ -19,7 +19,7 @@
 			</Anchors>
 			<Color r="1" g="1" b="1" a="0.25" />
 		</HighlightTexture>
-		<Layers>
+		<Layers >
 			<Layer level="ARTWORK">
 				<Texture parentKey="IconEdge" hidden="true">
 					<Size x="1" y="19" />
@@ -39,9 +39,9 @@
 		</ButtonText>
 	</Button>
 
-	<Button name="SyncUI_BrokerButtonTemplate" inherits="SyncUI_BrokerButtonStyleTemplate" alpha="0" virtual="true">
+	<Button name="SyncUI_BrokerButtonTemplate" inherits="SyncUI_BrokerButtonStyleTemplate BackdropTemplate" alpha="0" virtual="true">
 		<Scripts>
-			<OnLoad>
+			<OnLoad inherits = "prepend">
 				self:RegisterForClicks("AnyUp")
 				self.update = 0
 				self.interval = 1
@@ -218,7 +218,7 @@
 	<Script file="Broker - Latency.lua" />
 	<Script file="Broker - Memory.lua" />
 	<Script file="Broker - Money.lua" />
-	<!--Script file="Broker - Artifact.lua" /-->
-	<!--Script file="Broker - WorldQuests.lua" /-->	
+	<Script file="Broker - Artifact.lua" />
+	<Script file="Broker - WorldQuests.lua" />	
 	
 </Ui>

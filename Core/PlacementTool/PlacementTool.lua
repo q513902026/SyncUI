@@ -170,8 +170,8 @@ local specID, DragFrames, defaultPos = 1, {}, {
 		"TOPRIGHT",
 		"SyncUI_UIParent",
 		"TOPRIGHT",
-		-35,
-		-230,
+		-10,
+		-200,
 	},
 	["SyncUI_Minimap"] = {
 		"TOPRIGHT",
@@ -195,7 +195,7 @@ local specID, DragFrames, defaultPos = 1, {}, {
 		-50,
 	},	
 	
-	-- Blizzard Frames
+	--Blizzard Frames
 	["VehicleSeatIndicator"] = {
 		"BOTTOMRIGHT",
 		"SyncUI_ActionBar",
@@ -204,13 +204,13 @@ local specID, DragFrames, defaultPos = 1, {}, {
 		60,
 	},
 	
-	["DurabilityFrame"] = {
-		"BOTTOMLEFT",
-		"SyncUI_ActionBar",
-		"BOTTOMRIGHT",
-		-80,
-		60,
-	},
+	-- ["DurabilityFrame"] = {
+		-- "BOTTOMLEFT",
+		-- "SyncUI_ActionBar",
+		-- "BOTTOMRIGHT",
+		-- -80,
+		-- 60,
+	-- },
 }
 
 local specialPos = {

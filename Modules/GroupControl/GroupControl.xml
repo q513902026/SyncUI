@@ -80,7 +80,7 @@
 				<NormalTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Minus" />
 				<CheckedTexture file="Interface\AddOns\SyncUI\Media\Textures\Icons\Plus" />
 				<Scripts>
-					<OnLoad>
+					<OnLoad inherits="prepend">
 						SecureHandler_OnLoad(self)
 						RegisterStateDriver(self, "visibility", "[group:raid]show; hide")
 					</OnLoad>
@@ -115,7 +115,8 @@
 				</Anchors>
 			</Button>
 
-			<Frame name="SyncUI_RaidToolMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+			<!-- Popup Menus -->
+			<Frame name="SyncUI_RaidToolMenu" inherits="SecureHandlerShowHideTemplate, SyncUI_BorderGlowFrameTemplate" toplevel="true" hidden="true">
 				<Size x="160" y="180" />
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.RaidTool" relativePoint="BOTTOM" x="0" y="-10" />
@@ -162,7 +163,7 @@
 					</Frame>
 				</Frames>
 			</Frame>
-			<Frame name="SyncUI_GroupLayoutMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+			<Frame name="SyncUI_GroupLayoutMenu" inherits="SecureHandlerShowHideTemplate, SyncUI_BorderGlowFrameTemplate" toplevel="true" hidden="true">
 				<Size x="160" y="95" />
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.GroupLayout" relativePoint="BOTTOM" x="0" y="-10" />
@@ -198,7 +199,7 @@
 					</Button>
 				</Frames>
 			</Frame>
-			<Frame name="SyncUI_LootSpecMenu" inherits="SyncUI_BorderGlowFrameTemplate, SecureHandlerShowHideTemplate" toplevel="true" hidden="true">
+			<Frame name="SyncUI_LootSpecMenu" inherits="SecureHandlerShowHideTemplate, SyncUI_BorderGlowFrameTemplate" toplevel="true" hidden="true">
 				<Size x="160" y="100" />
 				<Anchors>
 					<Anchor point="TOP" relativeKey="$parent.LootSpec" relativePoint="BOTTOM" x="0" y="-10" />
@@ -281,7 +282,7 @@
 		</Scripts>
 	</Button>
 
-	<Frame name="SyncUI_WorldMarkerBar" inherits="SyncUI_BackdropTemplate" movable="true" clampedToScreen="true" parent="SyncUI_GroupControl" hidden="true">
+	<Frame name="SyncUI_WorldMarkerBar" inherits="SecureHandlerStateTemplate, SyncUI_BackdropTemplate" movable="true" clampedToScreen="true" parent="SyncUI_GroupControl" hidden="true">
 		<Size x="330" y="45" />
 		<Anchors>
 			<Anchor point="TOP" relativeTo="SyncUI_GroupControl" relativePoint="BOTTOM" x="0" y="5" />
@@ -332,11 +333,11 @@
 					<Anchor point="LEFT" relativeKey="$parent.Marker8" relativePoint="RIGHT" x="-10" y="0" />
 				</Anchors>
 				<Scripts>
-					<OnShow>
+					<OnLoad>
 						self:RegisterForClicks("AnyUp")
 						self:SetAttribute("type", "macro")
 						self:SetAttribute("macrotext1", "/cwm 0")
-					</OnShow>
+					</OnLoad>
 				</Scripts>
 			</Button>
 		</Frames>
@@ -345,6 +346,5 @@
 			<OnUpdate function="SyncUI_WorldMarkerBar_OnUpdate" />
 		</Scripts>
 	</Frame>
-
 
 </Ui>

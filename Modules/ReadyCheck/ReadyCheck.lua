@@ -81,13 +81,13 @@ local function ReadyCheck_OnInit(...)
 		
 		local name = select(1, UnitName(unitID))
 		
-		if not tContains(ReadyCheckInfo,name) and name ~= user then
-			tinsert(ReadyCheckInfo,name)
+		if not tContains(ReadyCheckInfo, name) and name ~= user then
+			tinsert(ReadyCheckInfo, name)
 			
 			if UnitIsConnected(name) then
-				tinsert(ReadyCheckStatus,"waiting")
+				tinsert(ReadyCheckStatus, "waiting")
 			else
-				tinsert(ReadyCheckStatus,"offline")
+				tinsert(ReadyCheckStatus, "offline")
 			end
 		end
 	end

@@ -30,7 +30,7 @@
 	SYNCUI_STRING_AURAS_FILTER_DEBUFFS = "Filter enemy debuffs"
 	SYNCUI_STRING_AURAS_NUMERIC_TIMERS = "Enable numeric duration timers"
 	SYNCUI_STRING_AURAS_REACTIVE_AURAS = "Reactive Auras"
-	SYNCUI_STRING_AURAS_ENTER_SPELL_ID = "Enter SpellID"
+	SYNCUI_STRING_AURAS_ENTER_SPELL_ID = "Enter aura-ID"
 	SYNCUI_STRING_UNITFRAMES = "Unit Frames"
 	SYNCUI_STRING_UNITFRAMES_DISABLE_DEFAULT = "Do you want to disable blizzard raid frames?"
 	SYNCUI_STRING_UNITFRAMES_ENABLE_DEFAULT = "Do you want to use blizzard raid frames?"
@@ -77,6 +77,7 @@
 --------------
 	SYNCUI_STRING_BINDING_USE_ACTIVE_QUEST_ITEM = "Use Active Quest Item"
 	SYNCUI_STRING_BINDING_TOGGLE_SIDEBAR = "Toggle Sidebar"
+	SYNCUI_STRING_BINDING_TOGGLE_TALENTUI = "Toggle Talents"
 -------------------
 -- Group Control --
 -------------------
@@ -129,8 +130,8 @@
 	SYNCUI_STRING_ENTER_NAME = "Enter name"
 	SYNCUI_STRING_SKIP_TURN = "Skip your turn"
 	SYNCUI_STRING_SPELLID = "|cFF66FF00SpellID:|r %d"
-	SYNCUI_STRING_AURAID = "|cFF66FF00AuraID:|r %d"
-	SYNCUI_STRING_ITEMID = "|cFF66FF00ItemID:|r %d"
+	SYNCUI_STRING_AURAID = "|cFF66FF00Aura-ID:|r %d"
+	SYNCUI_STRING_ITEMID = "|cFF66FF00Item-ID:|r %d"
 	SYNCUI_STRING_MEMORY = "Memory"
 	SYNCUI_STRING_MEMORY_LABEL = "AddOn Memory"
 	SYNCUI_STRING_EXP = "Exp"

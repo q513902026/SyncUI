@@ -33,20 +33,20 @@ end
 
 local function GetStanceIcon(index)
 	local class = select(2, UnitClass("player"))
-	local shapeshiftID, icon;
+	local icon;
 	
 	if index and index ~= 0 then
-		shapeshiftID = select(5, GetShapeshiftFormInfo(index))
-		icon = select(3, GetSpellInfo(shapeshiftID))
+		formID = select(4, GetShapeshiftFormInfo(index));
+		icon = select(3, GetSpellInfo(formID));
 	end
 	
 	-- special class treatments
-	if class == "DRUID" and IsStealthed() then
-		icon = select(3, GetSpellInfo(5215))
+	if class == "DRUID" and IsStealthed() then	
+		icon = select(3, GetSpellInfo(5215));
 	end
-
+	
 	if class == "ROGUE" then
-		if index == 1 then	-- Stealth
+		if index == 1 then	-- stealth
 			icon = select(3, GetSpellInfo(1784))
 		elseif index == 2 then	-- Vanish + Shadow Dance
 			for i = 1, 40 do
@@ -200,8 +200,8 @@ local function ActionButton_Setup(self, buttonType)
 		self.glass:SetTexture(SYNCUI_MEDIA_PATH.."ActionBars\\ActionButton")
 		self.glass:SetTexCoord(0.5546875,0.734375,0,0.71875)
 	end
-	
-	ActionButton_UpdateHotkeys(self, self.buttonType)
+	self:UpdateHotkeys(self.buttonType)
+	--ActionButton_UpdateHotkeys(self, self.buttonType)
 end
 
 local function ActionButtonSmall_Setup(self, buttonType)
@@ -323,8 +323,8 @@ local function ActionButtonSmall_Setup(self, buttonType)
 		self.glass:SetTexture(SYNCUI_MEDIA_PATH.."ActionBars\\ActionButton_Small")
 		self.glass:SetTexCoord(0.3125,0.4609375,0,0.59375)
 	end
-	
-	ActionButton_UpdateHotkeys(self, self.buttonType)
+	--self:UpdateHotkeys(self.buttonType)
+	--ActionButton_UpdateHotkeys(self, self.buttonType)
 end
 
 local function ExtraActionButton_Setup(self)
@@ -444,8 +444,11 @@ end
 HandleDefaultBars()
 
 
+
 function SyncUI_ActionBar_OnLoad(self)
-	SyncUI_RegisterDragFrame(DurabilityFrame, DURABILITY, true, true)
+	--DurabilityFrame:ClearAllPoints();
+	--DurabilityFrame:SetPoint("BOTTOMLEFT", SyncUI_ActionBar, "BOTTOMRIGHT", -80, 60);
+	--SyncUI_RegisterDragFrame(DurabilityFrame, DURABILITY, true, false)
 		
 	self:RegisterEvent("TAXIMAP_OPENED")
 	self:RegisterUnitEvent("UNIT_ENTERED_VEHICLE", "player")
@@ -455,7 +458,8 @@ function SyncUI_ActionBar_OnLoad(self)
 	
 	for i = 1, 12 do
 		self:SetFrameRef("Button"..i, self["Button"..i])
-	end	
+	end
+	
 	self:SetFrameRef("MainBar", MainMenuBarArtFrame)
 	self:SetFrameRef("OverrideBar", OverrideActionBar)
 	self:SetAttribute("_onstate-page", [[
@@ -613,8 +617,11 @@ function SyncUI_SideBar_OnLoad(self)
 end
 
 function SyncUI_VehicleBar_OnLoad(self)
+	VehicleSeatIndicator:ClearAllPoints();
+	VehicleSeatIndicator:SetPoint("BOTTOMRIGHT", SyncUI_ActionBar, "BOTTOMLEFT", 80, 60);
+	VehicleSeatIndicator.SetPoint = function() end
 	SyncUI_RegisterDragFrame(VehicleSeatIndicator, SYNCUI_STRING_PLACEMENT_TOOL_LABEL_VEHICLE, true)
-
+	
 	for i = 1, 6 do
 		local button = self["Button"..i]
 		self:SetFrameRef("Button"..i, button)
@@ -631,6 +638,7 @@ function SyncUI_VehicleBar_OnLoad(self)
 	RegisterStateDriver(self, "page", defaultPaging)
 	RegisterStateDriver(OverrideActionBar, "visibility", "[overridebar][vehicleui][possessbar,@vehicle,exists] show; hide")		
 end
+
 
 function SyncUI_PetBar_OnLoad(self)
 	RegisterStateDriver(self, "visibility", "[petbattle][overridebar][vehicleui][possessbar,@vehicle,exists] hide; [@pet,exists] show; hide")
@@ -657,44 +665,41 @@ function SyncUI_PetBattleBar_OnLoad(self)
 		frame.TurnTimer:Hide()
 		frame.TurnTimer:ClearAllPoints()
 		frame.TurnTimer:SetPoint("BOTTOM",self,"TOP",0,-20)
-		frame.MicroButtonFrame:Hide()
+		frame.MicroButtonFrame:Hide();
 	end
 end
 
 function SyncUI_PetBattleBar_OnEvent(self)
-	local frame = PetBattleFrame.BottomFrame
-	local dataBase = frame.abilityButtons
-	local dataBase2 = {"SwitchPetButton","CatchButton","ForfeitButton"}
+	local frame = PetBattleFrame.BottomFrame;
+	local dataBase = frame.abilityButtons;
+	local dataBase2 = {"SwitchPetButton", "CatchButton", "ForfeitButton"};
+	
+	frame:SetSize(568, 56);
+	xPos, yPos = 120, 28;
 	
 	for i, value in pairs(dataBase) do
-		local button = dataBase[i]
-		local fakeButton = self["Button"..i]
-		
-		button:ClearAllPoints()
-		button:SetPoint("CENTER",fakeButton)
-		button:SetFrameStrata("MEDIUM")
+		local button = dataBase[i];
+
+		button:ClearAllPoints();
+		button:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", xPos + 46 * (i-1), yPos);
+		button:SetFrameStrata("MEDIUM");
 		
 		BattlePetActionButton_Setup(button, true)
 	end
 
 	for i, value in pairs(dataBase2) do
-		local button = frame[value]
-		local fakeButton = self["Button"..i+3]
-		local isPetAction
-		
-		if i > 1 then
-			isPetAction = true
-		end
+		local button = frame[value];
 
-		button:ClearAllPoints()
-		button:SetPoint("CENTER",fakeButton)
-		button:SetFrameStrata("MEDIUM")
+		button:ClearAllPoints();
+		button:SetPoint("BOTTOMLEFT", frame, "BOTTOMLEFT", xPos + 46 * (i + 2), yPos);
+		button:SetFrameStrata("MEDIUM");
 		
-		BattlePetActionButton_Setup(button, isPetAction)
+		BattlePetActionButton_Setup(button, i > 1);
 	end
 	
 	PetBattleFrameXPBar:Hide()
 end
+
 
 function SyncUI_StanceBar_OnLoad(self)
 	SyncUI_StanceButton_OnLoad(self:GetParent().StanceButton)
@@ -750,7 +755,7 @@ end
 
 function SyncUI_StanceButton_OnUpdate(self)
 	local class = select(2, UnitClass("player"))
-	local numForms = GetNumShapeshiftForms()
+	local numForms = GetNumShapeshiftForms();
 
 	if class == "SHAMAN" then
 		numForms = 1
@@ -767,6 +772,10 @@ function SyncUI_StanceButton_OnUpdate(self)
 			self.Icon:Hide()
 		end
 	end
+end
+
+function SyncUI_StanceButton_OnEnter(self)
+	
 end
 
 

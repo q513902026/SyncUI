@@ -90,6 +90,8 @@ function SyncUI_TalkingHead_OnLoad(self)
 	self:RegisterEvent("SOUNDKIT_FINISHED")
 	self:RegisterEvent("LOADING_SCREEN_ENABLED")
 	
+	self.Model:SetScript("OnModelLoaded", TalkingHeadFrame_OnModelLoaded);
+	
 	SyncUI_RegisterDragFrame(self, "Cinema dialogue")
 end
 
@@ -146,4 +148,15 @@ end
 
 function SyncUI_TalkingHead_Close(self)
 	CloseImmediately(self:GetParent())
+end
+
+
+function SyncUI_TalkingHead_OnModelLoaded(self)
+	self:RefreshCamera();
+	
+	if self.uiCameraID then
+		Model_ApplyUICamera(self, self.uiCameraID);
+	end
+	
+	TalkingHeadFrame_SetupAnimations(self);
 end

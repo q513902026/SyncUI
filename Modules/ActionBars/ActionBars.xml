@@ -4,7 +4,8 @@
 	<Script file="PetActionButton.lua" />
 	<Script file="ActionBars.lua" />
 
-	<Button name="SyncUI_ActionBarButtonTemplate" inherits="SecureActionButtonTemplate, SecureHandlerDragTemplate" virtual="true">
+
+	<Button name="SyncUI_ActionBarButtonTemplate" inherits="SecureActionButtonTemplate, SecureHandlerDragTemplate, SecureHandlerStateTemplate" motionScriptsWhileDisabled="true" virtual="true">
 		<Size x="46" y="46" />
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -90,6 +91,13 @@
 			</Frame>
 			<Frame parentKey="FlyoutBorder" hidden="true" />
 			<Frame parentKey="FlyoutBorderShadow" hidden="true" />
+			
+			<Frame name="$parentShine" parentKey="AutoCastShine" inherits="AutoCastShineTemplate">
+				<Size x="30" y="30" />
+				<Anchors>
+					<Anchor point="CENTER" />
+				</Anchors>				
+			</Frame>			
 			<Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.Icon" />
@@ -109,7 +117,7 @@
 		</Scripts>
 	</Button>
 
-	<Button name="SyncUI_SideBarButtonTemplate" inherits="SecureActionButtonTemplate, SecureHandlerDragTemplate" virtual="true">
+	<Button name="SyncUI_SideBarButtonTemplate" inherits="SecureActionButtonTemplate, SecureHandlerDragTemplate, SecureHandlerStateTemplate" motionScriptsWhileDisabled="true" virtual="true">
 		<Size x="38" y="38" />
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -168,7 +176,7 @@
 			<Layer level="OVERLAY">
 				<Texture parentKey="Glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
 					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
-				</Texture>				
+				</Texture>
 			</Layer>
 		</Layers>
 		<HighlightTexture>
@@ -194,6 +202,13 @@
 			</Frame>
 			<Frame parentKey="FlyoutBorder" hidden="true" />
 			<Frame parentKey="FlyoutBorderShadow" hidden="true" />
+			
+			<Frame name="$parentShine" parentKey="AutoCastShine" inherits="AutoCastShineTemplate">
+				<Size x="30" y="30" />
+				<Anchors>
+					<Anchor point="CENTER" />
+				</Anchors>				
+			</Frame>	
 			<Cooldown parentKey="cooldown" inherits="CooldownFrameTemplate" hidden="true">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeKey="$parent.Icon" />
@@ -283,7 +298,7 @@
 			<Color r="1" g="1" b="1" a="0.25" />
 		</HighlightTexture>
 		<Frames>
-			<Frame name="$parentShine" parentKey="Shine" inherits="AutoCastShineTemplate">
+			<Frame name="$parentShine" parentKey="AutoCastShine" inherits="AutoCastShineTemplate">
 				<Size x="30" y="30" />
 				<Anchors>
 					<Anchor point="CENTER" />
@@ -1456,7 +1471,7 @@
 	</Frame>
 	
 	<Frame name="SyncUI_PetBattleBar" inherits="SecureHandlerStateTemplate" frameStrata="MEDIUM" parent="SyncUI_UIParent">
-		<Size x="568" y="56" />
+		<Size x="518" y="56" />
 		<Anchors>
 			<Anchor point="BOTTOM" x="0" y="21" />
 		</Anchors>			
@@ -1486,17 +1501,10 @@
 				</Texture>
 			</Layer>
 			<Layer level="BORDER">
-				<Texture parentKey="BtnDivLeft" file="Interface\AddOns\SyncUI\Media\Textures\Actionbars\ActionButton_Divider">
-					<Size x="8" y="48" />
-					<Anchors>
-						<Anchor point="TOPLEFT" x="138" y="-4" />
-					</Anchors>
-					<TexCoords left="0" right="1" top="0" bottom="0.75" />
-				</Texture>
 				<Texture parentKey="BtnDivRight" file="Interface\AddOns\SyncUI\Media\Textures\Actionbars\ActionButton_Divider">
 					<Size x="8" y="48" />
 					<Anchors>
-						<Anchor point="TOPRIGHT" x="-139" y="-4" />
+						<Anchor point="TOPRIGHT" x="-140" y="-4" />
 					</Anchors>
 					<TexCoords left="0" right="1" top="0" bottom="0.75" />
 				</Texture>
@@ -1547,46 +1555,9 @@
 					</Layer>
 				</Layers>
 			</Frame>
-
-			<Button parentKey="Button1" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="TOPLEFT" x="146" y="-5" />
-				</Anchors>
-			</Button>
-			<Button parentKey="Button2" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button1"  relativePoint="RIGHT"  />
-				</Anchors>
-			</Button>
-			<Button parentKey="Button3" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button2"  relativePoint="RIGHT"  />
-				</Anchors>
-			</Button>
-			<Button parentKey="Button4" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button3"  relativePoint="RIGHT"  />
-				</Anchors>
-			</Button>
-			<Button parentKey="Button5" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button4"  relativePoint="RIGHT"  />
-				</Anchors>
-			</Button>
-			<Button parentKey="Button6" inherits="SyncUI_ActionButtonTemplate" useParentLevel="true">
-				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button5"  relativePoint="RIGHT"  />
-				</Anchors>
-			</Button>
-
-			<Button parentKey="Locked" inherits="SyncUI_VehicleUnitButtomTemplate" disabled="true">
-				<Anchors>
-					<Anchor point="RIGHT" relativeKey="$parent.Button1"  relativePoint="LEFT" x="-7" y="0" />
-				</Anchors>
-			</Button>
 			<Button parentKey="SkipButton" inherits="SyncUI_SkipButtonTemplate">
 				<Anchors>
-					<Anchor point="LEFT" relativeKey="$parent.Button6"  relativePoint="RIGHT" x="7" y="0" />
+					<Anchor point="TOPRIGHT" x="-93" y="-5" />
 				</Anchors>
 				<Scripts>
 					<OnLoad>
@@ -1807,7 +1778,7 @@
 							<Anchor point="TOP" relativeKey="$parent.Button1" relativePoint="BOTTOM" x="0" y="10" />
 						</Anchors>
 					</Button>
-					<Button parentKey="Button3" name="SyncUI_TalentMicroButton" inherits="SyncUI_MicroMenuButtonTemplate" id="3" text="TALENTS">
+					<Button parentKey="Button3" inherits="SyncUI_MicroMenuButtonTemplate" id="3" text="TALENTS">
 						<Anchors>
 							<Anchor point="TOP" relativeKey="$parent.Button2" relativePoint="BOTTOM" x="0" y="10" />
 						</Anchors>

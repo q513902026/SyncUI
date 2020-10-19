@@ -308,19 +308,11 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	self:RegisterEvent("PLAYER_REGEN_ENABLED")
 	self:RegisterEvent("PLAYER_REGEN_DISABLED")
 	
-	
 	GameMenuFrame:SetAlpha(0)
 	GameMenuFrame:EnableMouse(false)
 	GameMenuFrame:SetFrameStrata("BACKGROUND")
 	GameMenuFrame:HookScript("OnShow",function()
 		self.SlideIn:Play()
-		GameMenuButtonLogout:SetPoint("TOP", self.BlizzMenu.Addons, "BOTTOM")
-		GameMenuButtonLogout.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
-		GameMenuButtonLogout:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
-		
-		GameMenuButtonQuit:SetPoint("TOP", GameMenuButtonLogout, "BOTTOM", 0, 10)
-		GameMenuButtonQuit.Text:SetFont(SyncUI_GameFontShadow_Medium:GetFont())
-		GameMenuButtonQuit:SetHighlightFontObject("SyncUI_GameFontShadow_Medium")
 	end)
 	GameMenuFrame:HookScript("OnHide",function()
 		self.SlideOut:Play()
@@ -329,41 +321,38 @@ function SyncUI_OptionsMenu_OnLoad(self)
 	for _, child in pairs({GameMenuFrame:GetChildren()}) do
 		local btn = _G[child:GetName()];
 		
-		btn:EnableMouse(false)
-		btn.Left:Hide();
-		btn.Right:Hide();
-		btn.Middle:Hide();
+		if (btn) then
+			btn:EnableMouse(false)
+			btn.Left:Hide();
+			btn.Right:Hide();
+			btn.Middle:Hide();
+		end
 	end
 	
-	local backdrop = {
-		bgFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile]],
-		edgeFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile]],
-		edgeSize = 16,
-		insets = { left = 7, right = 7, top = 7, bottom = 7},
-		tile = false,
-		tileSize = 0,		
-	}
+	local backdrop = SYNCUI_BACKDROP
 	
 	-- post 7.3.1 hotfix
 	GameMenuButtonLogout:SetSize(150,35);
 	GameMenuButtonLogout:SetParent(self.BlizzMenu);
 	GameMenuButtonLogout:ClearAllPoints();
 	GameMenuButtonLogout:SetPoint("TOP", self.BlizzMenu.Addons, "BOTTOM");
+	GameMenuButtonLogout.SetPoint = function() end;
+	Mixin(GameMenuButtonLogout,BackdropTemplateMixin)
 	GameMenuButtonLogout:SetBackdrop(backdrop);
+	GameMenuButtonLogout:OnBackdropLoaded()
 	GameMenuButtonLogout:SetHitRectInsets(5,5,5,5);
 	GameMenuButtonLogout:EnableMouse(true);
-
 	
 	GameMenuButtonQuit:SetSize(150,35);
 	GameMenuButtonQuit:SetParent(self.BlizzMenu);
 	GameMenuButtonQuit:ClearAllPoints();
 	GameMenuButtonQuit:SetPoint("TOP", GameMenuButtonLogout, "BOTTOM", 0, 10);
+	Mixin(GameMenuButtonQuit,BackdropTemplateMixin)
 	GameMenuButtonQuit:SetBackdrop(backdrop);
+	GameMenuButtonLogout:OnBackdropLoaded()
 	GameMenuButtonQuit:SetHitRectInsets(5,5,5,5);
 	GameMenuButtonQuit:EnableMouse(true);
-	
-	
-	
+
 	tinsert(UISpecialFrames, "AddonList")
 end
 
@@ -604,13 +593,18 @@ end
 
 function SyncUI_OptionPanel_ReactiveAuraLine_Update(self)
 	local profile = SyncUI_GetProfile()
-	if not profile["ReactiveAuras"][self:GetID()] then self:Hide() return end
-
 	local spellID = profile["ReactiveAuras"][self:GetID()]
+	
+	if not spellID then
+		self:Hide();
+		return;
+	end
+
 	local name = select(1, GetSpellInfo(spellID))
 	local icon = select(3, GetSpellInfo(spellID))
 
 	if name then
+		self.spellID = spellID;
 		self.Icon:SetTexture(icon)
 		self.Name:SetText(name)
 	end
@@ -638,17 +632,21 @@ function SyncUI_OptionPanel_ReactiveAura_UpdateScrollFrame(self)
 end
 
 function SyncUI_OptionPanel_ApplyReactiveAura(self)
-	local profile = SyncUI_GetProfile()
-	local editBox = self:GetParent().EnterID
-	local text = editBox:GetText()
-	local spellID = gsub(text,"%a+","")
+	local profile = SyncUI_GetProfile();
+	local editBox = self:GetParent().EnterID;
+	local spellID = gsub(editBox:GetText(),"%a+","");
+	
+	editBox:ClearFocus();
+	editBox:SetText("");
+	editBox.Thumbnail:Show();
+	editBox.ClearButton:Hide();
 	
 	if spellID then
 		local name, _, icon = GetSpellInfo(spellID)
 		
 		for _, spell in pairs(profile["ReactiveAuras"]) do
 			if spell == spellID then
-				editBox:SetText("")
+				return;
 			end
 		end
 
@@ -661,8 +659,6 @@ function SyncUI_OptionPanel_ApplyReactiveAura(self)
 
 			scrollFrame.ScrollBar:SetValue(0)
 			SyncUI_OptionPanel_ReactiveAura_UpdateScrollFrame(scrollFrame)
-
-			editBox:SetText("")
 		end
 	end
 end

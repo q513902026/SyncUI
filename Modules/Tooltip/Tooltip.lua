@@ -11,7 +11,7 @@ local tooltips = {
 	ShoppingTooltip1,
 	ShoppingTooltip2,
 	ShoppingTooltip3,
-	WorldMapTooltip,
+	--WorldMapTooltip,
 	WorldMapCompareTooltip1,
 	WorldMapCompareTooltip2,
 	WorldMapCompareTooltip3,
@@ -114,14 +114,14 @@ end
 local function AddDivider(self)
 	self:AddLine(" ")
 	
-	local line = self:NumLines()
-	local relativeTo = _G[self:GetName().."TextLeft"..line]
-	local divider = self.divider[line] or self:CreateDivider(line)
+	-- local line = self:NumLines()
+	-- local relativeTo = _G[self:GetName().."TextLeft"..line]
+	-- local divider = self.divider[line] or self:CreateDivider(line)
 
-	divider:ClearAllPoints()
-	divider:SetPoint("RIGHT",-10,0)
-	divider:SetPoint("LEFT",relativeTo,0,1)
-	divider:Show()
+	-- divider:ClearAllPoints()
+	-- divider:SetPoint("RIGHT",-10,0)
+	-- divider:SetPoint("LEFT",relativeTo,0,1)
+	-- divider:Show()
 end
 
 local function SetPrevLineJustify(self, justify)
@@ -135,7 +135,7 @@ local function OverwriteStyle(self)
 	if not self.bgFile then
 		local r,g,b,a = 1,1,1,1
 		
-		self.bgFile = CreateFrame("Frame",nil,self)
+		self.bgFile = CreateFrame("Frame",nil,self,"BackdropTemplate")
 		self.bgFile:SetPoint("TOPLEFT",-5,5)
 		self.bgFile:SetPoint("BOTTOMRIGHT",5,-5)
 		self.bgFile:SetFrameLevel(self:GetFrameLevel())
@@ -358,7 +358,7 @@ local function Hook_SetUnit(self,unit)
 end
 
 local function Hook_SetUnitAura(self, unitID, index, filter)
-	local spellID = select(10, UnitAura(unitID, index, filter))
+	local spellID = select(11, UnitAura(unitID, index, filter))
 	
 	if spellID then
 		self:AddDivider()
@@ -372,6 +372,8 @@ local function Hook_SetDefaultAnchor(self, parent)
 		self:SetOwner(parent, "ANCHOR_CURSOR")
 	else
 		self:SetOwner(parent, "ANCHOR_NONE")
+		-- MARKED: might fix the anchor family connection thingy
+		self:ClearAllPoints();
 		self:SetPoint("BOTTOMRIGHT", "SyncUI_Tooltip", "TOPRIGHT")
 		self.default = 1
 	end
@@ -425,11 +427,11 @@ end
 
 -- Tooltip API
 local function Tooltip_SetHooks()
-	GameTooltip:HookScript("OnTooltipSetSpell", Hook_SetSpell)
+	--GameTooltip:HookScript("OnTooltipSetSpell", Hook_SetSpell)
 	GameTooltip:HookScript("OnTooltipSetItem", Hook_SetItem)
 	GameTooltip:HookScript("OnTooltipSetUnit", Hook_SetUnit)
 	
-	hooksecurefunc(GameTooltip, "SetUnitAura", Hook_SetUnitAura)
+	--hooksecurefunc(GameTooltip, "SetUnitAura", Hook_SetUnitAura)
 	hooksecurefunc(GameTooltip, "SetOwner", Hook_Reset)
 	hooksecurefunc("GameTooltip_SetDefaultAnchor", Hook_SetDefaultAnchor)
 	hooksecurefunc("SetTooltipMoney", Hook_SetMoney)
@@ -446,7 +448,7 @@ local function Tooltip_AddWidgets()
 		tooltip.SetArrow = SetArrow
 		tooltip.SetIcon = SetIcon
 		tooltip.SetUnitIcon = SetUnitIcon
-		tooltip.CreateDivider = CreateDivider
+		--tooltip.CreateDivider = CreateDivider
 		tooltip.AddDivider = AddDivider
 		tooltip.SetPrevLineJustify = SetPrevLineJustify
 		tooltip:HookScript("OnShow", OverwriteStyle)
@@ -481,7 +483,6 @@ local function Tooltip_SetFonts()
 	GameTooltipHeaderText:SetFontObject(font)
 	GameTooltipText:SetFontObject(font)
 	Tooltip_Small:SetFontObject(SyncUI_GameFontShadow_Small)
-	SmallTextTooltipText:SetFontObject(font)
 end
 
 function SyncUI_Tooltip_OnLoad(self)

@@ -1,28 +1,33 @@
 local MAX_TOKENS = 10
 
 local function UpdateExpBar(self, useBonusExp)
-	if not IsXPUserDisabled() and UnitLevel("player") < MAX_PLAYER_LEVEL then
-		local xp, maxXP = UnitXP("player"), UnitXPMax("player")
-		local value = xp*100/maxXP
+	if IsXPUserDisabled() or UnitLevel("player") >= MAX_PLAYER_LEVEL then
+		self:Hide();
+		return;		
+	end
+
+	local xp, maxXP = UnitXP("player"), UnitXPMax("player")
+	local value = xp
+
+	if useBonusExp then
+		value = xp + (GetXPExhaustion() or 0)
+	end
+	
+	for i = 1, MAX_TOKENS do
+		local token = self["Token"..i]
+		local perToken = maxXP / MAX_TOKENS;
+		local minValue = (i - 1) * perToken;
+		local maxValue = i * perToken;
 		
-		if useBonusExp then
-			value = (xp + (GetXPExhaustion() or 0)) * 100 / maxXP
-		end
-		
-		for i = 1, MAX_TOKENS do
-			local token = self["Token"..i]
-			
-			if not useBonusExp then
-				token.BgFrame:Hide()
-			end
-			
-			token:SetValue(value)
+		if not useBonusExp then
+			token.BgFrame:Hide()
 		end
 
-		self:Show()
-	else
-		self:Hide()
+		token:SetMinMaxValues(minValue, maxValue)
+		token:SetValue(value)
 	end
+
+	self:Show()
 end
 
 local function UpdateRepBar(self)
@@ -219,6 +224,7 @@ local MicroIcons = {
 
 local MicroFrameRef = {
 	[2] = SpellbookMicroButton,
+	[3] = TalentMicroButton,
 	[4] = AchievementMicroButton,
 	[5] = QuestLogMicroButton,
 	[6] = LFDMicroButton,
@@ -272,9 +278,9 @@ function SyncUI_MicroMenuButton_OnLoad(self)
 		
 		self:SetAttribute("type", "macro")
 		self:SetAttribute("macrotext", "/run ToggleCharacter('PaperDollFrame')")
-	elseif index == 3 then
-		self:SetAttribute("type", "macro")
-		self:SetAttribute("macrotext", "/run SyncUI_ToggleTalentUI()")
+	-- elseif index == 3 then
+		-- self:SetAttribute("type", "macro")
+		-- self:SetAttribute("macrotext", "/run SyncUI_ToggleTalentUI()")
 	else
 		self:SetAttribute("type", "click")
 		self:SetAttribute("clickbutton", MicroFrameRef[index])

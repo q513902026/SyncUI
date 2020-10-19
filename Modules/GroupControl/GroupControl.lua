@@ -27,19 +27,22 @@ end
 function SyncUI_WorldMarkerBar_OnLoad(self)
 	local frame = SyncUI_RaidToolMenu
 	local button = frame["Button3"]
-	
-	button:SetFrameRef("Bar", self)
+	SecureHandler_OnLoad(button)
 	button:SetAttribute("_onclick", [[
 		local bar = self:GetFrameRef("Bar")
+		local menu = self:GetFrameRef("menu");
 		
+		menu:Hide();
+
 		if bar:IsShown() then
-			bar:Hide()
+			bar:Hide();
 		else
-			bar:Show()
+			bar:Show();
 		end
-		
-		self:GetFrameRef("Menu"):Hide()					
 	]])
+	
+	button:SetFrameRef("Bar", SyncUI_WorldMarkerBar)
+	button:SetFrameRef("Menu", frame);
 	
 	self:RegisterForDrag("LeftButton")
 	SyncUI_RegisterDragFrame(self,SYNCUI_STRING_PLACEMENT_TOOL_LABEL_WORLD_MARK_BAR)
@@ -65,7 +68,6 @@ local function RegisterMenuToggles(self)
 		local frame = self.RaidTool
 		
 		frame:RegisterForClicks("LeftButtonUp")
-		frame:SetFrameRef("menu", SyncUI_RaidToolMenu)
 		frame:SetAttribute("_onclick", [[
 			local menu = self:GetFrameRef("menu")
 			
@@ -75,27 +77,29 @@ local function RegisterMenuToggles(self)
 				menu:Show()
 			end
 		]])
+		SecureHandler_OnLoad(frame)
+		frame:SetFrameRef("Menu", SyncUI_RaidToolMenu)
 	end
 	do	-- Group Layout Toggle
 		local frame = self.GroupLayout
 		
 		frame:RegisterForClicks("LeftButtonUp")
-		frame:SetFrameRef("menu", SyncUI_GroupLayoutMenu)
 		frame:SetAttribute("_onclick", [[
-			local menu = self:GetFrameRef("menu")
+			local menu = self:GetFrameRef("menu");
 			
 			if menu:IsShown() then
-				menu:Hide()
+				menu:Hide();
 			else
-				menu:Show()
+				menu:Show();
 			end
 		]])
+		SecureHandler_OnLoad(frame)
+		frame:SetFrameRef("Menu", SyncUI_GroupLayoutMenu)
 	end
 	do	-- LootSpec Toggle
 		local frame = self.LootSpec
 		
 		frame:RegisterForClicks("LeftButtonUp")
-		frame:SetFrameRef("menu", SyncUI_LootSpecMenu)
 		frame:SetAttribute("_onclick", [[
 			local menu = self:GetFrameRef("menu")
 			
@@ -105,12 +109,13 @@ local function RegisterMenuToggles(self)
 				menu:Show()
 			end
 		]])
+		SecureHandler_OnLoad(frame)
+		frame:SetFrameRef("Menu", SyncUI_LootSpecMenu)
 	end
 	do	-- Raid Frame Toggle
 		local frame = self.Toggle
 		
 		frame:RegisterForClicks("LeftButtonUp")
-		frame:SetFrameRef("raid", SyncUI_RaidFrameContainer)
 		frame:SetAttribute("_onclick", [[
 			local raid = self:GetFrameRef("raid")
 			
@@ -120,6 +125,8 @@ local function RegisterMenuToggles(self)
 				raid:Show()
 			end
 		]])
+		SecureHandler_OnLoad(frame)
+		frame:SetFrameRef("raid", SyncUI_RaidFrameContainer)
 		frame:HookScript("OnClick", function()
 			local profile = SyncUI_GetProfile()
 			
@@ -142,32 +149,39 @@ local function RegisterMenu(self)
 	do 	-- Raid Tool Menu
 		local frame = SyncUI_RaidToolMenu
 		
-		frame:SetFrameRef("GroupLayout", SyncUI_GroupLayoutMenu)
-		frame:SetFrameRef("LootSpec", SyncUI_LootSpecMenu)
+
 		frame:SetAttribute("_onshow", [[
 			self:GetFrameRef("GroupLayout"):Hide()
 			self:GetFrameRef("LootSpec"):Hide()
 		]])
+		frame:SetFrameRef("GroupLayout", SyncUI_GroupLayoutMenu)
+		frame:SetFrameRef("LootSpec", SyncUI_LootSpecMenu)
 		
 		for i = 1, 5 do
 			local button = frame["Button"..i]
 			
-			button:SetFrameRef("Menu", frame)
+
 			button:SetAttribute("_onclick", [[
-				self:GetFrameRef("Menu"):Hide()
+				self:GetFrameRef("menu"):Hide()
 			]])			
+			SecureHandler_OnLoad(button)
+			button:SetFrameRef("Menu", SyncUI_RaidToolMenu)
 			button:HookScript("OnClick", function(self)
 				if i == 1 then
-					ToggleFriendsFrame(4)
+					if InCombatLockdown() then
+						UIErrorsFrame:AddExternalErrorMessage(ERR_NOT_IN_COMBAT);
+					else
+						ToggleFriendsFrame(3);
+					end
 				end
 				if i == 2 then
-					SyncUI_ToggleFrame(RaidInfoFrame)
+					SyncUI_ToggleFrame(RaidInfoFrame);
 				end
 				if i == 4 then
-					DoReadyCheck()
+					DoReadyCheck();
 				end
 				if i == 5 then
-					InitiateRolePoll()
+					InitiateRolePoll();
 				end
 			end)
 		end
@@ -179,22 +193,26 @@ local function RegisterMenu(self)
 			local button = frame["Button"..i]
 
 			button:RegisterForClicks('LeftButtonUp')
-			button:SetFrameRef("pNormal", SyncUI_PartyFrameContainer.Normal)
-			button:SetFrameRef("pHeal", SyncUI_PartyFrameContainer.Heal)
-			button:SetFrameRef("rNormal", SyncUI_RaidFrameContainer.Normal)
-			button:SetFrameRef("rHeal", SyncUI_RaidFrameContainer.Heal)
-			button:SetFrameRef("Menu", frame)
+
 
 			if i == 1 then
+				SecureHandler_OnLoad(button)
 				button:SetAttribute("_onclick", [[
 					if button == "LeftButton" then
-						self:GetFrameRef("Menu"):Hide()
+						self:GetFrameRef("menu"):Hide()
 						self:GetFrameRef("pHeal"):Hide()
 						self:GetFrameRef("rHeal"):Hide()
 						self:GetFrameRef("pNormal"):Show()
 						self:GetFrameRef("rNormal"):Show()
 					end
 				]])
+				
+				button:SetFrameRef("pNormal", SyncUI_PartyFrameContainer.Normal)
+				button:SetFrameRef("pHeal", SyncUI_PartyFrameContainer.Heal)
+				button:SetFrameRef("rNormal", SyncUI_RaidFrameContainer.Normal)
+				button:SetFrameRef("rHeal", SyncUI_RaidFrameContainer.Heal)
+				button:SetFrameRef("Menu", frame)
+
 				button:HookScript("OnClick", function()
 					local profile = SyncUI_GetProfile()
 					profile.GroupControl.Layout = "Normal"
@@ -204,7 +222,7 @@ local function RegisterMenu(self)
 			if i == 2 then
 				button:SetAttribute("_onclick", [[
 					if button == "LeftButton" then
-						self:GetFrameRef("Menu"):Hide()
+						self:GetFrameRef("menu"):Hide()
 						self:GetFrameRef("pNormal"):Hide()
 						self:GetFrameRef("rNormal"):Hide()
 						self:GetFrameRef("pHeal"):Show()
@@ -218,32 +236,36 @@ local function RegisterMenu(self)
 				end)
 			end
 		end
-		
-		frame:SetFrameRef("RaidTool", SyncUI_RaidToolMenu)
-		frame:SetFrameRef("LootSpec", SyncUI_LootSpecMenu)
+
 		frame:SetAttribute("_onshow", [[
 			self:GetFrameRef("RaidTool"):Hide()
 			self:GetFrameRef("LootSpec"):Hide()
 		]])	
+				
+		frame:SetFrameRef("RaidTool", SyncUI_RaidToolMenu)
+		frame:SetFrameRef("LootSpec", SyncUI_LootSpecMenu)
 	end
 	do	-- Loot Spec Menu
 		local frame = SyncUI_LootSpecMenu
 		
-		frame:SetFrameRef("RaidTool", SyncUI_RaidToolMenu)
-		frame:SetFrameRef("GroupLayout", SyncUI_GroupLayoutMenu)
+
 		frame:SetAttribute("_onshow", [[
 			self:GetFrameRef("RaidTool"):Hide()
 			self:GetFrameRef("GroupLayout"):Hide()
 		]])
+		frame:SetFrameRef("RaidTool", SyncUI_RaidToolMenu)
+		frame:SetFrameRef("GroupLayout", SyncUI_GroupLayoutMenu)
 		
 		-- Menu Buttons
 		for i = 0, 4 do
 			local button = frame["Button"..i]
 			
-			button:SetFrameRef("Menu", frame)
+
 			button:SetAttribute("_onclick", [[
-				self:GetFrameRef("Menu"):Hide()
+				self:GetFrameRef("menu"):Hide()
 			]])
+			SecureHandler_OnLoad(button)
+			button:SetFrameRef("Menu", frame)
 			button:HookScript("OnClick", function(self)
 				local btn = SyncUI_GroupControl.LootSpec
 				local index = self:GetID()

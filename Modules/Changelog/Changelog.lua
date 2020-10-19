@@ -1,10 +1,10 @@
  
-local version = GetAddOnMetadata("SyncUI", "Version")
+local version = GetAddOnMetadata("SyncUI", "Version");
 
 local maxLines, ChangeLogData = 5, {
-	"Updated for 8.0 prepatch:",
-	"Some Modules are currently disabled:",
-		"• TalentUI",
+	"Fixes:",
+		"• StaggerBar: error throwing issue",
+		"• Loot: fixed an issue, not closing the loot window while in combat",
 }
 
 local function ModifiedString(text)
@@ -18,15 +18,15 @@ local function ModifiedString(text)
 		local subHeader = text:find("•");
 		
 		if subHeader then
-			result = tostring("|cFF66FF00"..prefix.."|r"..suffix)
+			result = tostring("|cFFFFFF00"..prefix.."|r"..suffix)
 		else
-			result = tostring("|cFFFF6600"..prefix.."|r"..suffix)
+			result = tostring("|cFF66FF00"..prefix.."|r"..suffix)
 		end
 	end
 
 	-- highlights
 	for pattern in text:gmatch("('.*')") do
-		result = result:gsub(pattern, "|cFFFF8800" .. pattern:gsub("'","").."|r")
+		result = result:gsub(pattern, "|cFFF0F000" .. pattern:gsub("'","").."|r")
 	end
 	
 	return result

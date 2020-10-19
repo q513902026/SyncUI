@@ -93,7 +93,8 @@
 								self.pending = 0
 							</OnLoad>
 							<OnEvent>
-								local pending = C_Calendar.GetNumPendingInvites()
+								local pending = C_Calendar.GetNumPendingInvites();
+
 								if pending > self.pending then
 									self.Notification:Show()
 									self.pending = pending
@@ -101,12 +102,21 @@
 									self.Notification:Hide()
 									self.pending = 0
 								end
+								
+								if event == "PLAYER_ENTERING_WORLD" then
+									self.Text.String:SetText(C_DateAndTime.GetCurrentCalendarTime().monthDay)
+								end
 							</OnEvent>
 							<OnClick>
 								ToggleCalendar()
 							</OnClick>
 							<OnUpdate>
-								self.Text.String:SetText(select(3, C_Calendar.GetDate()))
+								local hour, minute = GetGameTime();
+								
+								if hour ~= self.hour then
+									self.hour = hour;
+									self.Text.String:SetText(C_DateAndTime.GetCurrentCalendarTime().monthDay)
+								end
 							</OnUpdate>
 						</Scripts>
 					</Button>
@@ -126,7 +136,7 @@
 							</OnLoad>
 							<OnEvent function="SyncUI_Minimap_Mail_OnEvent" />
 							<OnEnter function="SyncUI_Minimap_Mail_OnEnter" />            
-							<OnLeave function="" />
+							<!--OnLeave function="GameTooltip_Hide" /-->
 						</Scripts>
 					</Button>
 					<Button parentKey="Garrison">
@@ -173,7 +183,7 @@
 								GameTooltip:SetText(GARRISON_LANDING_PAGE_TITLE, 1,1,1)
 								GameTooltip:Show()
 							</OnEnter>
-							<OnLeave function="GameTooltip_Hide" />
+							<!--OnLeave function="GameTooltip:Hide" /-->
 						</Scripts>
 					</Button>
 					<Frame parentKey="Queue">

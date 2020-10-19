@@ -18,12 +18,16 @@
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<FontString parentKey="Charge" setAllPoints="true" justifyH="RIGHT" justifyV="BOTTOM" inherits="SyncUI_GameFontNormal_Medium">
+				<FontString parentKey="Charge" inherits="SyncUI_GameFontNormal_Large" setAllPoints="true" justifyH="RIGHT" justifyV="BOTTOM" >
 					<Anchors>
-						<Anchor point="BOTTOM" x="1" y="4" />
+						<Anchor point="BOTTOMRIGHT" x="0" y="0" />
 					</Anchors>
 				</FontString>
-				<FontString parentKey="Time" justifyH="CENTER" justifyV="MIDDLE" inherits="SyncUI_GameFontNormal_Medium" />
+				<FontString parentKey="CooldownTimer" inherits="SyncUI_GameFontNormal_Large" setAllPoints="true" justifyH="CENTER" justifyV="CENTER">
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
@@ -35,6 +39,7 @@
 				self.Cooldown:SetHideCountdownNumbers(true) 
 				self.timer = 0
 			</OnLoad>
+			<OnUpdate function="SyncUI_AuraButton_OnUpdate"/>
 			<OnEnter function="SyncUI_AuraButton_OnEnter" />
 			<OnLeave function="GameTooltip_Hide" />
 		</Scripts>
@@ -49,13 +54,13 @@
 				</Texture>
 			</Layer>
 			<Layer level="ARTWORK">
-				<FontString parentKey="Charge" inherits="SyncUI_GameFontNormal_Medium" justifyH="RIGHT">
+				<FontString parentKey="Charge" inherits="SyncUI_GameFontNormal_Small" justifyH="RIGHT">
 					<Size x="32" y="10" />
 					<Anchors>
-						<Anchor point="BOTTOMRIGHT" x="1" y="0" />
+						<Anchor point="BOTTOMRIGHT" x="2" y="0" />
 					</Anchors>
 				</FontString>
-				<FontString parentKey="Time" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER" justifyV="CENTER">
+				<FontString parentKey="CooldownTimer" inherits="SyncUI_GameFontNormal_Medium" justifyH="CENTER" justifyV="CENTER">
 					<Anchors>
 						<Anchor point="CENTER" />
 					</Anchors>
@@ -88,22 +93,12 @@
 				self.spellID = nil
 				self.timer = 0
             </OnLoad>
-            <OnEnter>
-				local spellID = self.spellID
-				
-                GameTooltip:SetOwner(self, "ANCHOR_BOTTOMRIGHT",-33,-2)
-                GameTooltip:SetUnitAura(SecureButton_GetUnit(self:GetParent()), self:GetID(), self:GetParent():GetAttribute("filter"))
-				--GameTooltip:AddDivider()		
-				--GameTooltip:AddLine(SYNCUI_STRING_SPELLID..spellID,1,1,1)
-				GameTooltip:Show()
-            </OnEnter>
-            <OnLeave function="GameTooltip_Hide"/>
-			<OnUpdate function="SyncUI_AuraButton_OnUpdate" />
+            <OnEnter function="SyncUI_SecureAuraButton_OnEnter" />
         </Scripts>
     </Button>
 
 	<!-- Special Aura Bars -->
-	<Frame name="SyncUI_ReactiveAuraBar" frameStrata="LOW" toplevel="true" parent="SyncUI_UIParent">
+	<Frame name="SyncUI_ReactiveAuraBar" frameStrata="LOW" parent="SyncUI_UIParent">
 		<Size x="228" y="38" />
 		<Frames>
 			<Frame parentKey="Aura1" inherits="SyncUI_AuraTemplate">

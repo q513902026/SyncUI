@@ -62,7 +62,8 @@ local function SetupLoot(self, type, itemLink, quantity, rollType, roll, specID,
 	local itemName, itemHyperLink, itemRarity, itemTexture, title
 	
 	if isCurrency then
-		itemName, _, itemTexture, _, _, _, _, itemRarity = GetCurrencyInfo(itemLink)
+		local currencyInfo = C_CurrencyInfo.GetCurrencyInfo(itemLink)
+		itemName,itemTexture,itemRarity = currencyInfo.name,currencyInfo.iconFileID,currencyInfo.quality
 		
 		if lootSource == LOOT_SOURCE_GARRISON_CACHE then
 			itemName = format(GARRISON_RESOURCES_LOOT, quantity)
@@ -165,7 +166,7 @@ local function SetupGarrisonTalent(self, type, garrisonType)
 	local talentID = C_Garrison.GetCompleteTalent(garrisonType)
     local talent = C_Garrison.GetTalent(talentID)
 	
-	self.Display.Icon:SetTexture(talent.icon)
+	--self.Display.Icon:SetTexture(talent.icon)
 	self.Title:SetText(GARRISON_UPDATE)
 	self.Text:SetFormattedText(GARRISON_BUILDING_COMPLETE_TOAST, garrisonType)
 	self.type = type
@@ -440,7 +441,6 @@ function SyncUI_AlertFrame_OnLoad(self)
 	self:RegisterEvent("SHOW_LOOT_TOAST_UPGRADE")
 	self:RegisterEvent("SHOW_PVP_FACTION_LOOT_TOAST")
 	self:RegisterEvent("PET_BATTLE_CLOSE")
-	self:RegisterEvent("STORE_PRODUCT_DELIVERED")
 	self:RegisterEvent("GARRISON_BUILDING_ACTIVATABLE")
 	self:RegisterEvent("GARRISON_TALENT_COMPLETE")
 	self:RegisterEvent("GARRISON_MISSION_FINISHED")
@@ -466,7 +466,7 @@ end
 
 function SyncUI_AlertFrame_OnEvent(self, event, ...)
 	if event == "ACHIEVEMENT_EARNED" then
-		if IsKioskModeEnabled() then
+		if Kiosk.IsEnabled() then
 			return
 		end
 
@@ -477,7 +477,7 @@ function SyncUI_AlertFrame_OnEvent(self, event, ...)
 		self:AddAlert("Achievement", ...)
 	end
 	if event == "CRITERIA_EARNED" then
-		if IsKioskModeEnabled() then
+		if Kiosk.IsEnabled() then
 			return
 		end
 
@@ -541,10 +541,6 @@ function SyncUI_AlertFrame_OnEvent(self, event, ...)
 		
 		self:AddAlert("LootUpgrade", itemLink, quantity, specID, baseQuality, nil, nil, lessAwesome)
 		--LootUpgradeAlertSystem:AddAlert(itemLink, quantity, specID, baseQuality, nil, nil, lessAwesome)
-	end
-	if event == "STORE_PRODUCT_DELIVERED" then
-		self:AddAlert("StorePurchase", ...)
-		--StorePurchaseAlertSystem:AddAlert(...)
 	end
 	if event == "GARRISON_BUILDING_ACTIVATABLE" then
 		self:AddAlert("GarrisonBuilding", ...)

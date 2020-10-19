@@ -94,11 +94,11 @@
 		</Scripts>
 	</Button>
 
-	<Button name="SyncUI_IconButtonTemplate" virtual="true">
+	<Button name="SyncUI_IconButtonTemplate" virtual="true" inherits = "BackdropTemplate">
 		<Size x="48" y="35" />
-		<Backdrop edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
-			<EdgeSize val="16" />
-		</Backdrop>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SYNCUI_ICON_BACKDROP" type="global" />
+		</KeyValues>
 		<Layers>
 			<Layer level="BACKGROUND" textureSubLevel="-1">
 				<Texture parentKey="Icon">
@@ -207,7 +207,6 @@
 		<Size x="150" y="35" />
 	</Button>
 
-	
 	<Frame name="SyncUI_OptionPanel_AuraLineTemplate" hidden="true" virtual="true">
 		<Size x="0" y="20" />
 		<Anchors>
@@ -256,10 +255,18 @@
 			<OnEnter>
 				self.Name:SetTextColor(0.4,1,0)
 				self.Delete:SetAlpha(1)
+				
+				GameTooltip:SetOwner(self:GetParent(), "ANCHOR_NONE")
+				GameTooltip:SetPoint("TOPLEFT", self:GetParent(), "TOPRIGHT", 5, -5);
+				GameTooltip:SetSpellByID(self.spellID);
+				GameTooltip:AddDivider()
+				GameTooltip:AddLine(format(SYNCUI_STRING_AURAID, self.spellID),1,1,1)
+				GameTooltip:Show();
 			</OnEnter>
 			<OnLeave>
 				self.Name:SetTextColor(1,1,1)
 				self.Delete:SetAlpha(0)
+				GameTooltip_Hide();
 			</OnLeave>
 		</Scripts>
 	</Frame>
@@ -1041,12 +1048,9 @@
 								</Anchors>
 								<Scripts>
 									<OnLoad>
-										self.Instructions:SetText(SYNCUI_STRING_AURAS_ENTER_SPELL_ID)
+										self.Thumbnail:SetText(SYNCUI_STRING_AURAS_ENTER_SPELL_ID)
 									</OnLoad>
-									<OnEnterPressed>
-										SyncUI_OptionPanel_ApplyReactiveAura(self)
-										--self:ClearFocus()
-									</OnEnterPressed>
+									<OnEnterPressed function="SyncUI_OptionPanel_ApplyReactiveAura" />
 									<OnEscapePressed>
 										self:ClearFocus()
 									</OnEscapePressed>
@@ -1710,5 +1714,6 @@
 			<OnUpdate function="SyncUI_Installer_UpdateProgress" />
 		</Scripts>
 	</Frame>
+	
 
 </Ui>

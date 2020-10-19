@@ -1,5 +1,6 @@
 
 BINDING_HEADER_QUESTHUB = OBJECTIVES_TRACKER_LABEL
+BINDING_HEADER_TALENTUI = OBJECTIVES_TRACKER_LABEL
 
 SYNCUI_MEDIA_PATH = [[Interface\AddOns\SyncUI\Media\Textures\]]
 SYNCUI_UISCALES = {ADDON_DISABLED,"0.5","0.6","0.7","0.8","0.9","1.0"}
@@ -29,7 +30,6 @@ SYNCUI_POWER_COLORS = {
 	["INSANITY"] 	= {0.7, 0.0, 1.0},
 	["FURY"] 		= {0.8, 0.3, 0.9},
 	["PAIN"] 		= {1.0, 0.6, 0.0},
-	
 }
 SYNCUI_RACE_ICON_TCOORDS = {
 	-- ALLIANCE
@@ -45,6 +45,16 @@ SYNCUI_RACE_ICON_TCOORDS = {
 	["DRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
 	["WORGEN_MALE"]		= {0.629, 0.750, 0, 0.25},
 	["WORGEN_FEMALE"]	= {0.629, 0.750, 0.5, 0.75},
+	["VOIDELF_MALE"]	= {0.5, 0.625, 0.25, 0.5},
+	["VOIDELF_FEMALE"]	= {0.5, 0.625, 0.75, 1.0},
+	["LIGHTFORGEDDRAENEI_MALE"]	= {0.5, 0.625, 0, 0.25},
+	["LIGHTFORGEDDRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
+	["DARKIRONDWARF_MALE"] = {0.125, 0.25, 0, 0.25},
+	["DARKIRONDWARF_FEMALE"] = {0.125, 0.25, 0.5, 0.75},
+	["KULTIRAN_MALE"] = {0, 0.125, 0, 0.25},
+	["KULTIRAN_FEMALE"] = {0, 0.125, 0.5, 0.75},
+	["MECHAGNOME_MALE"] = {0.25, 0.375, 0, 0.25},
+	["MECHAGNOME_FEMALE"] = {0.25, 0.375, 0.5, 0.75},
 	
 	-- HORDE 
 	["TAUREN_MALE"]		= {0, 0.125, 0.25, 0.5},
@@ -59,22 +69,20 @@ SYNCUI_RACE_ICON_TCOORDS = {
 	["BLOODELF_FEMALE"]	= {0.5, 0.625, 0.75, 1.0},
 	["GOBLIN_MALE"]		= {0.629, 0.750, 0.25, 0.5},
 	["GOBLIN_FEMALE"]	= {0.629, 0.750, 0.75, 1.0},
-
-	-- NEUTRAL
-	["PANDAREN_MALE"]	= {0.756, 0.881, 0, 0.25},
-	["PANDAREN_FEMALE"]	= {0.756, 0.881, 0.5, 0.75},
-
-	-- ALLIED RACES
 	["NIGHTBORNE_MALE"]	= {0.375, 0.5, 0, 0.25},
 	["NIGHTBORNE_FEMALE"]	= {0.375, 0.5, 0.5, 0.75},
 	["HIGHMOUNTAINTAUREN_MALE"]		= {0, 0.125, 0.25, 0.5},
 	["HIGHMOUNTAINTAUREN_FEMALE"]	= {0, 0.125, 0.75, 1.0},
-	["VOIDELF_MALE"]	= {0.5, 0.625, 0.25, 0.5},
-	["VOIDELF_FEMALE"]	= {0.5, 0.625, 0.75, 1.0},
-	["LIGHTFORGEDDRAENEI_MALE"]	= {0.5, 0.625, 0, 0.25},
-	["LIGHTFORGEDDRAENEI_FEMALE"]	= {0.5, 0.625, 0.5, 0.75},
+	["MAGHARORC_MALE"] = {0.375, 0.5, 0.25, 0.5},
+	["MAGHARORC_FEMALE"] = {0.375, 0.5, 0.75, 1.0},
 	["ZANDALARITROLL_MALE"]		= {0.25, 0.375, 0.25, 0.5},
 	["ZANDALARITROLL_FEMALE"]	= {0.25, 0.375, 0.75, 1.0},
+	["VULPERA_MALE"] = {0.629, 0.750, 0.25, 0.5},
+	["VULPERA_FEMALE"] = {0.629, 0.750, 0.75, 1.0},
+	
+	-- NEUTRAL
+	["PANDAREN_MALE"]	= {0.756, 0.881, 0, 0.25},
+	["PANDAREN_FEMALE"]	= {0.756, 0.881, 0.5, 0.75},
 }
 SYNCUI_FONTLIST = {
 	{"Nexa.otf",8,10,12,14,16},
@@ -89,6 +97,30 @@ SYNCUI_FONTLIST = {
 	{"Roboto.ttf",8,10,12,14,16,"Cyrillic"},
 	{"Gothic.ttf",8,10,12,14,16,"Cyrillic"},
 }
+
+-- add BackdropInfo
+SYNCUI_BACKDROP = {
+	bgFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile]],
+	edgeFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile]],
+	edgeSize = 16,
+	insets = { left = 7, right = 7, top = 7, bottom = 7},
+}
+
+SYNC_LAYERWITHNOEDGE_BACKDROP = {
+	bgFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile]],
+	edgeFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-EdgeFile]],
+	insets = { left = 7, right = 7, top = 7, bottom = 7},
+}
+
+
+SYNC_ICON_BACKDROP = {
+	edgeFile = [[Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile]],
+	tileEdge = true,
+	edgeSize = 16,
+}
+
+SYNCUI_LAYER_BACKDROP_COLOR = CreateColor(0, 0, 0)
+-- BackdropInfo End
 
 local bindingTabAction;
 
@@ -450,6 +482,10 @@ function SyncUI_FrameGlow_OnUpdate(self, elapsed)
 		return
 	end
 
+	if not self.useRainbow and self.mode ~= "pulse" then
+		return
+	end
+	
 	if self.mode == "pulse" then
 		if not self.flashTimer then
 			self.flashTimer = 0
@@ -513,7 +549,7 @@ function SyncUI_GetEffectiveLevelColor(level)
 		color = EffectiveLevelColors["Hard"]
 	elseif stage >= -4 then
 		color = EffectiveLevelColors["Normal"]
-	elseif -stage <= GetQuestGreenRange() then
+	elseif -stage <= UnitQuestTrivialLevelRange("player") then
 		color = EffectiveLevelColors["Easy"]
 	else
 		color = EffectiveLevelColors["Trivial"]
@@ -526,6 +562,10 @@ end
 -- Dev Functions --
 -------------------
 local function Decrypt(text)
+	if (not text) then
+		return -1;
+	end
+	
 	local counter = 1
 	local len = string.len(text)
 	
@@ -537,11 +577,13 @@ local function Decrypt(text)
 end
 
 function SyncUI_IsDev()
-	local battleTag = select(2, BNGetInfo())
+	return false;
 	
-	if Decrypt(battleTag) == 549956557 then
-		return true
-	end
+	-- local battleTag = select(2, BNGetInfo())
 	
-	return false
+	-- if Decrypt(battleTag) == 549956557 then
+		-- return true
+	-- end
+	
+	-- return false
 end

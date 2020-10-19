@@ -117,9 +117,9 @@
 						<Anchor point="BOTTOMRIGHT" />
 					</Anchors>
 				</FontString>
-				<FontString parentKey="Time" inherits="SyncUI_GameFontNormal_Small" justifyH="CENTER" justifyV="CENTER">
+				<FontString parentKey="CooldownTimer" inherits="SyncUI_GameFontNormal_Small" justifyH="CENTER" justifyV="CENTER">
 					<Anchors>
-						<Anchor point="BOTTOM" />
+						<Anchor point="CENTER" />
 					</Anchors>
 				</FontString>
 			</Layer>
@@ -152,6 +152,11 @@
 						<Anchor point="BOTTOM" relativeKey="$parent.healthBar" relativePoint="TOP" x="0" y="-16" />
 					</Anchors>
 				</FontString>
+				<FontString parentKey="Health" inherits="SyncUI_GameFontShadow_Small" justifyH="CENTER">
+					<Anchors>
+						<Anchor point="CENTER" relativeKey="$parent.healthBar" relativePoint="BOTTOMRIGHT" />
+					</Anchors>
+				</FontString>
 			</Layer>
 		</Layers>
 		<Frames>
@@ -161,15 +166,47 @@
 					<Anchor point="TOPLEFT" x="11" y="-20" />
 					<Anchor point="TOPRIGHT" x="-11" y="-20" />
 				</Anchors>
-				<Frames>
-					<Frame parentKey="border">
+				<Layers>
+					<Layer level="OVERLAY">
+						<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="TOPLEFT" x="-11" y="6" />
+							</Anchors>
+							<TexCoords left="0" right="0.375" top="0" bottom="0.375" />
+						</Texture>
+						<Texture parentKey="Right" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Size x="48" y="24" />
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT" x="11" y="-10" />
+							</Anchors>
+							<TexCoords left="0.625" right="1" top="0" bottom="0.375" />
+						</Texture>
+						<Texture parentKey="Center" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
+							<Anchors>
+								<Anchor point="TOPLEFT" relativeKey="$parent.Left" relativePoint="TOPRIGHT" />
+								<Anchor point="BOTTOMRIGHT" relativeKey="$parent.Right" relativePoint="BOTTOMLEFT" />
+							</Anchors>
+							<TexCoords left="0.375" right="0.625" top="0" bottom="0.375" />
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY" textureSubLevel="1">
+						<FontString parentKey="Label" inherits="SyncUI_GameFontNormal_Small" justifyH="CENTER">
+							<Anchors>
+								<Anchor point="CENTER" relativeKey="$parent.healthBar"/>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<!--Frames>
+					<Frame parentKey="border" hidden="true">
 						<Size x="" y="24" />
 						<Anchors>
 							<Anchor point="TOPLEFT" x="-11" y="6" />
 							<Anchor point="BOTTOMRIGHT" x="11" y="-10" />
 						</Anchors>
 						<Layers>
-							<Layer level="BORDER">
+							<Layer level="BACKGROUND">
 								<Texture parentKey="Left" file="Interface\AddOns\SyncUI\Media\Textures\NamePlate">
 									<Size x="48" y="24" />
 									<Anchors>
@@ -194,7 +231,7 @@
 							</Layer>
 						</Layers>
 					</Frame>
-				</Frames>
+				</Frames-->
 			</StatusBar>
 			<StatusBar parentKey="PowerBar" inherits="SyncUI_StatusBarTemplate" useParentLevel="true" hidden="true">
 				<Size x="" y="8" />

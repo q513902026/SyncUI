@@ -1,5 +1,4 @@
 <UI>
-
 	<Script file="Core.lua"/>
 
 	<Frame name="SyncUI_UIParent">
@@ -154,28 +153,29 @@
 
 	
 	<!-- Backdrop Templates -->
-	<Frame name="SyncUI_BackdropTemplate" virtual="true">
-		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
-			<EdgeSize val="16" />
-			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
-		</Backdrop>
+	<Frame name="SyncUI_BackdropTemplate" inherits="BackdropTemplate" virtual="true" >
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SYNCUI_BACKDROP" type="global" />
+		</KeyValues>
 		<HitRectInsets left="5" right="5" top="5" bottom="5" />
 	</Frame>
 	
-	<Frame name="SyncUI_LayerBackdropTemplate" virtual="true">
-		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-EdgeFile">
-			<EdgeSize val="16" />
-			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
-			<Color r="1" g="1" b="1" a="0.35" />
-		</Backdrop>
+	<Frame name="SyncUI_LayerBackdropTemplate" inherits="BackdropTemplate" virtual="true" >
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SYNCUI_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="SYNCUI_LAYER_BACKDROP_COLOR" type="global" />
+			<KeyValue key="backdropBorderColor" value="SYNCUI_LAYER_BACKDROP_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.35" type="number"/>
+		</KeyValues>
 	</Frame>
 
-	<Frame name="SyncUI_LayerWithNoEdgeTemplate" virtual="true">
-		<Backdrop bgFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Backdrop-BgFile" edgeFile="Interface\AddOns\SyncUI\Media\Textures\Backdrops\Layer-EdgeFile">
-			<BackgroundInsets left="7" right="7" top="7" bottom="7" />
-			<EdgeSize val="16" />
-			<Color r="1" g="1" b="1" a="0.35" />
-		</Backdrop>
+	<Frame name="SyncUI_LayerWithNoEdgeTemplate" inherits="BackdropTemplate"  virtual="true">
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="SYNC_LAYERWITHNOEDGE_BACKDROP" type="global" />
+			<KeyValue key="backdropColor" value="SYNCUI_LAYER_BACKDROP_COLOR" type="global" />
+			<KeyValue key="backdropBorderColor" value="SYNCUI_LAYER_BACKDROP_COLOR" type="global"/>
+			<KeyValue key="backdropBorderColorAlpha" value="0.35" type="number"/>
+		</KeyValues>
 	</Frame>
 
 	<Frame name="SyncUI_LayerFrameTemplate" virtual="true">
@@ -295,11 +295,15 @@
 
 	<EditBox name="SyncUI_EditBoxTemplate" autoFocus="false" letters="25" virtual="true">
 		<Size x="120" y="19" />
-		<FontString justifyH="CENTER" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium" />
-		<TextInsets left="0" right="15" top="0" bottom="0" />
+		<FontString justifyH="LEFT" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium" />
+		<TextInsets left="5" right="20" top="0" bottom="0" />
 		<Layers>
 			<Layer level="ARTWORK">
-				<FontString parentKey="Instructions" inherits="SyncUI_GameFontShadow_Medium" justifyH="CENTER" setAllPoints="true">
+				<FontString parentKey="Thumbnail" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="5" y="0" />
+						<Anchor point="BOTTOMRIGHT" x="-20" y="0" />
+					</Anchors>
 					<Color r="0.35" g="0.35" b="0.35"/>
 				</FontString>
 			</Layer>
@@ -311,7 +315,7 @@
 					<Anchor point="BOTTOMRIGHT" x="8" y="-8" />
 				</Anchors>
 			</Frame>
-			<Button parentKey="clearButton" name="$parentClearButton" hidden="true">
+			<Button parentKey="ClearButton" name="$parentClearButton" hidden="true">
 				<Size x="17" y="17" />
 				<Anchors>
 					<Anchor point="RIGHT" x="0" y="0" />
@@ -324,35 +328,56 @@
 				<Scripts>
 					<OnEnter>
 						self.texture:SetAlpha(1.0)
+						self:GetParent().ignoreFocusLoss = true;
 					</OnEnter>
 					<OnLeave>
 						self.texture:SetAlpha(0.5)
+						self:GetParent().ignoreFocusLoss = false;
 					</OnLeave>
-					<OnClick function="SearchBoxTemplateClearButton_OnClick" />
+					<OnClick>
+						self:GetParent():SetText("");
+						self:GetParent():ClearFocus();
+						self:GetParent().Thumbnail:Show();
+						self:Hide();						
+					</OnClick>
 				</Scripts>
 			</Button>
 		</Frames>
 		<Scripts>
 			<OnLoad>
-				self.Instructions:SetText(SYNCUI_STRING_ENTER_NAME)
+				self.Thumbnail:SetText(SYNCUI_STRING_ENTER_NAME)
 			</OnLoad>
 			<OnEditFocusGained>
-				self:SetText("")
-				self.clearButton:Show()
-				self.Instructions:Hide()
+				self.ClearButton:Show()
+				self.Thumbnail:Hide()
 			</OnEditFocusGained>
 			<OnEditFocusLost>
-				self:SetText("")
-				self.clearButton:Hide()
-				self.Instructions:Show()
+				if self.ignoreFocusLoss then
+					return
+				end
+
+				if (self:GetText() == "") then
+					self.ClearButton:Hide();
+					self.Thumbnail:Show()
+				end
 			</OnEditFocusLost>
 			<OnEnterPressed>
-				SyncUI_BagCategoryMenu_AddCategory()
-				self:ClearFocus()
+				self:ClearFocus();
 			</OnEnterPressed>
 			<OnEscapePressed>
-				self:ClearFocus()
+				self:ClearFocus();
 			</OnEscapePressed>
+			<OnEnter>
+				self.ignoreFocusLoss = true;
+			</OnEnter>
+			<OnLeave>
+				self.ignoreFocusLoss = false;
+			</OnLeave>
+			<OnHide>
+				self:SetText("");
+				self.Thumbnail:Show();
+				self.ClearButton:Hide();
+			</OnHide>
 		</Scripts>
 		
 	</EditBox>
@@ -366,17 +391,8 @@
 		</FontString>
 		<TextInsets left="16" right="15" top="0" bottom="0" />
 		<Layers>
-			<Layer level="ARTWORK">
-				<FontString parentKey="Instructions" justifyH="LEFT" justivyV="CENTER" inherits="SyncUI_GameFontShadow_Medium">
-					<Anchors>
-						<Anchor point="TOPLEFT" x="16" y="0" />
-						<Anchor point="BOTTOMRIGHT" x="0" y="0" />
-					</Anchors>
-					<Color r="0.35" g="0.35" b="0.35"/>
-				</FontString>
-			</Layer>
 			<Layer level="OVERLAY">
-				<Texture name="$parentSearchIcon" file="Interface\Common\UI-Searchbox-Icon" parentKey="searchIcon">
+				<Texture parentKey="Icon" file="Interface\Common\UI-Searchbox-Icon">
 					<Size x="14" y="14"/>
 					<Anchors>
 						<Anchor point="LEFT" x="3" y="-1" />
@@ -384,15 +400,20 @@
 					<Color r="0.6" g="0.6" b="0.6" />
 				</Texture>
 			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Thumbnail" inherits="SyncUI_GameFontShadow_Medium" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="TOPLEFT" x="16" y="0" />
+						<Anchor point="BOTTOMRIGHT" x="-20" y="0" />
+					</Anchors>
+					<Color r="0.35" g="0.35" b="0.35"/>
+				</FontString>
+			</Layer>
 		</Layers>
 		<Scripts>
 			<OnLoad>
-				self.Instructions:SetText(SEARCH)
+				self.Thumbnail:SetText(SEARCH)
 			</OnLoad>
-			<OnEscapePressed function="EditBox_ClearFocus" />
-			<OnEnterPressed function="EditBox_ClearFocus" />
-			<OnEditFocusLost function="SearchBoxTemplate_OnEditFocusLost" />
-			<OnEditFocusGained function="SearchBoxTemplate_OnEditFocusGained" />
 		</Scripts>
 	</EditBox>
 
@@ -489,7 +510,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame>
+<!-- 	<Frame>
 		<Size x="30" y="30" />
 		<Anchors>
 			<Anchor point="CENTER" />
@@ -499,7 +520,7 @@
 				<Texture />
 			</Layer>
 		</Layers>
-	</Frame>
+	</Frame> -->
 	
 	<Include file="Elements\Elements.xml" />
 	<Include file="Options\Options.xml" />

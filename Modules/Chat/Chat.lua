@@ -31,11 +31,17 @@ local function CleanUp(window)
 	for _, texture in pairs(chatTexPack) do
 		_G[window:GetName()..texture]:SetTexture(nil)
 	end
+	
+	ChatFrameChannelButton:ClearAllPoints();
+	ChatFrameChannelButton:SetParent(SyncUI_ChatFrame);
+	ChatFrameChannelButton:SetPoint("TOPRIGHT", ChatFrame1, 27, -28);
+	ChatFrameChannelButton:SetFrameStrata("HIGH");
 end
 
 local function SetupChatWindow(window)
 	if not window.setup then
 		local index = window:GetID()
+		local resizeBtn = _G[window:GetName().."ResizeButton"];
 		
 		window.setup = true
 		window.tab = _G[window:GetName().."Tab"]
@@ -53,11 +59,15 @@ local function SetupChatWindow(window)
 		window.tab:GetFontString():SetTextColor(1,1,1)
 		window.btnFrame:Hide()
 		window.Background:Hide()
-		window.ResizeButton:ClearAllPoints()
-		window.ResizeButton:SetPoint("BOTTOMRIGHT",31,-10)
-		window.ResizeButton:SetNormalTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
-		window.ResizeButton:SetPushedTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
-		window.ResizeButton:SetHighlightTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		
+		resizeBtn:ClearAllPoints()
+		resizeBtn:SetPoint("BOTTOMRIGHT",31,-10)
+		resizeBtn:SetNormalTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		resizeBtn:SetPushedTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		resizeBtn:SetHighlightTexture(SYNCUI_MEDIA_PATH.."Backdrops\\FrameBackdrop-Resize")
+		
+		SyncUI_DisableFrame(window.ScrollBar);
+		SyncUI_DisableFrame(window.ScrollToBottomButton);
 		
 		-- Fix undocked frames after login/reload
 		if not window.isDocked then

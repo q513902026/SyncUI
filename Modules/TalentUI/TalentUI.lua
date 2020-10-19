@@ -16,8 +16,11 @@ local function OverrideTalentKeyBind()
 	local key = GetBindingKey("TOGGLETALENTS")
 
 	if key then
-		SetOverrideBindingClick(TalentMicroButton, true, key, "SyncUI_TalentMicroButton", "LeftButton")
+		print(key);
+		SetOverrideBinding(TalentMicroButton, true, key, "SyncUI_ToggleTalentUI()");
+		--SetOverrideBindingClick(TalentMicroButton, true, key, "SyncUI_TalentMicroButton", "LeftButton")
 	else
+		print("nothing found");
 		ClearOverrideBindings(TalentMicroButton)
 	end
 end
@@ -44,30 +47,35 @@ end
 
 
 function SyncUI_ToggleTalentUI()
+	if UnitAffectingCombat("player") then
+		return;
+	end
+	
 	if SyncUI_TalentUI:IsShown() then
-		HideUIPanel(SyncUI_TalentUI)
+		HideUIPanel(SyncUI_TalentUI);
 	else
-		ShowUIPanel(SyncUI_TalentUI)
+		ShowUIPanel(SyncUI_TalentUI);
 	end
 end
 
 function SyncUI_TalentUI_OnLoad(self)
-	LoadAddOn("Blizzard_TalentUI")
-	SyncUI_DisableFrame("PlayerTalentFrame")
+	--LoadAddOn("Blizzard_TalentUI")
+	--SyncUI_DisableFrame("PlayerTalentFrame")
 
-	self:RegisterEvent("UPDATE_BINDINGS")
+	--self:RegisterEvent("UPDATE_BINDINGS")
 	
 	UIPanelWindows[self:GetName()] = { area = "left", pushable = 1, whileDead = 1, width = 270, height = 353 }
-	ShowUIPanel(self)
+	ShowUIPanel(self)	
 	
-	OverrideTalentKeyBind()
+	SyncUI_TalentUIToggle:SetAttribute("type", "macro");
+	SyncUI_TalentUIToggle:SetAttribute("macrotext", "/run SyncUI_ToggleTalentUI()");
 end
 
 function SyncUI_TalentUI_OnEvent(self,event,...)
 	if InCombatLockdown() then return end
 	
 	if event == "UPDATE_BINDINGS" then
-		OverrideTalentKeyBind()
+		--OverrideTalentKeyBind()
 	end
 end
 
@@ -242,21 +250,20 @@ function SyncUI_SpecButton_OnEnter(self)
 	
 	frame.spells = {}
 
-	if isPet then
-		for index, info in pairs({GetSpecializationSpells(buttonID, nil, isPet, true)}) do
-			local isOdd = index % 2 ~= 0
-			
-			if isOdd then
-				tinsert(frame.spells, info)
-			end
-		end
-	else
-		for index, info in pairs(SPEC_SPELLS_DISPLAY[specID]) do
-			local isOdd = index % 2 ~= 0
-			
-			if isOdd then
-				tinsert(frame.spells, info)
-			end
+	local bonuses;
+	local increment = 1;
+	
+	if (isPet) then
+		bonuses = {GetSpecializationSpells(buttonID, nil, isPet, true)};
+		increment = 2;
+	else 
+		bonuses = C_SpecializationInfo.GetSpellsDisplay(specID);
+	end
+	
+	-- Add spec specific spells
+	if (bonuses) then
+		for i = 1, #bonuses, increment do
+			tinsert(frame.spells, bonuses[i]);
 		end
 	end
 
@@ -364,7 +371,7 @@ end
 function SyncUI_PvPTalentButton_OnLoad(self)
 	local buttonID = self:GetID()
 	local tier, column = math.ceil(buttonID/3), ((buttonID-1)%3+1)
-	local name = select(2, GetPvpTalentInfo(tier, column, GetActiveSpecGroup()))
+	local slotinfo = C_SpecializationInfo.GetPvpTalentSlotInfo(buttonID)
 	local spellID = select(7, GetSpellInfo(name))
 	
 	self:RegisterForDrag("LeftButton")
@@ -441,3 +448,8 @@ function SyncUI_PvPTalentButton_OnEnter(self)
 	GameTooltip:SetPvpTalent(talent, nil, GetActiveSpecGroup())
 	GameTooltip:Show()
 end
+
+--------------
+-- Bindings --
+--------------
+setglobal("BINDING_NAME_CLICK SyncUI_TalentUIToggle:LeftButton", SYNCUI_STRING_BINDING_TOGGLE_TALENTUI);

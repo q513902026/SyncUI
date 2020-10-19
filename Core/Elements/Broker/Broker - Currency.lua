@@ -1,6 +1,6 @@
 
 local function Currency_OnClick(self)
-	ToggleCharacter("TokenFrame")
+	ToggleCharacter("TokenFrame");
 end
 
 local function Currency_OnEnter(self)
@@ -8,17 +8,16 @@ local function Currency_OnEnter(self)
 	
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	
-	for index = 1, GetCurrencyListSize() do
-		local name, isHeader, _, isUnused, isWatched, count, icon = GetCurrencyListInfo(index)
-		
-		if not isHeader and not isUnused then
+	for index = 1, C_CurrencyInfo.GetCurrencyListSize() do
+		local info = C_CurrencyInfo.GetCurrencyListInfo(index)
+		if not info.isHeader and not info.isTypeUnused then
 			if not spacer then
 				spacer = true
 			end
 			
 			numEntries = numEntries + 1
 			
-			GameTooltip:AddDoubleLine(name, count.." |T"..icon..":14:14:0:0:64:64:5:59:5:59|t",1,1,1,1,1,1)
+			GameTooltip:AddDoubleLine(info.name, info.quantity.." |T"..info.iconFileID..":14:14:0:0:64:64:5:59:5:59|t",1,1,1,1,1,1)
 		end
 	end
 
@@ -35,3 +34,6 @@ do	-- Initialize
 	
 	SyncUI_RegisterBrokerType("Currency", info)
 end
+
+-- pre load currency tab
+ToggleCharacter("TokenFrame", true);

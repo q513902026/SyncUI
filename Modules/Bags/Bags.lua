@@ -7,7 +7,7 @@ local ItemCategories = {
 	[3] = BAG_FILTER_TRADE_GOODS,
 	[4] = BAG_FILTER_CONSUMABLES,
 	[5] = BAG_FILTER_EQUIPMENT,
-	[6] = BAG_FILTER_EQUIPMENT.." (BoE)",
+	[6] = BAG_FILTER_EQUIPMENT.." (" .. ITEM_SOULBOUND .. ")",
 }
 local deleteQueue = {
 	[0] = {},
@@ -196,27 +196,6 @@ local function isEquip(itemID)
 	return
 end
 
-local function isBoE(bagID, slot)
-	local scanTooltip = SyncUI_ScanTooltip
-	
-	if scanTooltip then
-		local limit = min(4, scanTooltip:NumLines())
-		
-		scanTooltip:ClearLines()
-		scanTooltip:SetBagItem(bagID, slot)
-
-		for i = 2, limit do
-			local text = _G[scanTooltip:GetName().."TextLeft"..i]:GetText()
-
-			if text and text:find(ITEM_BIND_ON_EQUIP) then
-				return text			
-			end
-		end
-		
-		return false
-	end
-end
-
 local function GetNumContainers()
 	local dataBase = SyncUI_Data["Bags"]["ContainerList"]
 	local standard = #ItemCategories
@@ -255,11 +234,9 @@ local function GetDefaultContainerID(itemID, bagID, slot)
 	elseif itemType == 0 then		-- Consumables
 		return 4
 	elseif isEquip(itemID) then		-- Weapons + Armor
-		--if isBoE(bagID, slot) then
-			--return 6
-		--else
-			return 5
-		--end
+		local isBound = C_Item.IsBound(ItemLocation:CreateFromBagAndSlot(bagID, slot));
+
+		return isBound and 6 or 5;
 	else
 		return 1
 	end
@@ -679,18 +656,24 @@ local function UpdateItemDropSlot(self, isBank, isReagent)
 	end
 end
 
-local function UpdateSearchResults(frame)
+local function UpdateSearchResults(frame, searchValue)
 	local bagID = frame:GetID()
 	local numSlots = GetContainerNumSlots(bagID)
 	
 	for slot = 1, numSlots do
 		local button = _G[frame:GetName().."_Slot"..slot]
 		local isFiltered = select(8, GetContainerItemInfo(bagID, slot))
-
-		if isFiltered and not button.shouldDelete then
-			button.searchOverlay:Show()
-		else
-			button.searchOverlay:Hide()
+		local itemID = GetContainerItemID(bagID,slot)
+	
+		if itemID then
+			local itemName = string.lower(GetItemInfo(itemID))
+			local isMatching = string.find(itemName, searchValue) or string.find(itemID, searchValue);
+			
+			if isMatching and not button.shouldDelete then
+				button.searchOverlay:Hide()
+			else
+				button.searchOverlay:Show()
+			end
 		end
 	end
 end
@@ -732,11 +715,6 @@ function SyncUI_ItemSlot_OnLoad(self)
 	self:SetSize(buttonSize, buttonSize)
 	self:SetNormalTexture("")
 	self:SetPushedTexture("")
-	self.IconBorder:SetTexture("")
-	
-	self.Count:SetFontObject(SyncUI_GameFontNormal_Medium)
-	self.Count:ClearAllPoints()
-	self.Count:SetPoint("BOTTOMRIGHT",-2,2)
 	
 	if not self.cooldown then
 		self.cooldown = _G[self:GetName().."Cooldown"]
@@ -862,10 +840,11 @@ function SyncUI_ItemSlot_ForceUpdate(self, bagID, slot)
 		local isQuest, questID, isActive = GetContainerItemQuestInfo(bagID, slot)
 		local isEquip = isEquip(itemLink)
 		local itemLevel = select(4, GetItemInfo(itemLink))
-		
+
 		SetItemButtonTexture(self, texture)
 		SetItemButtonCount(self, itemCount)
 		SetItemButtonDesaturated(self, locked)
+		--self.Count:SetText(itemCount);
 		
 		-- Quality Indicator
 		if isQuest or questID then
@@ -1095,7 +1074,6 @@ function SyncUI_BagFrame_OnLoad(self)
 	
 	hooksecurefunc("ToggleAllBags", SyncUI_BagFrame_Toggle)
 	
-	self:RegisterEvent("INVENTORY_SEARCH_UPDATE")
 	self:RegisterEvent("MERCHANT_SHOW")
 	self:RegisterEvent("MERCHANT_CLOSED")
 	self:RegisterEvent("MAIL_SHOW")
@@ -1116,20 +1094,6 @@ function SyncUI_BagFrame_OnLoad(self)
 end
 
 function SyncUI_BagFrame_OnEvent(self, event, ...)
-	if event == "INVENTORY_SEARCH_UPDATE" then
-		for i = 1, 5 do
-			local bag = _G[self:GetName().."_Bag"..i]
-			UpdateSearchResults(bag)
-		end
-		
-		for i = 1, 8 do
-			local bag = _G["SyncUI_BankFrame_Bag"..i]
-			UpdateSearchResults(bag)
-		end
-
-		UpdateSearchResults(SyncUI_BankFrame_ReagentBank)
-	end
-	
 	if event == "MERCHANT_SHOW" or event == "MAIL_SHOW" or event == "AUCTION_HOUSE_SHOW" then
 		SyncUI_BagFrame:Show()
 		
@@ -1269,7 +1233,7 @@ function SyncUI_BagFrame_BagContainer_OnLoad(self)
 		button:SetPoint("TOPLEFT",self,13+buttonSize*i,-13)
 		button:SetNormalTexture("")
 		button:SetPushedTexture("")
-		button:SetCheckedTexture("")
+		--button:SetCheckedTexture("")
 		button.IconBorder:SetAlpha(0)
 		button.icon:SetTexCoord(0.075,0.925,0.075,0.925)
 		button:HookScript("OnUpdate", function(self)
@@ -1324,6 +1288,41 @@ function SyncUI_BagFrame_DeleteItems(self)
 	}
 end
 
+function SyncUI_BagSearch_OnTextChanged(self)
+	local searchValue = self:GetText();
+	
+	for i = 1, 5 do
+		local bag = _G["SyncUI_BagFrame_Bag"..i];
+		UpdateSearchResults(bag, searchValue);
+	end
+	
+	for i = 1, 8 do
+		local bag = _G["SyncUI_BankFrame_Bag"..i];
+		UpdateSearchResults(bag, searchValue);
+	end
+end
+
+function SyncUI_BagSearch_OnChar(self)
+	local MIN_REPEAT_CHARACTERS = 4;
+	local searchString = self:GetText();
+	
+	if (string.len(searchString) >= MIN_REPEAT_CHARACTERS) then
+		local repeatChar = true;
+		
+		for i=1, MIN_REPEAT_CHARACTERS - 1, 1 do
+			if ( string.sub(searchString,(0-i), (0-i)) ~= string.sub(searchString,(-1-i),(-1-i)) ) then
+				repeatChar = false;
+				break;
+			end
+		end
+		
+		if ( repeatChar ) then
+			self:ClearFocus();
+		end
+	end
+end
+
+
 
 -- Bank Functions
 function SyncUI_BankSlot_OnEnter(self)
@@ -1366,13 +1365,21 @@ function SyncUI_BankFrame_OnShow(self)
 end
 
 function SyncUI_BankFrame_OnLoad(self)
-	BankFrame:UnregisterAllEvents()
+	local frame = CreateFrame("Frame", nil, nil, "SecureHandlerBaseTemplate");
+	frame:Hide();
+	BankFrame:SetParent(frame);
+	--BankFrame:UnregisterEvent("BANKFRAME_OPENED");
+	--BankFrame:UnregisterEvent("BANKFRAME_CLOSED");
+	--ReagentBankFrame:UnregisterAllEvents()
+	
 	BankFrame:SetPoint("TOPRIGHT",UIParent,"TOPLEFT")
-
+	
+	
 	self:RegisterEvent("BANKFRAME_OPENED")
 	self:RegisterEvent("BANKFRAME_CLOSED")
 	self:RegisterEvent("PLAYERBANKSLOTS_CHANGED")
 	self:RegisterEvent("PLAYERBANKBAGSLOTS_CHANGED")
+	--self:RegisterEvent("PLAYERREAGENTBANKSLOTS_CHANGED")
 
 	UIPanelWindows[self:GetName()] = { area = "left", pushable = 0, width = 464 }
 end
@@ -1385,11 +1392,16 @@ function SyncUI_BankFrame_OnEvent(self, event, ...)
 	if event == "BANKFRAME_CLOSED" then
 		HideUIPanel(self)
 	end
-	
+
 	if event == "PLAYERBANKSLOTS_CHANGED" then
 		UpdateAllBags(true)
 		UpdateBankBagSlots()
 		UpdateItemDropSlot(self,true)
+	end
+	
+	if event == "PLAYERREAGENTBANKSLOTS_CHANGED" then
+		local slot = ...
+		-- TODO: Something?
 	end
 	
 	if event == "PLAYERBANKBAGSLOTS_CHANGED" then
@@ -1528,19 +1540,29 @@ function SyncUI_BagCategoryMenu_OnShow(self)
 end
 
 function SyncUI_BagCategoryMenu_AddCategory()
-	local dataBase = SyncUI_Data["Bags"]["ContainerList"]
-	local frame = SyncUI_BagCategoryMenu
-	local scrollFrame = frame.ScrollFrame
-	local editBox = frame.EnterName
-	local text = editBox:GetText()
+	local dataBase = SyncUI_Data["Bags"]["ContainerList"];
+	local frame = SyncUI_BagCategoryMenu;
+	local scrollFrame = frame.ScrollFrame;
+	local editBox = frame.EnterName;
+	local text = editBox:GetText();
 
+	editBox:ClearFocus();
+	editBox:SetText("");
+	editBox.Thumbnail:Show();
+	editBox.ClearButton:Hide();
+	
 	if text == "" or text == nil or (text:gsub("%s","") == "") then
 		return
+	end
+	
+	for _, container in pairs(dataBase) do
+		if string.lower(text) == string.lower(container) then
+			return;
+		end
 	end
 
 	tinsert(dataBase,text)
 
-	editBox:SetText("")
 	scrollFrame.ScrollBar:SetValue(0)
 	
 	SyncUI_BagCategoryMenu_UpdateScrollFrame(scrollFrame)
@@ -1617,6 +1639,10 @@ function SyncUI_BagCategoryLine_OnEnter(self, isLine)
 	else
 		line.Delete:SetAlpha(1)
 	end
+	
+	GameTooltip:SetOwner(self);
+	GameTooltip:AddLine();
+	GameTooltip:Show();
 end
 
 function SyncUI_BagCategoryLine_OnLeave(self, isLine)

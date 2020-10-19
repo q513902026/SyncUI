@@ -68,8 +68,8 @@
 					</Layer>
 				</Layers>
 				<Scripts>
-					<OnModelLoaded function="TalkingHeadFrame_OnModelLoaded"/>
-					<OnAnimFinished function="TalkingHeadFrame_OnAnimFinished"/>
+					<OnModelLoaded function="SyncUI_TalkingHead_OnModelLoaded" />
+					<!--OnAnimFinished function="TalkingHeadFrame_OnAnimFinished"/-->
 				</Scripts>
 			</PlayerModel>
 			<Button parentKey="Close" inherits="SyncUI_CloseButtonTemplate">

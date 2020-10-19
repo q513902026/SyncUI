@@ -146,7 +146,7 @@ function SyncUI_BrokerButton_OnUpdate(self, elapsed)
 		self.update = self.update + elapsed
 
 		while self.update > self.interval do
-			self.updateFunc(self)
+			self.updateFunc(self, elapsed)
 			self.update = self.update - self.interval
 		end
 	end
@@ -161,7 +161,7 @@ function SyncUI_BrokerButton_OnReset(self,noSave)
 	if not noSave then
 		dataBase[self:GetID()] = nil
 	end
-	
+
 	self.brokerType = nil
 	self.clickFunc = nil
 	self.updateFunc = nil

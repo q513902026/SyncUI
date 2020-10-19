@@ -17,11 +17,11 @@ local function GetUnitID(self)
 	end
 end
 
-local function SetCastStart(self,spell,icon,r,g,b)
+local function SetCastStart(self, spell, icon, r, g, b)
 	if not self.showCastbar then
 		return
 	end
-
+	
 	self:SetStatusBarColor(r,g,b)			
 	self.Icon:SetTexture(icon)
 	self.Spell:SetText(spell)
@@ -45,8 +45,8 @@ local function SetCastStop(self)
 		self:SetStatusBarColor(0,1,0)
 	end
 	
-	self.succeeded = nil
-	self.interrupted = nil
+	self.succeeded = false;
+	self.interrupted = false;
 	
 	self.FadeOut:Play()
 end
@@ -105,7 +105,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 			if UnitCastingInfo(unitID) then
 				spell = select(1, UnitCastingInfo(unitID))
 				icon = select(3, UnitCastingInfo(unitID))
-				noInterrupt = select(8, UnitCastingInfo(unitID))
+				noInterrupt = select(7, UnitCastingInfo(unitID))
 				
 				if noInterrupt then
 					r,g,b = 1,0,0
@@ -119,6 +119,7 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 				icon = select(3, UnitChannelInfo(unitID))	
 				r,g,b = 0,1,0		
 			end
+			
 			SetCastStart(self,spell,icon,r,g,b)
 		else
 			self:Hide()
@@ -126,15 +127,15 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 	end
 	
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
-		if select(2, CombatLogGetCurrentEventInfo() ) == "SPELL_INTERRUPT" then
-			if select(4, CombatLogGetCurrentEventInfo() ) == UnitGUID(unitID) then
+		if select(2, ...) == "SPELL_INTERRUPT" then
+			if select(4, ...) == UnitGUID(unitID) then
 				self.Spell:SetText(BATTLE_PET_MESSAGE_SPELL_LOCK)
 				self.interrupted = true
 			end
 		end
 		
-		if select(2, CombatLogGetCurrentEventInfo() ) == "UNIT_DIED" then
-			if select(4, CombatLogGetCurrentEventInfo() ) == UnitGUID(unitID) then
+		if select(2, ...) == "UNIT_DIED" then
+			if select(4, ...) == UnitGUID(unitID) then
 				SetCastStop(self)
 			end
 		end
@@ -163,29 +164,30 @@ function SyncUI_CastingBar_OnEvent(self,event,...)
 	end
 
 	if event == "UNIT_SPELLCAST_START" or event == "UNIT_SPELLCAST_CHANNEL_START" then
-		local name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID;
-		local r,g,b
+		local name, text, icon, startTime, endTime, isTradeSkill, spellID, notInterrupt;
+		local isChannel = false;
+		local r,g,b = 1, 0, 0;
 
 		if event == "UNIT_SPELLCAST_START" then
-			name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID = UnitCastingInfo(unitID);
-			
-			if noInterrupt then
-				r,g,b = 1,0,0
-			else
-				r,g,b = 1,0.7,0
-			end
+			name, text, icon, startTime, endTime, isTradeSkill, _, notInterrupt, spellID = UnitCastingInfo(unitID);
 		end
 		
 		if event == "UNIT_SPELLCAST_CHANNEL_START" then
-			name, text, texture, startTime, endTime, isTradeSkill, castID,noInterrupt, spellID = UnitChannelInfo(unitID);
-			
-			if noInterrupt then
-				r,g,b = 1,0,0
-			else
-				r,g,b = 0,1,0
-			end
+			name, text, icon, startTime, endTime, isTradeSkill, notInterrupt, spellID = UnitChannelInfo(unitID);
+			isChannel = true;
 		end
-		SetCastStart(self,name,texture,r,g,b)
+		
+		if (notInterrupt) then
+			r,g,b = 1, 0, 0;
+		else
+			if (isChannel) then
+				r,g,b = 0,1,0;
+			else
+				r,g,b = 1,0.7,0
+			end		
+		end
+
+		SetCastStart(self, name, icon, r, g, b)
 	end
 
 	if event == "UNIT_SPELLCAST_STOP" or event == "UNIT_SPELLCAST_CHANNEL_STOP" then
@@ -207,32 +209,30 @@ function SyncUI_CastingBar_OnUpdate(self)
 	local timer
 	
 	if UnitCastingInfo(unitID) then
-		local spell, _, icon, startTime, endTime = UnitCastingInfo(unitID)
+		local startTime, endTime = select(4, UnitCastingInfo(unitID));
 		
-		if spell then
-			value = GetTime() - (startTime / 1000)
-			maxValue = (endTime - startTime) / 1000
-			timer = tonumber(format("%.1f",maxValue - value))
-		end
+		value = GetTime() - (startTime / 1000)
+		maxValue = (endTime - startTime) / 1000
+		timer = tonumber(format("%.1f",maxValue - value))
 	end
 
 	if UnitChannelInfo(unitID) then
-		local spell, _, icon, startTime, endTime = UnitChannelInfo(unitID)
-		
-		if spell then
-			value = (endTime / 1000) - GetTime()
-			maxValue = (endTime - startTime) / 1000
-			timer = tonumber(format("%.1f",value))
-		end
+		local startTime, endTime = select(4, UnitChannelInfo(unitID));
+
+		value = (endTime / 1e3) - GetTime();
+		maxValue = (endTime - startTime) / 1e3;
+		timer = value;
 	end
 	
-	if UnitCastingInfo(unitID) or UnitChannelInfo(unitID) then
+	-- Update Values
+	if value and maxValue then
 		self:SetMinMaxValues(0, maxValue)
 		self:SetValue(value)
-		if timer >= 0.1 then
-			self.Timer:SetText(timer)
-		else
-			self.Timer:SetText("")
-		end
+	end
+	
+	if timer and timer >= 0.1 then
+		self.Timer:SetText( format("%.1f", timer) )
+	else
+		self.Timer:SetText("")
 	end
 end

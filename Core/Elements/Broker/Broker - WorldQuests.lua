@@ -1,14 +1,34 @@
 
-local currentZone;
-
 local questList, mapList = {}, {
-	[GetMapNameByID(1015)] = 1015,  -- Aszuna
-	[GetMapNameByID(1024)] = 1024,  -- Highmountain
-	[GetMapNameByID(1017)] = 1017,  -- Stormheim
-	[GetMapNameByID(1033)] = 1033,  -- Suramar
-	[GetMapNameByID(1018)] = 1018,  -- Val'sharah
-	[GetMapNameByID(1096)] = 1096,	-- Eye of Aszara
+	[862] = "Zul'Dazar",
+	[863] = "Nazmir",
+	[864] = "Vol'Dun",
+	[942] = "Stormsong Valley",
+	[895] = "Tiragarde Sound",
+	[896] = "Drustvar",
 }
+
+local function GetCurrentMapID()
+	local mapID = C_Map.GetBestMapForUnit("player");
+	
+	-- Horde Fix for Dazar'Alor
+	if mapID == 1163 or mapID == 1165 then
+		mapID = 862;
+	end
+	
+	-- Alliance fix for Boralus
+	if mapID == 1161 then
+		mapID = 895;
+	end	
+	
+	return mapID;
+end
+
+local function GetHeaderText(mapID)
+	local name = C_Map.GetMapInfo(mapID).name;
+	local count = #(C_TaskQuest.GetQuestsForPlayerByMapID(mapID))
+	return name .. " (" .. count .. ")";
+end
 
 local function SortQuest(a, b)
 	local an = C_TaskQuest.GetQuestInfoByQuestID(a.questId)
@@ -38,31 +58,24 @@ local function GetTimerString(value)
 end
 
 local function WorldQuests_OnEnter(self)
-	local preMapID = GetCurrentMapAreaID()
-
+	local mapID = GetCurrentMapID();
+	
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	
-	-- Available at lvl 110
-	if UnitLevel("player") < MAX_PLAYER_LEVEL_TABLE[LE_EXPANSION_LEVEL_CURRENT] then
-		GameTooltip:AddLine(format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, 110), 1,1,1)
+	-- Available at lvl 10 tempfix
+	if C_QuestLog.IsQuestFlaggedCompleted(51722)  then
+		GameTooltip:AddLine(format(FEATURE_BECOMES_AVAILABLE_AT_LEVEL, 50), 1,1,1)
 		GameTooltip:Show()
 		return
 	end
 
 	do	-- current zone (default)
-		--if not WorldMapFrame:IsShown() then
-			SetMapToCurrentZone()
-		--end
-
-		local mapID = (GetCurrentMapAreaID() == 1080 and 1024) or GetCurrentMapAreaID()
-		local name = GetMapNameByID(mapID)
-		
-		if mapList[name] then
+		if mapList[mapID] then
 			questList = C_TaskQuest.GetQuestsForPlayerByMapID(mapID)
 
 			table.sort(questList, SortQuest)
 			
-			GameTooltip:AddLine(name, 1,1,1)
+			GameTooltip:AddLine(GetHeaderText(mapID), 1,1,1)
 			GameTooltip:SetPrevLineJustify("CENTER")
 			GameTooltip:AddDivider()
 				
@@ -95,30 +108,21 @@ local function WorldQuests_OnEnter(self)
 			GameTooltip:AddLine(SPELL_FAILED_INCORRECT_AREA, 1,0,0)
 		end
 	end
-	
-	SetMapByID(preMapID)
+
 	GameTooltip:Show()
 end
 
 local function WorldQuests_OnClick(self)
-	local mapID = GetCurrentMapAreaID()
-	ToggleWorldMap()
+	ToggleWorldMap();
 end
 
 local function WorldQuests_OnUpdate(self)
-	local mapID = GetCurrentMapAreaID()
-	
-	if mapID == 1080 then
-		mapID = 1024
-	end
-	
-	currentZone = mapID
-	local name = GetMapNameByID(mapID)
-	
-	if mapList[name] then
-		self:SetText(name)
+	local mapID = GetCurrentMapID();
+
+	if mapList[mapID] then
+		self:SetText(GetHeaderText(mapID));
 	else
-		self:SetText(TRACKER_HEADER_WORLD_QUESTS)
+		self:SetText(TRACKER_HEADER_WORLD_QUESTS);
 	end
 end
 

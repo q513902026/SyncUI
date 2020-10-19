@@ -5,7 +5,7 @@ end
 
 local function Social_OnUpdate(self)
 	local numBNetOnline = select(2, BNGetNumFriends())
-	local numWoWOnline = select(2, GetNumFriends())
+	local numWoWOnline = C_FriendList.GetNumFriends()
 	
 	self:SetText(FRIENDS..": "..numBNetOnline + numWoWOnline)
 end
@@ -13,26 +13,28 @@ end
 local function Social_OnEnter(self)
 	local found, bnetFound
 
-	ShowFriends()
+	C_FriendList.ShowFriends()
 	GameTooltip:SetOwner(self, "ANCHOR_TOP")
 	--GameTooltip:SetPadding(-3)
 	
 	-- BNet-Friend-List
 	if BNConnected() then
 		for i = 1, BNGetNumFriends() do
-			local isOnline = select(8, BNGetFriendInfo(i))
+			local bnFriendInfo = C_BattleNet.GetFriendAccountInfo(i);
+			local isOnline = bnFriendInfo.gameAccountInfo.isOnline
 
 			if isOnline then
-				local battleTag = select(2, BNGetFriendInfo(i))
-				local client = select(7, BNGetFriendInfo(i))
-				local isAFK = select(10, BNGetFriendInfo(i))
-				local isDND = select(11, BNGetFriendInfo(i))
+				local battleTag = bnFriendInfo.battleTag
+				local client = bnFriendInfo.gameAccountInfo.clientProgram ~= "" and bnFriendInfo.gameAccountInfo.clientProgram or nil
+				local isAFK = bnFriendInfo.battleTag.isAFK
+				local isDND = bnFriendInfo.battleTag.isDND
 				local BNetName = battleTag
 				local info, status
 				local clientIcon = " |T"..BNet_GetClientTexture(client)..":14:14:0:0:64:64:10:54:10:54|t "
-				local numGameAccounts = BNGetNumFriendGameAccounts(i)
+				local numGameAccounts = C_BattleNet.GetFriendNumGameAccounts(i)
 
 				-- Add Header
+
 				if not bnetFound then
 					GameTooltip:AddLine(BATTLENET_OPTIONS_LABEL, 1,1,1)
 					GameTooltip:SetPrevLineJustify("CENTER")
@@ -58,17 +60,17 @@ local function Social_OnEnter(self)
 				-- Set Info
 				if numGameAccounts > 0 then
 					for index = 1, numGameAccounts do
-						local name = select(2, BNGetFriendGameAccountInfo(i,index))
-						local zone = select(10, BNGetFriendGameAccountInfo(i,index))
-						local gameText = select(12, BNGetFriendGameAccountInfo(i,index))
-						local class = select(8, BNGetFriendGameAccountInfo(i,index))
-
+						local bnInfo = C_BattleNet.GetFriendGameAccountInfo(i,index)
+						local name = bnInfo.characterName or ""
+						local zone = bnInfo.areaName or "";
+						local gameText = bnInfo.richPresence or "";
+						local class = bnInfo.className or "";
+						
 						if class and class ~= "" then
 							class = SYNCUI_CLASS_STRINGS[class]
 							name = SyncUI_GetColorizedText(name,unpack(SYNCUI_CLASS_COLORS[class]))
 							BNetName = battleTag.." ("..name..")"
 						end
-						
 						if client == "WoW" then
 							if not info and zone and zone ~= "" then
 								info = zone or ""
@@ -91,9 +93,9 @@ local function Social_OnEnter(self)
 	end
 	
 	-- Realm-Friend-List
-	for i = 1, GetNumFriends() do
-		local name = GetFriendInfo(i)
-		local class, area, isOnline, status = select(3, GetFriendInfo(i))
+	for i = 1, C_FriendList.GetNumFriends() do
+		local name = C_FriendList.GetFriendInfo(i)
+		local class, area, isOnline, status = select(3, C_FriendList.GetFriendInfo(i))
 
 		if isOnline then
 			local clientIcon = " |T"..BNet_GetClientTexture("WoW")..":14:14:0:0:64:64:10:54:10:54|t "

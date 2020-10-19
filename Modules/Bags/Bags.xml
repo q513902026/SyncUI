@@ -28,7 +28,13 @@
 				<Texture parentKey="quest" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
 					<TexCoords left="0.7578125" right="0.90625" top="0" bottom="0.59375" />
 				</Texture>
-			</Layer>
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" JustifyH="RIGHT">
+					<Size x="200" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="-2" y="4" />
+					</Anchors>
+				</FontString>
+			</Layer>			
 			<Layer level="OVERLAY">
 				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
 					<TexCoords left="0.3125" right="0.4609375" top="0" bottom="0.59375" />
@@ -114,6 +120,12 @@
 				<Texture parentKey="quest" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small" hidden="true">
 					<TexCoords left="0.7578125" right="0.90625" top="0" bottom="0.59375" />
 				</Texture>
+				<FontString parentKey="Count" inherits="SyncUI_GameFontNormal_Medium" JustifyH="RIGHT">
+					<Size x="200" y="10" />
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" x="-2" y="4" />
+					</Anchors>
+				</FontString>
 			</Layer>
 			<Layer level="OVERLAY">
 				<Texture parentKey="glass" file="Interface\AddOns\SyncUI\Media\Textures\ActionBars\ActionButton_Small">
@@ -339,7 +351,6 @@
 						if not frame.UpdateTooltip then
 							frame.UpdateTooltip = frame.OnEnter
 						end
-						frame.IconBorder:Hide()
 					</OnLoad>
 				</Scripts>
 			</Frame>
@@ -536,9 +547,8 @@
 					<Anchor point="BOTTOMRIGHT" x="-18" y="6" />
 				</Anchors>
 				<Scripts>
-					<OnHide function="BagSearch_OnHide" />
-					<OnTextChanged function="BagSearch_OnTextChanged" />
-					<OnChar function="BagSearch_OnChar"/>
+					<OnTextChanged function="SyncUI_BagSearch_OnTextChanged" />
+					<OnChar function="SyncUI_BagSearch_OnChar"/>
 				</Scripts>
 			</EditBox>
 		</Frames>
@@ -1024,7 +1034,6 @@
 			<OnLeave>
 				SyncUI_BagCategoryLine_OnLeave(self,true)
 			</OnLeave>
-			<!--OnDragStart function="SyncUI_BagCategoryLine_OnDragStart" /-->
 			<OnDragStop function="SyncUI_BagCategoryLine_OnDragStop" />
 			<OnMouseDown function="SyncUI_BagCategoryLine_OnDragStart" />
 			<OnMouseUp function="SyncUI_BagCategoryLine_OnDragStop" />
@@ -1097,10 +1106,7 @@
 					<Anchor point="TOPLEFT" relativeKey="$parent.ContentLayer" relativePoint="BOTTOMLEFT" x="8" y="-3" />
 				</Anchors>
 				<Scripts>
-					<OnEnterPressed>
-						SyncUI_BagCategoryMenu_AddCategory()
-						self:ClearFocus()
-					</OnEnterPressed>
+					<OnEnterPressed function="SyncUI_BagCategoryMenu_AddCategory" />
 				</Scripts>
 			</EditBox>
 			<Button parentKey="Create" inherits="SyncUI_TextButtonTemplate" text="BATTLETAG_CREATE">

@@ -10,17 +10,17 @@ local function GetPowerTypeIndex()
 	if specID then
 		-- Moonkin
 		if specID == 102 and GetShapeshiftForm() == 4 then
-			return SPELL_POWER_MANA
+			return 0;
 		end
 		
 		-- Shadow
 		if specID == 258 then
-			return SPELL_POWER_MANA
+			return 0;
 		end
 		
 		-- Elemental / Enhancement
 		if specID == 262 or specID == 263 then
-			return SPELL_POWER_MANA
+			return 0;
 		end
 	end	
 end
@@ -812,8 +812,8 @@ function SyncUI_UnitGroupContainer_OnEvent(self, event,...)
 				UnregisterStateDriver(self, "visibility")
 				self:Hide()
 				
-				UnregisterStateDriver(SyncUI_GroupControl.ToggleButton, "visibility")
-				SyncUI_GroupControl.ToggleButton:Hide()
+				UnregisterStateDriver(SyncUI_GroupControl.Toggle, "visibility")
+				SyncUI_GroupControl.Toggle:Hide()
 				SyncUI_GroupControl.GroupLayout:Disable()
 			else
 				CompactRaidFrameManager:HookScript('OnShow', HideDefaultRaid)
@@ -853,8 +853,8 @@ StaticPopupDialogs["SYNCUI_FORCE_RELOAD"] = {
 	whileDead = true,
 	preferredIndex = 3,
 	OnAccept = function()
-		EnableAddOn("Blizzard_CompactRaidFrames")
-		EnableAddOn("Blizzard_CUFProfiles")
-		ReloadUI()
+		EnableAddOn("Blizzard_CompactRaidFrames");
+		EnableAddOn("Blizzard_CUFProfiles");
+		ReloadUI();
 	end,
 }

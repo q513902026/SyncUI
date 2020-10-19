@@ -2,120 +2,172 @@
 --------------------------
 -- Auto Quest Functions --
 --------------------------
-local function QuestSelect(event)
-	if IsShiftKeyDown() then
-		return
-	end
-	
-	local profile = SyncUI_GetProfile()
-	
-	-- Turn Quests In
-	if profile.Options.Quests.TurnIn then
-		if event == "GOSSIP_SHOW" then
-			for i = 1, GetNumGossipActiveQuests() do
-				local name, level, isTrivial, isComplete, isLegendary = select(i*5-4, GetGossipActiveQuests())
+local exceptions = {
+	["Lucian Trias"] = 1,
+}
 
-				if isComplete then
-					SelectGossipActiveQuest(i)
-				end
-			end
-		end
-		if event == "QUEST_GREETING" then
-			for i = 1, GetNumActiveQuests() do
-				local isComplete = select(2, GetActiveTitle(i))
-				
-				if isComplete then
-					SelectActiveQuest(i)
-				end
-			end
-		end
-	end
+local function GetIndex(index, num, ignore)
+	local decrement = num - (ignore or 0 + 1);
+	local id = index * num - decrement;
 	
-	-- Accept Quests
-	if profile.Options.Quests.Accept then
-		if event == "GOSSIP_SHOW" then
-			local numAvailableQuests = GetNumGossipAvailableQuests()
-			local numActiveQuests = GetNumGossipActiveQuests()
-			local numOptions = GetNumGossipOptions()
+	return id;
+end
+
+local function Gossip()
+	local exception = exceptions[UnitName("target")];
+	
+	if exception then
+		C_GossipInfo.SelectOption(exception);
+	else
+		if C_GossipInfo.GetNumAvailableQuests() > 0 then
+			return;
+		end
+		
+		if C_GossipInfo.GetNumAvailableQuests() > 0 then
+			return;
+		end
+		
+		if C_GossipInfo.GetNumOptions() > 1 then
+			return;
+		end
+		
+		if select(2, C_GossipInfo.GetNumOptions()) ~= "gossip" then
+			return;
+		end
+		
+		C_GossipInfo.SelectOption(1);
+	end	
+end
+
+local function SelectAvailable(event)
+	local profile = SyncUI_GetProfile();
+
+	if not profile.Options.Quests.Accept then
+		return;
+	end
+
+	if event == "GOSSIP_SHOW" then
+		for i = 1, C_GossipInfo.GetNumAvailableQuests() do
+			local gossipInfo = C_GossipInfo.GetAvailableQuests()
+			local name, level, trivial, frequency, repeatable, legendary = gossipInfo.title,gossipInfo.questLevel,gossipInfo.isTrivial,gossipInfo.frequency,gossipInfo.repeatable,gossipInfo.isLegendary
 			
-			if (numAvailableQuests == 0 and numActiveQuests == 0 and numOptions == 1) or UnitName("target") == "Lucian Trias" then
-				local text, type = GetGossipOptions()
-				
-				if type == "gossip" then
-					SelectGossipOption(1,text,true)
-				end
+			if not repeatable and not trivial and frequency == 1 then
+				C_GossipInfo.SelectAvailableQuest(i);
+				break;
 			end
+		end
+	end
+	
+	if event == "QUEST_GREETING" then	
+		for i = 1, GetNumAvailableQuests() do
+			local trivial, frequency, repeatable = GetAvailableQuestInfo(i);
 			
-			for i = 1, numAvailableQuests do
-				--local name, level, isTrivial, frequency, isRepeatable, isLegendary, isIgnored = select(i*7-6, GetGossipAvailableQuests())	--legion
-				local name, level, isTrivial, frequency, isRepeatable, isLegendary = select(i*6-5, GetGossipAvailableQuests())
-				
-				if not isRepeatable and not isTrivial and ( frequency == 1 or (frequency ~= 1 and profile.Options.Quests.Daily) ) then
-					SelectGossipAvailableQuest(i)
-				end
-			end
-		end
-		if event == "QUEST_GREETING" then
-			for i = 1, GetNumAvailableQuests() do
-				local name, level, isTrivial, frequency, isRepeatable, isLegendary = select(i*6-5, GetGossipAvailableQuests())
-
-				if not isRepeatable and not isTrivial and ( frequency == 1 or (frequency ~= 1 and profile.Options.Quests.Daily) ) then
-					SelectAvailableQuest(i)
-				end
+			if not repeatable and not trivial and frequency == 1 then
+				SelectAvailableQuest(i);
+				break;
 			end
 		end
 	end
 end
 
-local function QuestAccept()
-	local profile = SyncUI_GetProfile()
+local function SelectActive(event)
+	local profile = SyncUI_GetProfile();
 	
-	if profile.Options.Quests.Accept then
-		if not QuestGetAutoAccept() then
-			local isRepeatable
+	if not profile.Options.Quests.TurnIn then
+		return;
+	end
+	
+	if event == "GOSSIP_SHOW" then
+		for i = 1, C_GossipInfo.GetNumAvailableQuests() do
+			local gossipInfo = C_GossipInfo.GetAvailableQuests()
+			local name, level, trivial, complete = gossipInfo.title,gossipInfo.questLevel,gossipInfo.isTrivial,gossipInfo.isComplete
 			
-			if QuestIsDaily() or QuestIsWeekly() then
-				isRepeatable = true
+			if complete then
+				C_GossipInfo.SelectActiveQuest(i)
+				break;
 			end
-
-			if not isRepeatable or (isRepeatable and profile.Options.Quests.Daily) then
-				AcceptQuest()	
-			end		
 		end
 	end
-end
-
-local function QuestShare(questID)
-	local profile = SyncUI_GetProfile()
 	
-	if profile.Options.Quests.Share then
-		if GetNumGroupMembers() > 0 then
-			SelectQuestLogEntry(questID)
-			if GetQuestLogPushable() then
-				QuestLogPushQuest()
+	if event == "QUEST_GREETING" then
+		for i = 1, GetNumActiveQuests() do
+			local isComplete = select(2, GetActiveTitle(i));
+			
+			if isComplete then
+				SelectActiveQuest(i);
+				break;
 			end
 		end
 	end
 end
 
-local function QuestTurnIn()
+local function SelectReward()
 	local profile = SyncUI_GetProfile()
 	
-	if profile.Options.Quests.TurnIn then
-		if IsQuestCompletable() then
-			CompleteQuest()
-		end
+	if not profile.Options.Quests.TurnIn then
+		return;
+	end
+	
+	if GetNumQuestChoices() > 1 then
+		return;
+	end
+	
+	QuestRewardCompleteButton_OnClick();
+end
+
+local function Accept()
+	local profile = SyncUI_GetProfile();
+
+	if not profile.Options.Quests.Accept then
+		return;
+	end
+	
+	local isRepeatable = QuestIsDaily() or QuestIsWeekly();
+
+	if not isRepeatable or (isRepeatable and profile.Options.Quests.Daily) then
+		AcceptQuest();
+	end
+	
+	if QuestGetAutoAccept() then
+		CloseQuest();
+	else
+		AcceptQuest();
 	end
 end
 
-local function QuestReward()
-	local profile = SyncUI_GetProfile()
+local function TurnIn()
+	local profile = SyncUI_GetProfile();
 	
-	if profile.Options.Quests.TurnIn then
-		if GetNumQuestChoices() <= 1 then
-			QuestFrameCompleteQuestButton:Click()
-		end
+	if not profile.Options.Quests.TurnIn then
+		return;
 	end
+	
+	if IsQuestCompletable() then
+		CompleteQuest();
+	end
+	
+	-- TODO: check if this stops interaction completely...
+	CloseQuest();
+end
+
+local function Share(questID)
+	local profile = SyncUI_GetProfile();
+	
+	if not profile.Options.Quests.Share then
+		return;
+	end
+	
+	if GetNumGroupMembers() <= 0 then
+		return;
+	end
+	
+	C_QuestLog.SetSelectedQuest(questID);
+		
+	if not C_QuestLog.IsPushableQuest() then
+		return;
+	end
+	
+	QuestLogPushQuest();
 end
 
 ------------------------------
@@ -127,16 +179,16 @@ local AchievementFilter, QuestFilter
 local function UntrackQuests()
 	QuestList, QuestFilter = {}, true
 
-	for i = 1, GetNumQuestWatches() do
-		local questID = GetQuestWatchInfo(i)
+	for i = 1, C_QuestLog.GetNumQuestWatches() do
+		local questInfo = C_QuestLog.GetInfo(i)
 
-		if questID then
-			QuestList[questID] = true
+		if questInfo.questID then
+			QuestList[questInfo.questID] = true
 		end
 	end
 	
 	for questID in pairs(QuestList) do
-		RemoveQuestWatch(GetQuestLogIndexByID(questID))
+		C_QuestLog.RemoveQuestWatch(questID)
 	end
 end
 
@@ -144,7 +196,7 @@ local function RestoreQuests()
 	QuestFilter = false
 	
 	for questID in pairs(QuestList) do
-		AddQuestWatch(GetQuestLogIndexByID(questID))
+		C_QuestLog.AddQuestWatch(questID)
 	end
 end
 
@@ -195,17 +247,21 @@ local function UpdateHeader()
 		SyncUI_ObjTracker:Show()
 	end
 	
-	ObjectiveTrackerBlocksFrame.AchievementHeader.Text:SetText(TRACKER_HEADER_ACHIEVEMENTS.." ("..GetNumTrackedAchievements().."/".. 10 ..")")
-	ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetText(TRACKER_HEADER_QUESTS.." ("..GetNumQuestWatches().."/"..MAX_WATCHABLE_QUESTS..")")
+	--ObjectiveTrackerBlocksFrame.AchievementHeader.Text:SetFontObject(SyncUI_GameFontShadow_Medium)
+	--ObjectiveTrackerBlocksFrame.AchievementHeader.Text:SetText(TRACKER_HEADER_ACHIEVEMENTS.." ("..GetNumTrackedAchievements().."/".. 10 ..")")
+	--ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetFontObject(SyncUI_GameFontShadow_Medium)
+	--ObjectiveTrackerBlocksFrame.QuestHeader.Text:SetText(TRACKER_HEADER_QUESTS.." ("..GetNumQuestWatches().."/"..MAX_WATCHABLE_QUESTS..")")
 end
 
 local function UpdateQuickItem(self, i)
-	local questLogID = select(3, GetQuestWatchInfo(i)) or 0
-	local isComplete = select(6, GetQuestWatchInfo(i)) and 1 or false
-	local link, item, charges, showItemWhenComplete = GetQuestLogSpecialItemInfo(questLogID)
-					
+	local questInfo = C_QuestLog.GetInfo(i)
+	if not questInfo then return end
+	local questLogIndex = questInfo.questLogIndex or 0
+	local isQuestComplete = questInfo.isAutoComplete
+	local link, item, charges, showItemWhenComplete = GetQuestLogSpecialItemInfo(questLogIndex);
+
 	if item and (not isQuestComplete or showItemWhenComplete) and not self.minimized then
-		self.QuickItem:SetID(questLogID)
+		self.QuickItem:SetID(questLogIndex)
 		self.QuickItem.charges = charges
 		self.QuickItem.rangeTimer = -1
 		self.QuickItem:Show()
@@ -226,9 +282,9 @@ local function SetupObjTracker(self)
 	tracker:SetParent(self)
 	tracker:SetHeight(600)
 	tracker:ClearAllPoints()
-	tracker:SetPoint("TOPRIGHT",self,"TOPRIGHT",-8,-8)
+	tracker:SetPoint("TOPRIGHT", self, "TOPRIGHT", -8, -8)
 
-	--tracker.HeaderMenu.MinimizeButton:Hide()
+	tracker.HeaderMenu.MinimizeButton:Hide()
 
 	hooksecurefunc(tracker, "SetPoint", function(_, ...)
 		if not InCombatLockdown() then
@@ -236,11 +292,13 @@ local function SetupObjTracker(self)
 			
 			if point and relativeTo == "MinimapCluster" then
 				tracker:SetPoint("TOPRIGHT", self, "TOPRIGHT", -8, -8);
+				print("changed");
 			end
 		end		
 	end)
-
-	--[[
+	local function skinHeader(_,block)
+		block.HeaderText:SetFontObject(SyncUI_GameFontShadow_Medium)
+	end
 	hooksecurefunc("ObjectiveTracker_Update", function(reason, id)
 		if tracker.MODULES and #tracker.MODULES > 0 then
 			for i = 1, #tracker.MODULES do
@@ -249,12 +307,17 @@ local function SetupObjTracker(self)
 				module.Header.Text:SetFontObject(SyncUI_GameFontShadow_Medium)
 				module.Header.Text:SetVertexColor(1,1,1)
 				module.Header.Background:SetDesaturated(true)
-
+				
+				if not module.hook then 
+					hooksecurefunc(module,"SetBlockHeader",skinHeader) 
+					module.hook = true 
+				end
+				--[[
 				for _, block in pairs(module.usedBlocks) do
 					if block.HeaderText then
 						block.HeaderText:SetFontObject(SyncUI_GameFontShadow_Medium)
 					end
-				
+					
 					for _, line in pairs(block.lines) do
 						if line.Dash then
 							line.Dash:SetText("• ")
@@ -269,14 +332,32 @@ local function SetupObjTracker(self)
 						line.Text:SetFontObject(SyncUI_GameFontShadow_Medium)
 					end
 				end
+				]]--
 			end
 	
-			UpdateHeader()
+			UpdateHeader();
 		end
 	end)
-	hooksecurefunc("AddQuestWatch", function(questLogID)
+
+
+	hooksecurefunc(DEFAULT_OBJECTIVE_TRACKER_MODULE, "AddObjective", function(self, block, objectiveKey, _, lineType)
+		local line = self:GetLine(block, objectiveKey, lineType)
+			
+		if line.Dash and line.Dash:IsShown() then
+			line.Dash:SetText("• ")
+		end					
+		if line.ProgressBar then
+			line.ProgressBar.Bar.Label:SetFontObject(SyncUI_GameFontShadow_Medium)
+		end
+		if line.TimerBar then
+			line.TimerBar.Label:SetFontObject(SyncUI_GameFontShadow_Medium)
+		end
+		
+		line.Text:SetFontObject(SyncUI_GameFontShadow_Medium)
+	end)
+	hooksecurefunc(C_QuestLog,"AddQuestWatch", function(questLogID,watchType)
 		if QuestFilter then
-			RemoveQuestWatch(questLogID)
+			C_QuestLog.RemoveQuestWatch(questID)
 		end
 	end)
 	hooksecurefunc("AddTrackedAchievement", function(achieveID)
@@ -284,8 +365,6 @@ local function SetupObjTracker(self)
 			AchievementObjectiveTracker_UntrackAchievement(_, achieveID)
 		end
 	end)
-
-	--]]
 
 	QUEST_DASH = "• "
 end
@@ -299,18 +378,15 @@ function SyncUI_ObjTracker_OnLoad(self)
 	self:RegisterEvent("QUEST_PROGRESS")
 	self:RegisterEvent("QUEST_COMPLETE")
 	
-	self:RegisterEvent("PLAYER_LOGIN")
-	--self:RegisterEvent("PLAYER_LOGOUT")
-	--self:RegisterEvent("SUPER_TRACKED_QUEST_CHANGED")
-	--self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
-	--self:RegisterEvent("UPDATE_BINDINGS")
+	self:RegisterEvent("PLAYER_LOGIN")	
+	self:RegisterEvent("PLAYER_LOGOUT")
+	self:RegisterEvent("SUPER_TRACKING_CHANGED")
+	self:RegisterEvent("QUEST_WATCH_LIST_CHANGED")
+	self:RegisterEvent("UPDATE_BINDINGS")
 	
 	SyncUI_RegisterDragFrame(self, SYNCUI_STRING_OBJ_TRACKER)
-	
-	
+
 	--[[
-	setglobal("BINDING_NAME_CLICK SyncUI_ObjQuickItem:LeftButton", SYNCUI_STRING_BINDING_USE_ACTIVE_QUEST_ITEM)
-	
 	-- Dungeons + normal Scenarios
 	ScenarioStageBlock.Stage:SetFontObject(SyncUI_GameFontShadow_Huge)
 	ScenarioStageBlock.Name:SetFontObject(SyncUI_GameFontShadow_Medium)
@@ -324,48 +400,25 @@ function SyncUI_ObjTracker_OnLoad(self)
 	--]]
 end
 
-function SyncUI_ObjTracker_OnEvent(self,event,...)
-	if event == "GOSSIP_SHOW" or event == "QUEST_GREETING" then
-		QuestSelect(event)
-	end
-	if event == "QUEST_DETAIL" then
-		QuestAccept()
-	end
-	if event == "QUEST_ACCEPTED" then
-		QuestShare(...)
-	end
-	if event == "QUEST_PROGRESS" then
-		QuestTurnIn()
-	end
-	if event == "QUEST_COMPLETE" then
-		QuestReward()
-	end
-
+function SyncUI_ObjTracker_OnEvent(self, event, ...)
 	if event == "PLAYER_LOGIN" then
 		SetupObjTracker(self)
 	end
-	--[[
 	if event == "PLAYER_LOGOUT" then
 		RestoreQuests()
 		RestoreAchievements()
 	end
-	if event == "SUPER_TRACKED_QUEST_CHANGED" then
-		local tracked = ...
-		local found
+	if event == "SUPER_TRACKING_CHANGED" or event == "PLAYER_LOGIN" then
+		local tracked = C_SuperTrack.GetSuperTrackedQuestID();
 
-		for i = 1, GetNumQuestWatches() do
-			local questID = GetQuestWatchInfo(i)
-			
-			if questID == tracked then
+		for i = 1, C_QuestLog.GetNumQuestWatches() do
+			if C_QuestLog.GetQuestIDForQuestWatchIndex(i)  == tracked then
 				UpdateQuickItem(self, i)
-				found = true
-				break
+				return;
 			end
 		end
-		
-		if not found then
-			UpdateQuickItem(self, 0)
-		end
+
+		UpdateQuickItem(self, 0)
 	end
 	if event == "QUEST_WATCH_LIST_CHANGED" then
 		local questID, added = ...
@@ -380,7 +433,39 @@ function SyncUI_ObjTracker_OnEvent(self,event,...)
 
 		self.QuickItem.Hotkey:SetText(text)
 	end
-	--]]
+
+	
+	
+	if IsShiftKeyDown() then
+		return;
+	end
+
+	if event == "GOSSIP_SHOW" then
+		Gossip();
+		SelectAvailable(event);
+		SelectActive(event);
+	end
+	
+	if event == "QUEST_GREETING" then
+		SelectAvailable(event);
+		SelectActive(event);
+	end
+	
+	if event == "QUEST_DETAIL" then
+		Accept();
+	end
+	
+	if event == "QUEST_ACCEPTED" then
+		Share(...);
+	end
+	
+	if event == "QUEST_PROGRESS" then
+		TurnIn();
+	end
+	
+	if event == "QUEST_COMPLETE" then
+		SelectReward();
+	end
 end
 
 function SyncUI_ObjTracker_FilterButton_OnClick(self)
@@ -414,7 +499,7 @@ function SyncUI_ObjTracker_FilterButton_OnClick(self)
 			tracker.minimized = false
 			tracker.QuestToggle:Show()
 			tracker.AchieveToggle:Show()
-			SetSuperTrackedQuestID(GetSuperTrackedQuestID())
+			C_SuperTrack.SetSuperTrackedQuestID(C_SuperTrack.GetSuperTrackedQuestID())
 			ObjectiveTrackerFrame.BlocksFrame:Show()
 			ObjectiveTrackerFrame.collapsed	= false
 		end
@@ -422,3 +507,5 @@ function SyncUI_ObjTracker_FilterButton_OnClick(self)
 		UpdateHeader()
 	end
 end
+
+setglobal("BINDING_NAME_CLICK SyncUI_ObjQuickItem:LeftButton", SYNCUI_STRING_BINDING_USE_ACTIVE_QUEST_ITEM);

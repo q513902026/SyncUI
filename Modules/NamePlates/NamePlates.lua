@@ -5,7 +5,17 @@ local baseWidth, baseHeight = 110, 40
 local function UpdateHealth(self)
 	local unitID = self.unitID
 	local health, maxHealth = UnitHealth(unitID), UnitHealthMax(unitID)
-	
+	-- local text;
+
+	-- if health >= 10000000 then
+		-- text = string.format("%.0f",(health)/1000000).."m".." | "..string.format("%.0f",math.ceil((health)*100/maxHealth)).."%"
+	-- elseif health >= 10000 then
+		-- text = string.format("%.0f",(health)/1000).."k".." | "..string.format("%.0f",math.ceil((health)*100/maxHealth)).."%"
+	-- elseif health > 0 then
+		-- text = health.." | "..string.format("%.0f",math.ceil((health)*100/maxHealth)).."%"
+	-- end
+			
+	self.HealthBar.Label:SetText(string.format("%.0f",(health * 100 / maxHealth)).."%")
 	self.HealthBar:SetMinMaxValues(0, maxHealth)
 	SmoothBar(self.HealthBar,health)
 end

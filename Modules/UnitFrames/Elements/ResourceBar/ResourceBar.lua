@@ -3,12 +3,6 @@ local maxTokens = 6
 local class = select(2, UnitClass("player"))
 local prevComboPoints = 0
 
-local SPELL_POWER_ARCANE_CHARGES = SPELL_POWER_ARCANE_CHARGES or Enum.PowerType.ArcaneCharges
-local SPELL_POWER_HOLY_POWER = SPELL_POWER_HOLY_POWER or Enum.PowerType.HolyPower
-local SPELL_POWER_SOUL_SHARDS = SPELL_POWER_SOUL_SHARDS or Enum.PowerType.SoulShards
-local SPELL_POWER_CHI = SPELL_POWER_CHI or Enum.PowerType.Chi
-local SPELL_POWER_COMBO_POINTS = SPELL_POWER_COMBO_POINTS or Enum.PowerType.ComboPoints
-
 local BorderTable = {
 	[4] = {
 		["Size"] = {42,10},
@@ -27,21 +21,21 @@ local BorderTable = {
 local BarTypeTable = {
 	["Arcane"] = {
 		["PowerMax"] = 4,
-		["PowerType"] = SPELL_POWER_ARCANE_CHARGES,
+		["PowerType"] = Enum.PowerType.ArcaneCharges,
 		["PowerColor"] = {0.2,0.6,1.0},
 	},
 	["Holy"] = {
 		["PowerMax"] = 5,
-		["PowerType"] = SPELL_POWER_HOLY_POWER,
+		["PowerType"] = Enum.PowerType.HolyPower,
 		["PowerColor"] = {1.0,0.9,0.3},
 	},
 	["Shard"] = {
 		["PowerMax"] = 5,
-		["PowerType"] = SPELL_POWER_SOUL_SHARDS,
+		["PowerType"] = Enum.PowerType.SoulShards,
 		["PowerColor"] = {0.8,0.0,1.0},
 	},
 	["Chi"] = {
-		["PowerType"] = SPELL_POWER_CHI,
+		["PowerType"] = Enum.PowerType.Chi,
 		["PowerColor"] = {0.6,1.0,0.8},
 	},
 }
@@ -89,26 +83,30 @@ local function UpdateAlternateBar(self)
 	if not self.init then
 		local powerType = select(2, UnitPowerType("player"))
 		local color = SYNCUI_POWER_COLORS[powerType]
-		local r,g,b = unpack(color)
-
-		self.StatusBar:SetStatusBarColor(r,g,b)	
+		
+		if (color) then
+			local r,g,b = unpack(color)
+			self.StatusBar:SetStatusBarColor(r,g,b)
+		end
 	end
 end
 
 local function UpdateGenericBar(self)
-	if self.powerMax and self.powerType then
-		local powerType = UnitPower("player", self.powerType)
+	--if self.powerMax and self.powerType then
+		local power = UnitPower("player", self.powerType, true) / UnitPowerDisplayMod(self.powerType)
+
+		-- Affliction / Demo hotfix
+		if GetSpecialization() ~= SPEC_WARLOCK_DESTRUCTION then
+			power = math.floor(power);
+		end
 		
 		for i = 1, self.powerMax do
 			local token = self["Token"..i]
 
-			if i <= powerType then
-				token:SetValue(1)
-			else
-				token:SetValue(0)
-			end
+			token:SetMinMaxValues(i-1, i);
+			token:SetValue(power)
 		end
-	end
+	--end
 end
 
 local function UpdateStatueButton(self)
@@ -140,18 +138,24 @@ local function UpdateStatueButton(self)
 end
 
 local function UpdateStaggerBar(self)
-	local stagger, maxStagger = UnitStagger("player"), UnitHealthMax("player")
-	local perc = math.ceil(stagger*100/maxStagger)
-	local statusBar = self.StatusBar
+	local stagger = UnitStagger("player");
+	
+	if (not stagger) then
+		return;
+	end
+	
+	local maxStagger = UnitHealthMax("player");
+	local perc = stagger/maxStagger;
+	local statusBar = self.StatusBar;
 	
 	--Update value + maxValue
-	statusBar:SetMinMaxValues(0, maxStagger)
-	SmoothBar(statusBar,stagger)
+	statusBar:SetMinMaxValues(0, maxStagger);
+	SmoothBar(statusBar, stagger);
 	
 	--Update Color
-	if perc > 60 then
+	if perc >= STAGGER_RED_TRANSITION then
 		statusBar:SetStatusBarColor(1,0,0)
-	elseif perc > 30 then
+	elseif perc >= STAGGER_YELLOW_TRANSITION then
 		statusBar:SetStatusBarColor(1,1,0)
 	else
 		statusBar:SetStatusBarColor(0,1,0)
@@ -159,11 +163,11 @@ local function UpdateStaggerBar(self)
 end
 
 local function UpdateTotemBar(self)
-	for i = 1, 4 do
+	for i = 1, 4 do		
+		local haveTotem, name, start, duration, icon = GetTotemInfo(i)
 		local totem = self["Totem"..i]
-
-		if GetTotemInfo(i) then
-			local haveTotem, name, start, duration, icon = GetTotemInfo(i)
+		
+		if haveTotem then			
 			local timeLeft = math.ceil(start + duration - GetTime())
 			
 			totem.Icon:SetTexture(icon)
@@ -189,8 +193,8 @@ local function UpdateTotemBar(self)
 end
 
 local function UpdateComboBar(self, event, ...)
-	local comboPoints = UnitPower("player", SPELL_POWER_COMBO_POINTS)
-	local maxComboPoints = UnitPowerMax("player", SPELL_POWER_COMBO_POINTS)
+	local comboPoints = UnitPower("player", Enum.PowerType.ComboPoints)
+	local maxComboPoints = UnitPowerMax("player", Enum.PowerType.ComboPoints)
 	local maxShown = 5
 	
 	for i = 1, maxShown do
@@ -200,7 +204,7 @@ local function UpdateComboBar(self, event, ...)
 			local extra = comboPoints > maxShown and comboPoints - maxShown
 			
 			if i <= extra then
-				token:SetStatusBarColor(0,1,0)
+				token:SetStatusBarColor(0.4,0.6,1)
 			else
 				token:SetStatusBarColor(1,0,0)
 			end
@@ -219,9 +223,15 @@ end
 
 function SyncUI_ResourceBar_OnLoad(self)
 	self:RegisterEvent("PLAYER_TALENT_UPDATE")
-	
+
 	if class == "DRUID" then 
-		self:RegisterEvent("UPDATE_SHAPESHIFT_FORM")
+		RegisterStateDriver(self.ComboBar, "visibility", "[stance:2] show; hide");
+		RegisterStateDriver(self.AlternateBar, "visibility", "[stance:4] show; hide");
+	end
+	
+	if (class == "SHAMAN") then
+		RegisterStateDriver(self.AlternateBar, "visibility", "[stance:1] hide; show");
+		--RegisterStateDriver(self.TotemBar, "visibility", "[stance:1] hide; show");
 	end
 	
 	self.GenericBar:SetScript("OnUpdate", UpdateGenericBar)
@@ -304,13 +314,5 @@ function SyncUI_ResourceBar_OnEvent(self, event, ...)
 	if event == "UNIT_MAXPOWER" then
 		self.GenericBar:Setup("Chi")
 		return
-	end
-	
-	-- Druid Shapeshifting
-	if event == "UPDATE_SHAPESHIFT_FORM" then
-		local form = GetShapeshiftForm()
-
-		self.ComboBar:SetShown(form == 2)
-		self.AlternateBar:SetShown(form == 4 and specID == 102)
 	end
 end
